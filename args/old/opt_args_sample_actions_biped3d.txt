@@ -1,0 +1,52 @@
+-scenario= sample_action
+
+-output_path= output/test_actions.txt
+-scene_warmup_time= 0
+-num_action_samples= 256
+
+-character_file= data/characters/biped3d_mocap.txt
+-motion_file= data/motions/biped3d_walk.txt
+-state_file= data/states/biped3d_sim_walk_state.txt
+
+-num_threads= 1
+
+-sim_mode= 3d
+-char_type= general
+-char_ctrl= biped3d_sym_step_stoch
+-char_ctrl_ct_query_rate= 30
+-char_ctrl_cycle_dur= 1
+-terrain_file= data/terrain/plane.txt
+
+-num_update_steps= 20
+-num_sim_substeps= 2
+-world_scale= 4
+
+-policy_solver= data/policies/biped3d/nets/biped3d_sym_step_stoch_dphase_actor_solver.prototxt
+-policy_net= data/policies/biped3d/nets/biped3d_sym_step_stoch_dphase_actor_net.prototxt
+-policy_model= data/policies/biped3d/models/biped3d_step_model.h5
+
+-critic_solver= data/policies/biped3d/nets/biped3d_sym_step_stoch_dphase_critic_solver.prototxt
+-critic_net= data/policies/biped3d/nets/biped3d_sym_step_stoch_dphase_critic_net.prototxt
+-critic_model= data/policies/biped3d/models/biped3d_step_model_critic.h5
+
+-exp_rate= 0
+-exp_temp= 0.001
+-exp_base_rate= 0.01
+-exp_noise= 0.0
+-exp_noise_internal= 0.1
+
+-enable_rand_state_reset= true
+-enable_rand_time_limit= false
+-rand_seed= 21
+
+-step_max_heading_turn_rate= 0.25
+-step_sharp_turn_prob= 0.1
+-step_mean_width= 0.15
+-step_length_min= 0.5
+-step_length_max= 0.5
+-change_step_len_prob= 0.05
+
+-rand_target_pos_time_min= 1
+-rand_target_pos_time_max= 5
+
+-kin_ctrl_file= data/controllers/biped3D/biped3d_mocap_step_ctrl0.txt

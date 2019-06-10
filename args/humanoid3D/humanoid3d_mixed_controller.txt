@@ -1,0 +1,37 @@
+-scenario= multitask_imitate_viz
+
+-character_file= data/characters/humanoid3d_colourful.txt
+// -motion_file= data/motions/humanoid3d_walk_wrap.txt
+-state_file= data/states/humanoid3d_sim_walk_state_wrist.txt
+
+-output_path= output/int_step_eval.txt
+-record_reward= false
+-reward_output_path= output/int_step_reward.txt
+-record_pose_err= false
+-pose_err_file= output/int_step_pose_err.txt
+
+-char_ctrl_num_ground_samples= 0
+-char_ctrl_ground_view_dist= 3
+
+-sim_mode= 3d
+-char_type= general
+-char_ctrl= ct_pd_grf
+-char_ctrl_ct_query_rate= 0
+-char_ctrl_cycle_dur= 30
+-char_ctrl_waypoint_init_step_len= 0.5
+-terrain_file= data/terrain/plane.txt
+
+-num_update_steps= 20
+-num_sim_substeps= 5
+-world_scale= 10
+
+// -policy_solver= data/policies/biped3d/nets/biped3d_sym_step_dphase_actor_solver.prototxt
+// -policy_net= data/policies/biped3d/nets/biped3d_sym_step_dphase_actor_net.prototxt
+//-policy_model= data/policies/biped3d/models/biped3d_step_dphase_model2.h5
+
+// -critic_solver= data/policies/biped3d/nets/biped3d_sym_step_dphase_critic_solver.prototxt
+// -critic_net= data/policies/biped3d/nets/biped3d_sym_step_dphase_critic_net.prototxt
+//-critic_model= data/policies/biped3d/models/biped3d_step_dphase_model2_critic.h5
+
+// -kin_ctrl_file= data/controllers/biped3D/biped3d_mocap_step_ctrl0.txt
+-kin_ctrl_file= data/controllers/humanoid3d/humanoid3d_mocap_mixed_ctrl0.txt

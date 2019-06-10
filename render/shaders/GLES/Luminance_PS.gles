@@ -1,0 +1,21 @@
+#version 300 es
+
+uniform		sampler2D	gBufferTex;
+precision mediump float;
+in		vec2		tex_coord;
+
+out         vec4        fragColor;
+
+float CalcLuminance(vec3 color)
+{
+    return max( dot(color, vec3(0.299f, 0.587f, 0.114f)), 0.0001f);
+}
+
+void main(void) {
+	vec3 color = texture( gBufferTex, tex_coord.xy ).xyz;
+
+	// calculate the luminance using a weighted average
+    float luminance = CalcLuminance(color);
+
+	fragColor = vec4( log(luminance), 1.f, 1.f, 1.f );
+}

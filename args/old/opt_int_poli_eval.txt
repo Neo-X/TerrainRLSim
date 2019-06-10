@@ -1,0 +1,23 @@
+-scenario= poli_eval
+
+-character_file= data/characters/dog.txt
+-state_file= data/states/dog_bound_state3.txt
+-output_path= output/int_poli_eval.txt
+
+-char_type= dog
+-char_ctrl= dog_mace
+
+-num_update_steps= 20
+-num_sim_substeps= 5
+-world_scale= 4
+
+//-policy_net= data/policies/dog/nets/dog_max_net.prototxt
+-policy_net= data/policies/dog/nets/dog_actor_net.prototxt
+//-policy_net= data/policies/dog/nets/dog_mace3_net.prototxt
+
+-poli_eval_max_episodes= 100
+-rand_seed= 21
+
+-terrain_file= data/terrain/test_terrain.txt
+
+-num_threads= 20

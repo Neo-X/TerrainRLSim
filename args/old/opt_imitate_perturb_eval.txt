@@ -1,0 +1,63 @@
+-scenario= imitate_eval
+
+-character_file= data/characters/dog.txt
+-state_file= data/states/dog_bound_state3.txt
+-motion_file= data/motions/dog_sim_bound.txt
+
+//-character_file= data/characters/raptor.txt
+//-motion_file= data/motions/raptor_sim_run.txt
+//-state_file= data/states/raptor_run_state.txt
+
+//-character_file= data/characters/biped.txt
+//-motion_file= data/motions/biped_run.txt
+//-state_file= data/states/biped_stand_state.txt
+
+-output_path= output/int_imitate_eval.txt
+-record_reward= true
+-reward_output_path= output/int_imitate_reward.txt
+-pose_err_file= output/int_imitate_pose_err.txt
+
+-char_type= dog
+-char_ctrl= ct_track
+-char_ctrl_ct_query_rate= 60
+-terrain_file= data/terrain/bumps_blend.txt
+
+-num_update_steps= 20
+-num_sim_substeps= 5
+-world_scale= 4
+
+-policy_solver= data/policies/dog/nets/dog_ct_track_actor_solver.prototxt
+-policy_net= data/policies/dog/nets/dog_ct_track_actor_net.prototxt
+-policy_model= data/policies/dog/models/trainer_int_model_0001000000.h5
+-critic_solver= data/policies/dog/nets/dog_ct_track_critic_solver.prototxt
+-critic_net= data/policies/dog/nets/dog_ct_track_critic_net.prototxt
+-critic_model= data/policies/dog/models/trainer_int_model_0001000000_critic.h5
+
+//-policy_solver= data/policies/raptor/nets/raptor_ct_track_actor_solver.prototxt
+//-policy_net= data/policies/raptor/nets/raptor_ct_track_actor_net.prototxt
+//-policy_model= data/policies/raptor/models/trainer_int_model_0001000000.h5
+//-critic_solver= data/policies/raptor/nets/raptor_ct_track_critic_solver.prototxt
+//-critic_net= data/policies/raptor/nets/raptor_ct_track_critic_net.prototxt
+//-critic_model= data/policies/raptor/models/trainer_int_model_0001000000_critic.h5
+
+//-policy_solver= data/policies/biped/nets/biped_ct_track_actor_solver.prototxt
+//-policy_net= data/policies/biped/nets/biped_ct_track_actor_net.prototxt
+//-policy_model= data/policies/biped/models/trainer_int_model_0001000000.h5
+//-critic_solver= data/policies/biped/nets/biped_ct_track_critic_solver.prototxt
+//-critic_net= data/policies/biped/nets/biped_ct_track_critic_net.prototxt
+//-critic_model= data/policies/biped/models/trainer_int_model_0001000000_critic.h5
+
+-enable_rand_state_reset= true
+-rand_seed= 21
+-poli_eval_max_episodes= 128
+-episode_max_time= 20
+
+-enable_rand_perturbs= false
+-perturb_time_min= 1
+-perturb_time_max= 4
+-min_pertrub_duration= 0.1
+-max_perturb_duration= 0.4
+-perturb_part_ids= 0 1 2 3 4 5
+//-perturb_part_ids= 0
+
+-num_threads= 2

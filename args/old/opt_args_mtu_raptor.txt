@@ -1,0 +1,41 @@
+-scenario= opt_mtu
+-output_path= output/opt_results/opt
+
+-character_file= data/characters/raptor5.txt
+-motion_file= data/motions/raptor_sim_run.txt
+-state_file= data/states/raptor_stand_state.txt
+
+-char_type= raptor
+-char_ctrl= ct_mtu_track
+-char_ctrl_ct_query_rate= 60
+-terrain_file= data/terrain/flat.txt
+
+-num_update_steps= 100
+-num_sim_substeps= 1
+-world_scale= 4
+
+-opt_mtu_target_ids= 20 21 22 23 24 25 26 27 28 29
+-opt_mtu_mirror_srcs= 20 21 22 23 24 25 26 27 28 29
+-opt_mtu_mirror_dsts= 30 31 32 33 34 35 36 37 38 39
+
+-policy_solver= data/policies/raptor/nets/raptor_ct_mtu_track_actor_solver.prototxt
+-policy_net= data/policies/raptor/nets/raptor_ct_mtu_track_actor_net.prototxt
+-policy_model= data/policies/raptor/models/raptor_imitate_model.h5
+
+-critic_solver= data/policies/raptor/nets/raptor_ct_mtu_track_critic_solver.prototxt
+-critic_net= data/policies/raptor/nets/raptor_ct_mtu_track_critic_net.prototxt
+-critic_model= data/policies/raptor/models/raptor_imitate_model_critic.h5
+
+-enable_rand_state_reset= true
+-record_pose_err= false
+-record_reward= true
+-poli_eval_max_episodes= 16
+-episode_max_time= 10
+
+-cma_sigma= 0.25
+-cma_step_tol= 0.0001
+-cma_max_gen= 1000000
+-cma_max_iter= 1
+//-cma_pop_size= 16
+
+-num_threads= 4

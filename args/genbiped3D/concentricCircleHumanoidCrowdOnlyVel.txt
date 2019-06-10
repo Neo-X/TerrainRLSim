@@ -1,0 +1,60 @@
+-scenario= multi_char_circle
+-output_path= output/int_multi_char_eval.txt
+
+
+-character_file= data/characters/humanoid3d_colourful2.txt
+-motion_file= data/motions/humanoid3d_walk_wrap.txt
+-state_file= data/states/humanoid3d_sim_walk_state_wrist.txt
+
+-num_threads= 1
+
+-sim_mode= 3d
+-char_type= general
+-char_ctrl= multi_char_crowd_vel
+-char_ctrl_ct_query_rate= 0
+-char_ctrl_cycle_dur= 1
+-char_ctrl_enable_sym_step= true
+-char_ctrl_enable_sym_llc= true
+-char_ctrl_waypoint_init_step_len= 0.5
+-terrain_file= data/terrain/obstacles3d_StaticAndDynamics_Flat.txt
+// -terrain_file= data/terrain/obstacles3d.txt
+
+// -char_ctrl_ground_sample_res_3d= 32
+-char_ctrl_ground_view_dist= 5
+// -char_ctrl_num_ground_samples=25
+
+-num_update_steps= 20
+-num_sim_substeps= 5
+-world_scale= 4
+
+// -policy_solver= data/policies/biped3d/nets/biped3d_sym_step_dphase_actor_solver.prototxt
+// -policy_net= data/policies/biped3d/nets/biped3d_sym_step_dphase_actor_net.prototxt
+// -policy_model= data/policies/biped3d/models/biped3d_sym_step_dphase_model1.h5
+
+// -critic_solver= data/policies/biped3d/nets/biped3d_sym_step_dphase_critic_solver.prototxt
+// -critic_net= data/policies/biped3d/nets/biped3d_sym_step_dphase_critic_net.prototxt
+// -critic_model= data/policies/biped3d/models/biped3d_sym_step_dphase_model1_critic.h5
+
+// -policy_solver1= data/policies/biped3d/nets/biped3d_waypoint2_actor_solver.prototxt
+// -policy_net1= data/policies/biped3d/nets/biped3d_waypoint2_actor_net.prototxt
+// -policy_model1= data/policies/biped3d/models/biped3d_waypoint_model.h5
+
+// -critic_solver1= data/policies/biped3d/nets/biped3d_waypoint2_critic_solver.prototxt
+// -critic_net1= data/policies/biped3d/nets/biped3d_waypoint2_critic_net.prototxt
+// -critic_model1= data/policies/biped3d/models/biped3d_waypoint_model_critic.h5
+
+-enable_fall_reset= true
+-enable_random_restarts= true
+-enable_rand_state_reset= false
+-episode_max_time= 200
+-rand_target_pos_time_min= 50
+-rand_target_pos_time_max= 100
+
+-num_characters= 1
+-spawn_radius= 5.0
+-rand_target_bound= 5
+
+-rand_seed= 21
+-poli_eval_max_episodes= 32
+
+-kin_ctrl_file= data/controllers/humanoid3d/mocap_step_ctrl0.txt

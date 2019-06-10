@@ -1,0 +1,11 @@
+#version 300 es
+
+uniform		sampler2D	gBufferTex;
+precision mediump float;
+in			vec2		tex_coord;
+
+out         vec4        fragColor;
+
+void main(void) {
+	fragColor = texture( gBufferTex, tex_coord.xy );
+}
