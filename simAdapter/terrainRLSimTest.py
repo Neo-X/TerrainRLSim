@@ -45,8 +45,8 @@ if __name__ == '__main__':
             observation, reward,  done, info = env.step(actions)
             # env.getImitationState()
             print ("Done: ", done)
-            if ( done ):
-                break
+            # if ( done ):
+            #     break
             """
             states = []
             for i in range(sim.getNumAgents()):
@@ -63,7 +63,7 @@ if __name__ == '__main__':
                 
             states = np.array(observation)
             print("states shape ", np.array(states[0]).shape)
-            print ("state: ", states)
+            # print ("state: ", states)
             # print ("std length: ", len(np.std(states, axis=0)) )
             # print ("std for states: ", np.std(states))
             #### LLC states. If there is an LLC
