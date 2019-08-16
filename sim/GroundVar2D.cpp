@@ -270,9 +270,9 @@ void cGroundVar2D::InitSegments(const tVector& bound_min, const tVector& bound_m
 		int seg_id = GetSegID(i);
 		tVector fix_point = tVector::Zero();
 		eAlignMode align_mode = GetSegAlignMode(i);
-		
-		double bound_min = (align_mode == eAlignMax) ? -w : 0;
-		double bound_max = (align_mode == eAlignMax) ? 0 : w;
+		/// -1 so that agent does not straddle segments
+		double bound_min = (align_mode == eAlignMax) ? -w : -1;
+		double bound_max = (align_mode == eAlignMax) ? -1 : w;
 		bound_min += mid;
 		bound_max += mid;
 
@@ -340,6 +340,7 @@ void cGroundVar2D::BuildSegment(int seg_id, double bound_min, double bound_max,
 	bool contains_origin = (bound_min <= 0) && (bound_max >= 0);
 	if (contains_origin)
 	{
+		// std::cout << " Adding padding: " << seg_id << std::endl;
 		AddPadding(seg_id, bound_min, bound_max);
 	}
 	(*mTerrainFunc)(bound_max - bound_min, mBlendParams, mRand, seg->mData);
@@ -366,7 +367,8 @@ void cGroundVar2D::BuildSegment(int seg_id, double bound_min, double bound_max,
 void cGroundVar2D::AddPadding(int seg_id, double bound_min, double bound_max)
 {
 	std::unique_ptr<tSegment>& seg = mSegments[seg_id];
-	double flat_w = std::min(bound_max - bound_min, 1 - bound_min);
+	double padding_width = 0.5;
+	double flat_w = std::min(bound_max - bound_min, padding_width - bound_min);
 	cTerrainGen2D::BuildFlat(flat_w, mBlendParams, mRand, seg->mData);
 
 	/*

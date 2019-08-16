@@ -8,7 +8,12 @@
 "PD_Biped2D_Incline_Terrain-v0": 
 {
 	"config_file": "./args/genBiped2D/biped2dfull_incline_with_terrain_features.txt",
-	"time_limit": 256
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"render_mode": "3d"
+    }
 },
 "PD_Biped2D_Steps_Terrain-v0": 
 {
@@ -24,6 +29,21 @@
 {
 	"config_file": "./args/genBiped2D/biped2d_full_gaps_with_terrain_features.txt",
 	"time_limit": 256
+},
+"PD_Biped2D_Cliff_v0": 
+{
+	"config_file": "./args/genBiped2D/biped2d_full_cliff.txt",
+	"time_limit": 256
+},
+"PD_Biped2D_Cliff_v1": 
+{
+	"config_file": "./args/genBiped2D/biped2d_full_cliff.txt",
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"terrain_file": "data/terrain/cliff_humanoid2.txt"
+    }
 },
 "PD_Biped2D_Walls_Terrain-v0": 
 {
@@ -86,7 +106,12 @@
 "PD_Raptor2D_Incline_Terrain-v0": 
 {
 	"config_file": "./args/genBiped2D/raptor/incline_with_terrain_features.txt",
-	"time_limit": 256
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"render_mode": "3d"
+    }
 },
 "PD_Raptor2D_Steps_Terrain-v0": 
 {
