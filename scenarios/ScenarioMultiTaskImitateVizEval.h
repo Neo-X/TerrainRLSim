@@ -19,6 +19,8 @@ public:
 	virtual void ParseArgs(const std::shared_ptr<cArgParser>& parser);
 
 	virtual size_t getMotionID() const;
+	virtual void setMotionID(size_t task);
+	virtual size_t GetNumMotions() const;
 
 protected:
 

@@ -297,6 +297,8 @@ public:
 	std::vector<double> getJointWeights() const;
 
 	virtual size_t getTaskID() const;
+	virtual void setTaskID(size_t task);
+	virtual size_t GetNumMotions() const;
 
 	void handleUpdatedAction();
 

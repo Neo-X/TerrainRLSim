@@ -87,3 +87,13 @@ size_t cScenarioMultiTaskImitateVizEval::getMotionID() const
 {
 	return mKinChar->GetController()->getMotionID();
 }
+
+size_t cScenarioMultiTaskImitateVizEval::GetNumMotions() const
+{
+	return mKinChar->GetController()->GetNumMotions();
+}
+
+void cScenarioMultiTaskImitateVizEval::setMotionID(size_t task)
+{
+	return mKinChar->GetController()->setMotionID(task);
+}

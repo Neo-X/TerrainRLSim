@@ -45,6 +45,12 @@ size_t cMocapDataBaseController::getMotionID() const
 	return mCurrMotionID;
 }
 
+void cMocapDataBaseController::setMotionID(size_t id)
+{
+	mCurrMotionID = id;
+	UpdateNewStep();
+}
+
 void cMocapDataBaseController::UpdateNewStep()
 {
 

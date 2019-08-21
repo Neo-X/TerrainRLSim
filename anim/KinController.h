@@ -24,6 +24,8 @@ public:
 	virtual bool IsMotionOver() const;
 
 	virtual size_t getMotionID() const;
+	virtual void setMotionID(size_t id);
+	virtual int GetNumMotions() const;
 
 protected:
 	cKinCharacter* mChar;

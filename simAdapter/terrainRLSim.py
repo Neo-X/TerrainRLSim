@@ -8,6 +8,7 @@ import numpy as np
 from time import sleep
 # import cv2
 import time
+from builtins import property
 
 class ActionSpace(object):
     """
@@ -17,6 +18,7 @@ class ActionSpace(object):
     def __init__(self, action_space):
         self._minimum = np.array(action_space[0])
         self._maximum = np.array(action_space[1])
+        self._shape = np.array(action_space[1]).shape
         
     def getMinimum(self):
         return self._minimum
@@ -31,6 +33,10 @@ class ActionSpace(object):
     @property
     def high(self):
         return self._maximum
+    
+    @property
+    def shape(self):
+        return self._shape
 
 class TerrainRLSimWrapper(object):
     """
@@ -68,27 +74,28 @@ class TerrainRLSimWrapper(object):
             self._fig.set_size_inches(8.0, 4.5, forward=True)
             plt.show()
 
-        ### Render first frame
-        self.render()
-        # time.sleep(2)
-        self.reset()
+        if ( config != {}):
+            ### Render first frame
+            self.render()
+            # time.sleep(2)
+            self.reset()
         
-        act_low = [-1] * self.getEnv().getActionSpaceSize()
-        act_high = [1] * self.getEnv().getActionSpaceSize() 
-        action_space = [act_low, act_high]
-        action_space = self.getEnv().getActionSpaceBounds()
-        self._action_space = ActionSpace(action_space)
-        if ("process_visual_data" in self._config
-            and (self._config["process_visual_data"] == True)):
-            ob_low = (np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [0]
-            ob_high = (np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [1]
-            observation_space = [ob_low, ob_high]
-            self._observation_space = ActionSpace(observation_space)
-        else:
-            ob_low = [-1] * self.getEnv().getObservationSpaceSize()
-            ob_high = [1] * self.getEnv().getObservationSpaceSize() 
-            observation_space = [ob_low, ob_high]
-            self._observation_space = ActionSpace(observation_space)
+            act_low = [-1] * self.getEnv().getActionSpaceSize()
+            act_high = [1] * self.getEnv().getActionSpaceSize() 
+            action_space = [act_low, act_high]
+            action_space = self.getEnv().getActionSpaceBounds()
+            self._action_space = ActionSpace(action_space)
+            if ("process_visual_data" in self._config
+                and (self._config["process_visual_data"] == True)):
+                ob_low = (np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [0]
+                ob_high = (np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [1]
+                observation_space = [ob_low, ob_high]
+                self._observation_space = ActionSpace(observation_space)
+            else:
+                ob_low = [-1] * self.getEnv().getObservationSpaceSize()
+                ob_high = [1] * self.getEnv().getObservationSpaceSize() 
+                observation_space = [ob_low, ob_high]
+                self._observation_space = ActionSpace(observation_space)
         
     def render(self, headless_step=False):
         if (self._render):
@@ -712,6 +719,14 @@ class TerrainRLSimWrapper(object):
     def getTaskID(self):
         return self.getEnv().getTaskID()
     
+    def set_task(self, id):
+        self.getEnv().setTaskID(id)
+        
+        
+    def sample_tasks(self, tasks):
+        return np.choose(range(self.getEnv().GetNumMotions()), tasks)
+        
+    
 def getEnvsList():
     import os, sys, json
     
@@ -750,6 +765,9 @@ def getEnv(env_name, render=False, GPU_device=None):
 
     if (env_name in env_data):
         config_file = env_data[env_name]['config_file']
+    elif (env_name == None):
+        sim_ = TerrainRLSimWrapper(None, render=render, config={})
+        return sim_
     else:
         print("Env: ", env_name, " not found. Check that you have the correct env name.")
         return None

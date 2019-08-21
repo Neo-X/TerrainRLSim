@@ -57,3 +57,13 @@ size_t cKinController::getMotionID() const
 {
 	return 0;
 }
+
+void cKinController::setMotionID(size_t id)
+{
+	/// Does nothings....
+}
+
+int cKinController::GetNumMotions() const
+{
+	return 1;
+}

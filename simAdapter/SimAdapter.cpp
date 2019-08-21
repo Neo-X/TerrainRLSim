@@ -1847,7 +1847,27 @@ size_t cSimAdapter::getTaskID() const
 	{
 		return sc->getMotionID() + 1;
 	}
-
 	return 0;
+}
+
+void cSimAdapter::setTaskID(size_t task)
+{
+	auto sc = std::dynamic_pointer_cast<cScenarioMultiTaskImitateVizEval>(this->_scene);
+	if ( sc != nullptr )
+	{
+		 sc->setMotionID(task);
+	}
+
+}
+
+size_t cSimAdapter::GetNumMotions() const
+{
+	auto sc = std::dynamic_pointer_cast<cScenarioMultiTaskImitateVizEval>(this->_scene);
+	if ( sc != nullptr )
+	{
+		 return sc->GetNumMotions();
+	}
+
+	return 1;
 
 }

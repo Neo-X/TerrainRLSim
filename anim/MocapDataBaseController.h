@@ -15,6 +15,7 @@ public:
 	virtual void Update(double time_step);
 
 	virtual size_t getMotionID() const;
+	virtual void setMotionID(size_t id);
 
 protected:
 

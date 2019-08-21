@@ -44,6 +44,7 @@ public:
 
 	virtual void EnableAutoStepUpdate(bool enable);
 	virtual void ForceStepUpdate();
+	virtual int GetNumMotions() const;
 
 	virtual void setRelativeFilePath(std::string path);
 
@@ -85,7 +86,6 @@ protected:
 
 	virtual const cMotion& GetMotion(int m) const;
 	virtual const cMotion& GetCurrMotion() const;
-	virtual int GetNumMotions() const;
 	virtual double CalcMotionPhase(double time) const;
 	virtual double CalcStepPhase(double motion_phase) const;
 
