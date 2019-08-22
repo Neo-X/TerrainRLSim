@@ -28,7 +28,7 @@ void cScenarioMultiTaskImitateVizEval::Init()
 
 std::string cScenarioMultiTaskImitateVizEval::GetName() const
 {
-	return "MultiTask Visual imitation Imitation.";
+	return "MultiTask Visual Imitation.";
 }
 
 void cScenarioMultiTaskImitateVizEval::SetupKinController()

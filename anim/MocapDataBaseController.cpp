@@ -7,7 +7,7 @@
 cMocapDataBaseController::cMocapDataBaseController() :
 	cMocapStepController()
 {
-
+	randomMotions = true;
 }
 
 cMocapDataBaseController::~cMocapDataBaseController()
@@ -19,8 +19,23 @@ void cMocapDataBaseController::Reset()
 	cKinController::Reset();
 	ResetParams();
 
-	mCurrMotionID = SelectNewMotion();
+	if (randomMotions)
+	{
+		mCurrMotionID = SelectNewMotion();
+	}
 	UpdateNewStep();
+}
+
+void cMocapDataBaseController::ResetParams()
+{
+	mPrevStance = cBipedStepController3D::eStanceMax;
+	mOriginTrans.setZero();
+	mOriginRot.setIdentity();
+
+	if (GetNumMotions() > 0 && randomMotions)
+	{
+		mCurrMotionID = 0;
+	}
 }
 
 
@@ -48,6 +63,7 @@ size_t cMocapDataBaseController::getMotionID() const
 void cMocapDataBaseController::setMotionID(size_t id)
 {
 	mCurrMotionID = id;
+	randomMotions = false;
 	UpdateNewStep();
 }
 

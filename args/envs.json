@@ -6774,6 +6774,47 @@
     "append_camera_velocity_state": false,
     	"comment__": "Include the camera velocity on the end of the state",
     "skip_reshape": false	
+},
+"PD_Humanoid_3D_GRF_Mixed_1Sub_Imitate_30FPS_ObsFlat_v0": 
+{
+	"config_file": "./args/humanoid3D/humanoid3d_mixed_controller.txt",
+	"time_limit": 256,
+	"control_return": false,
+	"process_visual_data": false,
+		"comment__": "Number of times the action is updated per second, fps",
+	"action_fps": 30,
+		"comment__": "Number of subsampled pose images taken between action updates",
+	"timestep_subsampling": 1,
+		"comment__": "Area that will be clipped from the rendering using glReadPixels [x, y, width, height]",
+	"image_clipping_area": [245, 75, 256, 256],
+		"comment__": "Amount of downsampling that will be done to the image",
+	"downsample_image": [4, 4, 1],
+		"comment__": "Whether or not to convert the image to grayscale",
+	"convert_to_greyscale": true,
+		"comment__" : "Whether or not to collect imitation visual data as well (skip for efficiency)",
+	"also_imitation_visual_data": false,
+		"comment__": "Enable headless rendering",
+	"headless_render": false,
+	    "comment__": "Mix different state discription types, used for debugging visual imitation learning",
+    "use_dual_state_representations": false,
+    	"comment__": "Keep the viz state for the agent and the imitation character",
+    "use_dual_pose_state_representations": false,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+   "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Type of controller to use, controls the environment state",
+    	"char_ctrl": "ct_pd",
+    		"comment__": "Motion File to use for task",
+    	"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
+    		"comment__": "The file that list all the tasks types to include",
+    	"kin_ctrl_file": "data/controllers/humanoid3d/humanoid3d_mocap_mixed_small.txt"
+    },
+    	"comment__": "Include the camera velocity on the end of the state",
+    "append_camera_velocity_state": false,
+    	"comment__": "Flatten the output observation",
+    "flatten_observation": true
 }
 
 

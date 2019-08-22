@@ -114,12 +114,16 @@ class TerrainRLSimWrapper(object):
         
     def updateAction(self, action):
         # print ("step action: ", action)
-        if (self._sim.getNumAgents() > 0): ### Multi Character simulation
+        if (self._sim.getNumAgents() > 1): ### Multi Character simulation
             for i in range(self._sim.getNumAgents()):
                 # print("action[i]: ", action[i])
                 self._sim.updateActionForAgent(i, action[i])
         else:
-            self._sim.updateAction(action[0])
+            if ("flatten_observation" in self._config
+            and (self._config["flatten_observation"])):
+                self._sim.updateAction(action)
+            else:
+                self._sim.updateAction(action[0])
             
         self._sim.handleUpdatedAction()
         
@@ -310,6 +314,9 @@ class TerrainRLSimWrapper(object):
                 ob = self._sim.getState()
                 ob = np.reshape(np.array(ob), (-1, len(ob)))
             # ob = np.array(ob)
+        if ("flatten_observation" in self._config
+            and (self._config["flatten_observation"])):
+            ob = ob.flatten()
         return ob
     
     def simUpdate(self):
@@ -375,7 +382,10 @@ class TerrainRLSimWrapper(object):
         # observation, reward, done, info
         # ob = np.array(ob)
         # print ("ob shape: ", ob.shape)
-        return ob, reward, self._done, None
+        if ("flatten_observation" in self._config
+            and (self._config["flatten_observation"])):
+            reward = reward[0][0]
+        return ob, reward, self._done, self._config
         
     def calcRewardForAgent(self, a):
         return self._sim.calcRewardForAgent(a)
@@ -720,11 +730,17 @@ class TerrainRLSimWrapper(object):
         return self.getEnv().getTaskID()
     
     def set_task(self, id):
+        # print ("task id: ", id[0], type(id[0]))
         self.getEnv().setTaskID(id)
         
         
     def sample_tasks(self, tasks):
-        return np.choose(range(self.getEnv().GetNumMotions()), tasks)
+        import random
+        tasks = random.sample(range(self.getEnv().GetNumMotions()), tasks)
+        return tasks 
+    
+    def log_diagnostics(self, paths, prefix):
+        pass
         
     
 def getEnvsList():

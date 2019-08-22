@@ -25,5 +25,8 @@ protected:
 	virtual void UpdateNewStep();
 	virtual double CalcMotionPhase(double time) const;
 
+	virtual void ResetParams();
+	bool randomMotions;
+
 	
 };
