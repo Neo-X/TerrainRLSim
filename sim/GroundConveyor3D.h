@@ -11,6 +11,7 @@ public:
 	virtual ~cGroundConveyor3D();
 
 	virtual eClass GetGroundClass() const;
+	virtual void Init(std::shared_ptr<cWorld> world, const tParams& params);
 
 protected:
 	

@@ -61,6 +61,37 @@ cGroundConveyor3D::eClass cGroundConveyor3D::GetGroundClass() const
 	return eClassConveyor3D;
 }
 
+void cGroundConveyor3D::Init(std::shared_ptr<cWorld> world, const tParams& params)
+{
+	mParams = params;
+	SetParamBlend(params.mBlend);
+	/// 0 for moves along the z axis and 1 for along the x-axis
+	const int direction = mBlendParams[cTerrainGen3D::eParamsConveyorDirection];
+	if (direction == 0)
+	{
+		cGroundPlane::Init(world, params);
+	}
+	else
+	{
+		mParams = params;
+		mPrevCenter.setZero();
+
+		btVector3 normal = btVector3(0, 1, 0);
+		btVector3 origin = btVector3(static_cast<btScalar>(params.mOrigin[0]),
+									static_cast<btScalar>(params.mOrigin[1]-1000),
+									static_cast<btScalar>(params.mOrigin[2]));
+		normal.normalize();
+		btScalar w = normal.dot(origin);
+		mShape = std::unique_ptr<btCollisionShape>(new btStaticPlaneShape(normal, w));
+
+		btRigidBody::btRigidBodyConstructionInfo cons_info(0, this, mShape.get(), btVector3(0, 0, 0));
+		mSimBody = std::unique_ptr<btRigidBody>(new btRigidBody(cons_info));
+		mSimBody->setFriction(static_cast<btScalar>(params.mFriction));
+		cGround::Init(world, params);
+	}
+	BuildObstacles();
+}
+
 void cGroundConveyor3D::BuildObstacles()
 {
 	const int num_strips = mBlendParams[cTerrainGen3D::eParamsConveyorNumStrips];
@@ -118,14 +149,29 @@ void cGroundConveyor3D::BuildStrip(int num_slices, double strip_width, double st
 	const int direction = mBlendParams[cTerrainGen3D::eParamsConveyorDirection];
 	double slice_l = strip_len / num_slices;
 	tObstacle::eDir dir = mRand.FlipCoin() ? tObstacle::eDirForward : tObstacle::eDirBackward;
-	
+	if (direction == 1)
+	{
+		dir = tObstacle::eDirBackward;
+	}
 	out_strip.mAnchorPos = pos;
 	out_strip.mLen = strip_len;
 	out_strip.mWidth = strip_width;
+	if (direction == 1)
+	{
+		out_strip.mLen = strip_width;
+		out_strip.mWidth = strip_len;
+	}
 	out_strip.mSliceObstacles.clear();
 
 	double dz = 0.5 * strip_len;
-	out_strip.mAnchorPos[2] += (dir == tObstacle::eDirForward) ? -dz : dz;
+	if (direction == 0)
+	{
+		out_strip.mAnchorPos[2] += (dir == tObstacle::eDirForward) ? -dz : dz;
+	}
+	else
+	{
+		out_strip.mAnchorPos[0] += (dir == tObstacle::eDirForward) ? -dz : dz;
+	}
 
 	for (int i = 0; i < num_slices; ++i)
 	{
@@ -154,15 +200,26 @@ void cGroundConveyor3D::BuildStripSlice(const tVector& pos, double strip_width, 
 										double speed, tObstacle& out_obstacle)
 {
 	/// 0 for moves along the z axis and 1 for along the x-axis
-		const int direction = mBlendParams[cTerrainGen3D::eParamsConveyorDirection];
+	const int direction = mBlendParams[cTerrainGen3D::eParamsConveyorDirection];
 	const double h = 1;
 	const double h_pad = 0.01;
 	double end_dist = 1;
 
 	tVector size = tVector(strip_width, h, strip_len, 0);
+	if (direction == 1)
+	{
+		size = tVector(strip_len, h, strip_width, 0);
+	}
 	tVector pos_start = pos;
 	tVector pos_end = pos_start;
-	pos_end[2] += (dir == tObstacle::eDirForward) ? end_dist : -end_dist;
+	if (direction == 0)
+	{
+		pos_end[2] += (dir == tObstacle::eDirForward) ? end_dist : -end_dist;
+	}
+	else
+	{
+		pos_end[0] += (dir == tObstacle::eDirForward) ? end_dist : -end_dist;
+	}
 
 	pos_start[1] += h_pad - 0.5 * h;
 	pos_end[1] += h_pad - 0.5 * h;
@@ -201,7 +258,14 @@ void cGroundConveyor3D::UpdateObstacles(double time_elapsed)
 
 void cGroundConveyor3D::UpdateStrips()
 {
+	/// 0 for moves along the z axis and 1 for along the x-axis
+	const int direction = mBlendParams[cTerrainGen3D::eParamsConveyorDirection];
 	int num_strips = GetNumStrips();
+	int direction_index = 2;
+	if (direction == 1 )
+	{
+		direction_index = 0;
+	}
 	for (int s = 0; s < num_strips; ++s)
 	{
 		tStrip& strip = mStrips[s];
@@ -216,8 +280,8 @@ void cGroundConveyor3D::UpdateStrips()
 			tVector pos = curr_slice.CalcPos();
 			tVector vel = curr_slice.CalcVel();
 
-			bool at_end = (vel[2] > 0 && (pos[2] - slice_len / 2 > strip.mLen / 2))
-						|| (vel[2] < 0 && (pos[2] + slice_len / 2 < -strip.mLen / 2));
+			bool at_end = (vel[direction_index] > 0 && (pos[direction_index] - slice_len / 2 > strip.mLen / 2))
+						|| (vel[direction_index] < 0 && (pos[direction_index] + slice_len / 2 < -strip.mLen / 2));
 
 			if (at_end)
 			{
@@ -226,13 +290,13 @@ void cGroundConveyor3D::UpdateStrips()
 				tObstacle& tail_slice = mObstacles[tail_id];
 				tVector new_pos = tail_slice.CalcPos();
 
-				if (vel[2] > 0)
+				if (vel[direction_index] > 0)
 				{
-					new_pos[2] -= slice_len;
+					new_pos[direction_index] -= slice_len;
 				}
 				else
 				{
-					new_pos[2] += slice_len;
+					new_pos[direction_index] += slice_len;
 				}
 
 				curr_slice.mObj->SetPos(new_pos);
