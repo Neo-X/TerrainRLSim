@@ -72,6 +72,8 @@ void cGroundConveyor3D::BuildObstacles()
 	const double min_speed = mBlendParams[cTerrainGen3D::eParamsObstacleSpeed0];
 	const double max_speed = mBlendParams[cTerrainGen3D::eParamsObstacleSpeed1];
 	const double speed_lerp_pow = mBlendParams[cTerrainGen3D::eParamsObstacleSpeedLerpPow];
+	/// 0 for moves along the z axis and 1 for along the x-axis
+	const int direction = mBlendParams[cTerrainGen3D::eParamsConveyorDirection];
 	
 	int num_obstacles = num_strips * num_slices;
 
@@ -85,7 +87,14 @@ void cGroundConveyor3D::BuildObstacles()
 	{
 		double strip_width = mRand.RandDouble(min_w, max_w);
 		tVector strip_pos = tVector::Zero();
-		strip_pos[0] = curr_x + 0.5 * strip_width;
+		if (direction == 0)
+		{
+			strip_pos[0] = curr_x + 0.5 * strip_width;
+		}
+		else
+		{
+			strip_pos[0] = curr_x;
+		}
 
 		double speed_lerp = mRand.RandDouble();
 		speed_lerp = std::pow(speed_lerp, speed_lerp_pow);
@@ -105,7 +114,8 @@ void cGroundConveyor3D::BuildObstacles()
 void cGroundConveyor3D::BuildStrip(int num_slices, double strip_width, double strip_len, double speed,
 									const tVector& pos, tStrip& out_strip)
 {
-	
+	/// 0 for moves along the z axis and 1 for along the x-axis
+	const int direction = mBlendParams[cTerrainGen3D::eParamsConveyorDirection];
 	double slice_l = strip_len / num_slices;
 	tObstacle::eDir dir = mRand.FlipCoin() ? tObstacle::eDirForward : tObstacle::eDirBackward;
 	
@@ -122,7 +132,14 @@ void cGroundConveyor3D::BuildStrip(int num_slices, double strip_width, double st
 		tVector curr_pos = out_strip.mAnchorPos;
 		double dz = (0.5 + num_slices - 1 - i) * slice_l;
 		dz = (dir == tObstacle::eDirForward) ? dz : -dz;
-		curr_pos[2] += dz;
+		if (direction == 0)
+		{
+			curr_pos[2] += dz;
+		}
+		else
+		{
+			curr_pos[0] += dz;
+		}
 
 		tObstacle curr_obstacle;
 		BuildStripSlice(curr_pos, strip_width, slice_l, dir, speed, curr_obstacle);
@@ -136,6 +153,8 @@ void cGroundConveyor3D::BuildStrip(int num_slices, double strip_width, double st
 void cGroundConveyor3D::BuildStripSlice(const tVector& pos, double strip_width, double strip_len, tObstacle::eDir dir, 
 										double speed, tObstacle& out_obstacle)
 {
+	/// 0 for moves along the z axis and 1 for along the x-axis
+		const int direction = mBlendParams[cTerrainGen3D::eParamsConveyorDirection];
 	const double h = 1;
 	const double h_pad = 0.01;
 	double end_dist = 1;

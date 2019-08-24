@@ -31,6 +31,7 @@ const cTerrainGen3D::tParamDef cTerrainGen3D::gParamDefs[] =
 	{ "ConveyorNumStrips", 4 },
 	{ "ConveyorNumSlices", 10 },
 	{ "ConveyorSpacing", 3 },
+	{ "ConveyorDirection", 0 },
     
 	{"StepSpacingMin", 1},
 	{"StepSpacingMax", 2},

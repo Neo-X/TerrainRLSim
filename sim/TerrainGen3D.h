@@ -43,6 +43,7 @@ public:
 		eParamsConveyorNumStrips,
 		eParamsConveyorNumSlices,
 		eParamsConveyorSpacing,
+		eParamsConveyorDirection,
         eParamsStepSpacingMin,
         eParamsStepSpacingMax,
         eParamsObstaclePositionMin,
