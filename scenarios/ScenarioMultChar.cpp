@@ -26,6 +26,7 @@ cScenarioMultChar::cScenarioMultChar() :
 	mRandomizeInititalRotation = false;
 	mCreateNewGoals = false;
 	mReachTargetBonus = 200;
+	mUsePursuitConfig = false;
 }
 
 cScenarioMultChar::~cScenarioMultChar()
@@ -66,6 +67,7 @@ void cScenarioMultChar::ParseMiscArgs(const std::shared_ptr<cArgParser>& parser)
 	mRandTargetBound = mInitRandTargetBound;
 	parser->ParseBool("use_simple_reward", mUseSimpleReward);
 	parser->ParseBool("use_repulsive_reward", mUseRepulsiveReward);
+	parser->ParseBool("use_persuit_config", mUsePursuitConfig);
 }
 
 const std::shared_ptr<cSimCharacter>& cScenarioMultChar::GetSpaceCharacter() const
@@ -184,6 +186,10 @@ void cScenarioMultChar::UpdateCharacter(double time_step)
     		agentDatas[a+1].reachedTarget = true;
     		mChars[a]->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChars[a]));
 		}
+    	if (mUsePursuitConfig)
+    	{
+    		mChars[a]->SetCurrentGroundTarget(mChar->GetRootPos());
+    	}
 	}
 }
 

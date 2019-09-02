@@ -65,6 +65,7 @@ protected:
 	bool mUseSimpleReward;
 	double mReachTargetBonus;
 	bool mUseRepulsiveReward;
+	bool mUsePursuitConfig;
 
 	virtual void GenerateInitialTransform(std::shared_ptr<cSimCharacter>& character);
 	virtual tVector CalcTargetPosObstaclesDynamicCharacters3D(std::shared_ptr<cSimCharacter>& character);
