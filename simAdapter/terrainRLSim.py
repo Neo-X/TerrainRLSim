@@ -10,6 +10,56 @@ from time import sleep
 import time
 from builtins import property
 
+def checkDataIsValid(data, verbose=False, scale=1.0, identifier="Data"):
+    """
+        Checks to make sure the data going into the exp buffer is not garbage...
+        Returns True if the data is valid
+    """
+    import numpy as np
+    # print(identifier, " data: ", data)
+    
+    """
+    if (isinstance(data[0][0], list) or (isinstance(bounds[0][0], np.ndarray))):
+        ### Multi Agent or multi state simulation
+        valid = True
+        for data__ in data:
+            valid = valid and checkDataIsValid(data__, verbose=verbose, scale=scale, identifier=identifier)
+    """
+    bad_value_boundary=100000
+    data = np.array(data)
+    if (not np.all(np.isfinite(data))):
+        if ( verbose ):
+            less_ = np.isfinite(data)
+            bad_indecies = np.where(less_ == False)
+            print (identifier + " not finite: ", less_ )
+            print ("Bad Value indx: ", bad_indecies)
+            bad_values_ = data[bad_indecies]
+            print ("Bad Values: ", bad_values_)
+        return False
+
+    if (np.any(np.less(data, -bad_value_boundary*scale))):
+        if ( verbose ):
+            less_ = np.less(data, -1000.0*scale)
+            bad_indecies = np.where(less_ == True)
+            print (identifier + " too negative: ", less_ )
+            print ("Bad Value indx: ", bad_indecies)
+            bad_values_ = data[bad_indecies]
+            print ("Bad Values: ", bad_values_)
+        return False
+    
+    if (np.any(np.greater(data, bad_value_boundary*scale))):
+        if ( verbose ):
+            less_ = np.greater(data, bad_value_boundary*scale)
+            bad_indecies = np.where(less_ == True)
+            bad_values_ = data[bad_indecies]
+            print (identifier + " too positive: ", less_ )
+            print ("Bad Value indx: ", bad_indecies)
+            bad_values_ = data[bad_indecies]
+            print ("Bad Values: ", bad_values_)
+        return False
+    
+    return True
+
 class ActionSpace(object):
     """
         Wrapper for the action space of an env
@@ -385,6 +435,12 @@ class TerrainRLSimWrapper(object):
         if ("flatten_observation" in self._config
             and (self._config["flatten_observation"])):
             reward = reward[0][0]
+        
+        # ob[0,0] = np.nan
+        if (not checkDataIsValid(ob)):
+            ob = np.zeros_like(ob)
+            self._done = True
+            # print ("Found nan")
         return ob, reward, self._done, self._config
         
     def calcRewardForAgent(self, a):
