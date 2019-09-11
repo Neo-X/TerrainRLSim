@@ -233,7 +233,7 @@ class TerrainRLSimWrapper(object):
             else:
                 self._done = False
         else:
-            self._done = self._done or self.agentHasFallen()
+            self._done = self._done or self.endOfEpochForAgent(0)
         # self.render()
         # print("Trying to render...")
         
@@ -410,13 +410,13 @@ class TerrainRLSimWrapper(object):
             i=0
             while ( (not self._sim.needUpdatedAction()) and (i < 50 )):
                 # print ("Controlling return")
-                self.simUpdate()
+                self.update()
                 self.render(headless_step=True)
                 i=i+1
                 reward = reward + np.array(self.calcRewards())
             reward = reward / i    
         else:
-            self.simUpdate()
+            self.update()
             self.render(headless_step=True)
             reward = self.calcRewards()
             
@@ -428,7 +428,7 @@ class TerrainRLSimWrapper(object):
         ob = self.getObservation()
         self._steps = self._steps + 1    
             
-        self._done = self._sim.agentHasFallen() or self._done or (self._steps >= self._config["time_limit"])
+        # self._done = self._sim.agentHasFallen() or self._done or (self._steps >= self._config["time_limit"])
         # observation, reward, done, info
         # ob = np.array(ob)
         # print ("ob shape: ", ob.shape)

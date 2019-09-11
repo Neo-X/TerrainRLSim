@@ -1754,9 +1754,10 @@ bool cSimAdapter::endOfEpochForAgent(size_t agent_num)
 {
 	std::shared_ptr<cSimCharacter> agent = this->getAgent(agent_num);
 
-
+	Eigen::VectorXd pose0 = agent->GetPose();
 	// std::cout << "agent " << agent_num << " Fallen: " << agent->HasFallen() << " Exploded?: " << agent->HasExploded() << std::endl;
-	if (agent->HasFallen() || agent->HasExploded())
+	if (agent->HasFallen() || agent->HasExploded() ||
+			(pose0[1] < -10.0))
 	{
 		// std::cout << "End of Epoch:" << std::endl;
 		return true;
