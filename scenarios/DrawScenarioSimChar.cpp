@@ -389,7 +389,8 @@ void cDrawScenarioSimChar::DrawObstacles() const
 		{
 			DrawGroundDynamicObstacles3D(ground);
 		}
-		if ( ground->GetGroundClass() == cGround::eClassObstaclesDynamicCharacters3D )
+		if ( ground->GetGroundClass() == cGround::eClassObstaclesDynamicCharacters3D
+				|| ground->GetGroundClass() == cGround::eClassObstaclesMeshDynamicCharacters3D)
 		{
 			DrawGroundObstacles3D(ground);
 		}

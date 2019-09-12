@@ -371,6 +371,7 @@ void cDrawGround::BuildMeshVar3D(const cGround* ground, cDrawMesh* out_mesh)
 		|| ground->GetGroundClass() == cGround::eClassHills3D
 		|| ground->GetGroundClass() == cGround::eClassTrail3D
 		|| ground->GetGroundClass() == cGround::eClassObstaclesDynamicCharacters3D
+		|| ground->GetGroundClass() == cGround::eClassObstaclesMeshDynamicCharacters3D
 		|| ground->GetGroundClass() == cGround::eClassObstacles3D);
 	const tVector tex_size = tVector(0.5, 0.5, 0, 0);
 	const int verts_per_face = 6;

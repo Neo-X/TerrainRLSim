@@ -5,6 +5,7 @@
 #include "sim/GroundTrail3D.h"
 #include "sim/GroundObstacles3D.h"
 #include "sim/GroundObstaclesDynamicCharacters3D.h"
+#include "sim/GroundMeshDynamicObstacles3D.h"
 #include "sim/GroundDynamicCharacters3D.h"
 #include "sim/GroundDynamicObstacles3D.h"
 #include "sim/GroundConveyor3D.h"
@@ -84,6 +85,9 @@ void cGroundFactory::BuildGround(const std::shared_ptr<cWorld>& world, const cGr
 	case cGround::eClassObstaclesDynamicCharacters3D:
 		BuildGroundObstaclesDynamicCharacters3D(world, params, out_ground);
 		break;
+	case cGround::eClassObstaclesMeshDynamicCharacters3D:
+		BuildGroundObstaclesMeshDynamicCharacters3D(world, params, out_ground);
+		break;
 	case cGround::eClassDynamicCharacters3D:
 		BuildGroundDynamicCharacters3D(world, params, out_ground);
 		break;
@@ -118,6 +122,7 @@ bool cGroundFactory::ParseParamsJason(cGround::eType type, const Json::Value& js
 	case cGround::eClassTrail3D:
 	case cGround::eClassObstacles3D:
 	case cGround::eClassObstaclesDynamicCharacters3D:
+	case cGround::eClassObstaclesMeshDynamicCharacters3D:
 	case cGround::eClassDynamicCharacters3D:
 	case cGround::eClassDynamicObstacles3D:
 	case cGround::eClassConveyor3D:
@@ -224,6 +229,21 @@ void cGroundFactory::BuildGroundObstaclesDynamicCharacters3D(const std::shared_p
 
 	// ground->Init(world, params, bound_min, bound_max);
 	ground->Init(world, params);
+	out_ground = ground;
+}
+
+void cGroundFactory::BuildGroundObstaclesMeshDynamicCharacters3D(const std::shared_ptr<cWorld>& world, const cGround::tParams& params, std::shared_ptr<cGround>& out_ground)
+{
+	const double spawn_offset = 0;
+
+	auto ground = std::shared_ptr<cGroundMeshDynamicObstacles3D>(new cGroundMeshDynamicObstacles3D());
+	double half_width = params.mGroundWidth / 2;
+
+	tVector bound_min = tVector(-half_width + spawn_offset, 0, -half_width + spawn_offset, 0);
+	tVector bound_max = tVector(half_width + spawn_offset, 0, half_width + spawn_offset, 0);
+
+	ground->Init(world, params, bound_min, bound_max);
+	// ground->Init(world, params);
 	out_ground = ground;
 }
 

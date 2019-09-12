@@ -27,6 +27,7 @@ std::string gGroundTypeNames[cGround::eTypeMax] =
 	"trail3d",
 	"obstacles3d",
 	"obstaclesDynamicCharacters3D",
+	"obstaclesMeshDynamicCharacters3D",
 	"dynamicCharacters3D",
 	"dynamic_obstacles3d",
 	"conveyor3d",
@@ -94,6 +95,11 @@ cGround::eClass cGround::GetClassFromType(eType ground_type)
 		case eTypeObstaclesDynamicCharacters3D:
 			ground_class = eClassObstaclesDynamicCharacters3D;
 			std::cout << "Setting dynamic obs and char ground class" << std::endl;
+			break;
+
+		case eTypeObstaclesMeshDynamicCharacters3D:
+			ground_class = eClassObstaclesMeshDynamicCharacters3D;
+			std::cout << "Setting dynamic obs Mesh and char ground class" << std::endl;
 			break;
 		case eTypeDynamicCharacters3D:
 			ground_class = eClassDynamicCharacters3D;

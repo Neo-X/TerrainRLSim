@@ -336,7 +336,8 @@ bool cTerrainRLCharController::SampleGroundHeightVel(const tVector& pos, double&
 	
 	if (mGround != nullptr)
 	{
-		if (mGround->GetGroundClass() == cGround::eClassObstaclesDynamicCharacters3D)
+		if (mGround->GetGroundClass() == cGround::eClassObstaclesDynamicCharacters3D
+				|| mGround->GetGroundClass() == cGround::eClassObstaclesMeshDynamicCharacters3D)
 		{
 			mGround->SampleHeightVel(mChar, pos, out_h, out_vel, valid_sample);
 		}
