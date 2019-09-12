@@ -883,6 +883,15 @@ void cSimAdapter::initEpoch()
 	gForceClear = true;
 }
 
+void cSimAdapter::reload()
+{
+	if ( this->_gScenario != nullptr)
+	{
+		this->_gScenario->Reload();
+	}
+	gForceClear = true;
+}
+
 double cSimAdapter::getAnimTimestep() const
 {
 	return gAnimStep;

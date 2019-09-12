@@ -135,6 +135,7 @@ void InitCamera()
 
 void ClearScenario()
 {
+	gScenario.reset();
 	gScenario = nullptr;
 }
 

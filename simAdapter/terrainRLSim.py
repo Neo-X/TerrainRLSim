@@ -436,11 +436,17 @@ class TerrainRLSimWrapper(object):
             and (self._config["flatten_observation"])):
             reward = reward[0][0]
         
-        # ob[0,0] = np.nan
+        ob[0,0] = np.nan
         if (not checkDataIsValid(ob)):
             ob = np.zeros_like(ob)
             self._done = True
-            # print ("Found nan")
+            self._sim.reload()
+            print ("Found obs nan")
+        if (not checkDataIsValid(reward)):
+            reward = np.zeros_like(reward)
+            self._done = True
+            self._sim.reload()
+            print ("Found reward nan")
         return ob, reward, self._done, self._config
         
     def calcRewardForAgent(self, a):
