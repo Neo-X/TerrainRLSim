@@ -436,7 +436,7 @@ class TerrainRLSimWrapper(object):
             and (self._config["flatten_observation"])):
             reward = reward[0][0]
         
-        ob[0,0] = np.nan
+        # ob[0,0] = np.nan
         if (not checkDataIsValid(ob)):
             ob = np.zeros_like(ob)
             self._done = True

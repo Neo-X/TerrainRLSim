@@ -232,7 +232,6 @@ public:
 
 	virtual void init();
 	virtual void initEpoch();
-	/// For when the sim gets pretty messed up...
 	virtual void reload();
 	virtual double updateAction(std::vector<double> action);
 	virtual double updateLLCAction(std::vector<double> action);

@@ -887,7 +887,7 @@ void cSimAdapter::reload()
 {
 	if ( this->_gScenario != nullptr)
 	{
-		// this->_gScenario->Reload();
+		this->init();
 	}
 	gForceClear = true;
 }
