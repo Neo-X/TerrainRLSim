@@ -18,6 +18,12 @@ def checkDataIsValid(data, verbose=False, scale=1.0, identifier="Data"):
     import numpy as np
     # print(identifier, " data: ", data)
     
+    valid = True
+    if (isinstance(data, list)):
+        # print ("data is list", data)
+        for dat  in data:
+            valid = valid and checkDataIsValid(dat, verbose=verbose, scale=scale, identifier=identifier)
+        return valid
     """
     if (isinstance(data[0][0], list) or (isinstance(bounds[0][0], np.ndarray))):
         ### Multi Agent or multi state simulation
