@@ -5,6 +5,8 @@
 #include "render/DrawSimCharacter.h"
 #include "render/DrawUtil.h"
 #include "sim/WaypointController.h"
+#include "render/DrawUtil.h"
+#include "render/DrawObj.h"
 
 const tVector gFillTint = tVector(1, 1, 1, 1);
 
@@ -46,36 +48,23 @@ void cDrawScenarioMultCharRugby::BuildScene(std::shared_ptr<cScenarioSimChar>& o
 	out_scene = std::shared_ptr<cScenarioMultCharRugby>(new cScenarioMultCharRugby());
 }
 
-void cDrawScenarioMultChar::DrawTarget(const std::shared_ptr<cSimCharacter>& character) const
+void cDrawScenarioMultCharRugby::DrawTarget(const std::shared_ptr<cSimCharacter>& character) const
 {
 	cDrawScenarioMultChar::DrawTarget(character);
-	/*
-	cDrawUtil::PushMatrix();
-	cDrawUtil::Translate(character->GetCurrentGroundTarget());
-	cDrawUtil::DrawSphere( 0.25 );
-	cDrawUtil::PopMatrix();
-
-	cDrawUtil::DrawLine( groundProjectedPosition, character->GetCurrentGroundTarget() );
-	*/
-	tVector groundProjectedPosition = tVector(character->GetRootPos()[0], 0, character->GetRootPos()[2], 0);
-	const double r = 0.1;
-	const double line_h = 2;
-	const double line_w = 2;
-	const tVector col = tVector(1, 0, 0, 0.5);
 
 	auto scene = std::dynamic_pointer_cast<cScenarioMultCharRugby>(mScene);
-	const tVector& target_pos = character->GetCurrentGroundTarget();
-	double reset_dist = scene->GetTargetResetDist();
 
-	cDrawUtil::PushMatrix();
+	const auto& obj = scene->GetBall();
+	cDrawUtil::SetColor(tVector(0.8,0.8,0.8,1));
+	cDrawObj::Draw(obj.get(), cDrawUtil::eDrawSolid);
 
-	cDrawUtil::Translate(target_pos);
-	cDrawUtil::SetColor(col);
-	cDrawUtil::DrawSphere(r);
+	tVector line_col = GetLineColor();
+	if (line_col[3] > 0)
+	{
+		cDrawUtil::SetColor(line_col);
+		cDrawObj::Draw(obj.get(), cDrawUtil::eDrawWire);
+	}
 
-	cDrawUtil::PopMatrix();
-	// cDrawUtil::SetColor(tVector(0.2, 1.0, 0.2, 0.5));
-	cDrawUtil::DrawLine( groundProjectedPosition, character->GetCurrentGroundTarget() );
 }
 
 

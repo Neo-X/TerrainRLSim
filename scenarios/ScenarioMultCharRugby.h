@@ -17,6 +17,7 @@ public:
 	virtual void SetBallPos(const tVector& pos);
 	// virtual int GetNumBalls() const;
 	// virtual void RemoveObj(int handle);
+	virtual const std::shared_ptr<cSimObj>& GetBall() const;
 
 protected:
 	int ballObjHandle;
@@ -29,7 +30,7 @@ protected:
 	// double mRandBallPosTimeMax;
 	// double mRandBallPosTimer;
 	
-	virtual void GenerateInitialTransform(std::shared_ptr<cSimCharacter>& character, size_t agentNum, double rand_rot);
+	virtual void GenerateInitialTransform(std::shared_ptr<cSimCharacter>& character, size_t agentNum);
 	virtual tVector CalcTargetPosObstaclesDynamicCharacters3D(std::shared_ptr<cSimCharacter>& character);
 
 	//virtual void ParseMiscArgs(const std::shared_ptr<cArgParser>& parser);
@@ -49,7 +50,6 @@ protected:
 
 	// virtual void BuildBalls();
 	virtual int BuildBall();
-	virtual const std::shared_ptr<cSimObj>& GetBall() const;
 	// virtual const std::shared_ptr<cSimObj>& GetBall(int ball_handle) const;
 	virtual tVector GetBallPos() const;
 	// virtual tVector GetBallPos(int ball_handle) const;

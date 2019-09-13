@@ -156,7 +156,7 @@ void cScenarioMultCharRugby::BuildChars()
 		    */
 		}
 
-		GenerateInitialTransform(newChar, i+1, rand_rot);
+		GenerateInitialTransform(newChar, i+1);
 		newChar->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(newChar));
 
 		previousPositions.push_back(newChar->GetRootPos());
@@ -167,7 +167,7 @@ void cScenarioMultCharRugby::BuildChars()
 
 
 	//////////////////////////////////////////////////////////////
-	GenerateInitialTransform(mChar, 0, rand_rot);
+	GenerateInitialTransform(mChar, 0);
 	previousPosition = mChar->GetRootPos();
 	mass = ComputeTotalCharacterMass(mChar);
 	mChar->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChar));
@@ -175,40 +175,25 @@ void cScenarioMultCharRugby::BuildChars()
 }
 
 
-void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharacter>& character,
-																size_t agentNum, double rand_rot)
+void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharacter>& character, size_t a)
 {
 	// Find a clear ground plane point to place the character
 	// do
-	tVector rotation_axis;
-	double rotation_angle;
-	double circle_rad = mSpawnRadius + mRand.RandDouble(-2, 1);
-	tVector origin = tVector(0,0,0,0);
-	tVector dist = tVector(1.0,0,0,0);
-	rotation_axis = tVector(0.0, 1.0, 0.0, 0.0);
-	double portion = (M_PI * 2) / (mNumChars + 1);
-	/// To add more noise to the initial circle positions
-	double rand_circle_rot = rand_rot;
 	{
-		tQuaternion new_rotation = cMathUtil::AxisAngleToQuaternion(rotation_axis, ((portion * agentNum) + mRand.RandDouble(-portion/3.0, portion/3.0)) + rand_circle_rot);
-		tVector new_pos = cMathUtil::QuatRotVec(new_rotation, dist * circle_rad);
-		if (agentNum < ((mNumChars + 1)/2))
-		{
-			new_pos[0] = -std::fabs(new_pos[0]);
-		}
-		else
-		{
-			new_pos[0] = std::fabs(new_pos[0]);
-		}
-		new_pos[1] = 0.82;
 		character->Reset();
 
 		// Handle position
-		// tVector root_pos1 = character->GetRootPos();
-		// root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0.82, mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
-		
-		// bool freeSpace = true;
-
+		tVector root_pos1 = character->GetRootPos();
+		root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0.82, mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
+		bool freeSpace = true;
+		if (a < (mNumChars + 1)/2)
+		{
+			root_pos1[0] = -std::fabs(root_pos1[0]);
+		}
+		else
+		{
+			root_pos1[0] = std::fabs(root_pos1[0]);
+		}
 		// Find any intersections with previously placed characters
 		// Note we want to avoid any intersections with any characters, thus the inner loop which checks all characters
 		// given the current generated starting position, and generates a new one if any intersection is found
@@ -231,25 +216,30 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 			}
 		} while (!freeSpace);
 		*/
-		
-		// character->SetRootPos(root_pos1);
-		// character->SetRootPos0(root_pos1);
 
 		// ResolveCharGroundIntersect(character);
 
 		// Handle rotation
+		if (mRandomizeInititalRotation)
+		{
+			tVector rotation_axis;
+			double rotation_angle;
 
-		// rotation_angle = mRand.RandDouble(-M_PI, M_PI);
-		// Look the opposite direction
-		// tQuaternion new_rotation2 = cMathUtil::AxisAngleToQuaternion(rotation_axis, (((portion * agentNum) + mRand.RandDouble(-portion/3.0, portion/3.0)) - M_PI) + (rand_circle_rot + mRand.RandDoubleNorm(0, 0.025) ));
-		tQuaternion new_rotation2 = cMathUtil::AxisAngleToQuaternion(rotation_axis, (((portion * agentNum)) - M_PI) + (rand_circle_rot + mRand.RandDoubleNorm(0, 0.025) ));
-		
-		// TODO: Need to fix this, character initial link velocities need to be lined up with this rotation
-		// character->SetRootRotation(new_rotation);
-		// std::cout << "new_pos: " << new_pos <<std::endl;
-		character->SetRootTransform(new_pos, new_rotation2);
-		new_pos[1] = 0.0;
-		character->SetCurrentGroundTarget(-new_pos);
+			rotation_angle = mRand.RandDouble(-M_PI, M_PI);
+			rotation_axis = tVector(0.0, 1.0, 0.0, 0.0);
+
+			tQuaternion new_rotation = cMathUtil::AxisAngleToQuaternion(rotation_axis, rotation_angle);
+
+			// TODO: Need to fix this, character initial link velocities need to be lined up with this rotation
+			// character->SetRootRotation(new_rotation);
+
+			// Sets rotation and position
+			character->SetRootTransform(root_pos1, new_rotation);
+		} else {
+			// Set position
+			character->SetRootPos(root_pos1);
+			character->SetRootPos0(root_pos1);
+		}
 
 	}
 	// while (character->GetRootPos()[1] - 0 > 0.82); //  Ensures character finds a spot on the flat ground
@@ -257,8 +247,32 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 
 void cScenarioMultCharRugby::Reset()
 {
-	cScenarioMultChar::Reset();
+	cScenarioExpHike::Reset();
 
+	GenerateInitialTransform(mChar, 0);
+	mChar->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChar));
+	previousPosition = mChar->GetRootPos();
+
+
+	// Find random positions somewhere on the open ground for the rest of the characters
+	std::vector<std::shared_ptr<cSimCharacter>>::iterator it;
+	std::vector<tVector>::iterator pos;
+
+	for (size_t it = 0; it <  mChars.size() ; it++)
+	{
+		GenerateInitialTransform((mChars[it]), it);
+		(*pos) = mChars[it]->GetRootPos();
+		mChars[it]->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChars[it]));
+		// (*it)->SetRootRotation(mChar->GetRootRotation());
+	}
+
+	for (size_t a =0; a < mChars.size(); a++)
+	{
+		mPrevCOMs[a] = mChars[a]->CalcCOM();
+		mPrevTimes[a] = mTime;
+	}
+	EnableTargetPos(false);
+	SetBallPos(tVector(0,0.5,0,0));
 }
 
 tVector cScenarioMultCharRugby::CalcTargetPosObstaclesDynamicCharacters3D(std::shared_ptr<cSimCharacter>& character)

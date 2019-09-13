@@ -15,6 +15,7 @@ public:
 	virtual void Keyboard(unsigned char key, int x, int y);
 	// virtual std::string BuildTextInfoStr() const;
 	virtual void ResetCallback();
+	virtual void DrawTarget(const std::shared_ptr<cSimCharacter>& character) const;
 
 protected:
 	
