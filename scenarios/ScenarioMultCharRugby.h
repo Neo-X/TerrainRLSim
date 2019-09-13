@@ -15,19 +15,19 @@ public:
 	virtual std::string GetName() const;
 
 	virtual void SetBallPos(const tVector& pos);
-	virtual int GetNumBalls() const;
-	virtual void RemoveObj(int handle);
+	// virtual int GetNumBalls() const;
+	// virtual void RemoveObj(int handle);
 
 protected:
-	std::vector<int> mBallObjHandles;
-	int mNumBallSpawns;
-	bool mRemoveBallAtGoal;
+	int ballObjHandle;
+	std::shared_ptr<cSimObj> ball;
+	// bool mRemoveBallAtGoal;
 
-	tVector mPrevBallPos;
+	// tVector mPrevBallPos;
 
-	double mRandBallPosTimeMin;
-	double mRandBallPosTimeMax;
-	double mRandBallPosTimer;
+	// double mRandBallPosTimeMin;
+	// double mRandBallPosTimeMax;
+	// double mRandBallPosTimer;
 	
 	virtual void GenerateInitialTransform(std::shared_ptr<cSimCharacter>& character, size_t agentNum, double rand_rot);
 	virtual tVector CalcTargetPosObstaclesDynamicCharacters3D(std::shared_ptr<cSimCharacter>& character);
@@ -41,27 +41,30 @@ protected:
 	virtual bool CheckResetTarget() const;
 	virtual void ClearObjs();
 
-	virtual double GetRandTargetMaxDist() const;
-	virtual double GetRandBallMaxDist() const;
+	// virtual double GetRandTargetMaxDist() const;
+	// virtual double GetRandBallMaxDist() const;
 	virtual void HandleNewActionUpdate();
 
-	virtual bool EndEpisode() const;
+	// virtual bool EndEpisode() const;
 
-	virtual void BuildBalls();
+	// virtual void BuildBalls();
 	virtual int BuildBall();
 	virtual const std::shared_ptr<cSimObj>& GetBall() const;
-	virtual const std::shared_ptr<cSimObj>& GetBall(int ball_handle) const;
+	// virtual const std::shared_ptr<cSimObj>& GetBall(int ball_handle) const;
 	virtual tVector GetBallPos() const;
-	virtual tVector GetBallPos(int ball_handle) const;
+	// virtual tVector GetBallPos(int ball_handle) const;
 
-	virtual tVector CalcTargetPosDefault();
-	virtual void UpdateBallPos(double time_elapsed);
-	virtual void ResetBallPosAll();
-	virtual void ResetBallPos(int ball_handle);
-	virtual void SetBallPos(int ball_handle, const tVector& pos);
-	virtual void ResetBallTimer();
+	// virtual tVector CalcTargetPosDefault();
+	// virtual void UpdateBallPos(double time_elapsed);
+	// virtual void ResetBallPosAll();
+	// virtual void ResetBallPos(int ball_handle);
+	// virtual void SetBallPos(int ball_handle, const tVector& pos);
+	// virtual void SetBallPos(const tVector& pos);
+	// virtual void ResetBallTimer();
 
-	virtual int GetTargetBallHandle() const;
-	virtual void UpdateTargetBall();
-	virtual int FindNearestBall(const tVector& pos) const;
+	// virtual int GetTargetBallHandle() const;
+	// virtual void UpdateTargetBall();
+	// virtual int FindNearestBall(const tVector& pos) const;
+
+	virtual void UpdateCharacter(double time_step);
 };
