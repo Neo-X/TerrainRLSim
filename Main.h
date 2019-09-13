@@ -38,6 +38,7 @@
 #include "scenarios/DrawScenarioSpaceMultChar.h"
 #include "scenarios/DrawScenarioTestCaseMultChar.h"
 #include "scenarios/DrawScenarioMultChar.h"
+#include "scenarios/DrawScenarioMultCharRugby.h"
 #include "scenarios/DrawScenarioMultCharConcentricCircle.h"
 #include "scenarios/DrawScenarioMultiTaskImitateVizEval.h"
 
@@ -278,6 +279,10 @@ void SetupScenario()
 	else if (scenario_name == "multi_char")
 	{
 		gScenario = std::shared_ptr<cDrawScenarioMultChar>(new cDrawScenarioMultChar(gCamera));
+	}
+	else if (scenario_name == "multi_char_rugby")
+	{
+		gScenario = std::shared_ptr<cDrawScenarioMultCharRugby>(new cDrawScenarioMultCharRugby(gCamera));
 	}
 	else if (scenario_name == "multi_char_circle")
 	{
