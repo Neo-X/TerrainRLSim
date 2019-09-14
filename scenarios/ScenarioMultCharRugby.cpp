@@ -184,7 +184,7 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 
 		// Handle position
 		tVector root_pos1 = character->GetRootPos();
-		std::cout << root_pos1 << std::endl;
+		// std::cout << root_pos1 << std::endl;
 		root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, mSpawnRadius), root_pos1[1], mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
 		if (root_pos1[1] < 0.82)
 		{
@@ -200,6 +200,9 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 		{
 			root_pos1 = tVector(mRand.RandDouble(1, mSpawnRadius), root_pos1[1], mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
 		}
+		tVector ballVector = GetBallPos() - root_pos1;
+		tQuaternion ballRot = cMathUtil::VecDiffQuat(ballVector, tVector(1.0,0,0,0));
+		double ballAngle = cMathUtil::QuatTheta(ballRot);
 		// Find any intersections with previously placed characters
 		// Note we want to avoid any intersections with any characters, thus the inner loop which checks all characters
 		// given the current generated starting position, and generates a new one if any intersection is found
@@ -229,7 +232,7 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 		tVector rotation_axis;
 		double rotation_angle;
 
-		rotation_angle = mRand.RandDouble(-M_PI, M_PI);
+		rotation_angle = mRand.RandDouble(-0.1, 0.1) + ballAngle;
 		rotation_axis = tVector(0.0, 1.0, 0.0, 0.0);
 
 		tQuaternion new_rotation = cMathUtil::AxisAngleToQuaternion(rotation_axis, rotation_angle);
