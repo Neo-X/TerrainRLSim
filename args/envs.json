@@ -441,6 +441,33 @@
     	"use_persuit_config": "true"
     }
 },
+"PD_Biped3D_MutliChar_Humanoid_ScenarioSpace_Pursuite_3_WithObstacles_OnlyVel_SimpleReward_v1": 
+{
+	"config_file": "./args/genbiped3D/scenarioSpaceCrowdWithObsOnlyVel.txt",
+	"time_limit": 256,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Use a different rotation representation for the policy learning state [quaternion|axisangle|euler]",
+    	"terrain_file": "data/terrain/dynamicCharacters3D_ScenarioSpace.txt",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"use_simple_reward": "true",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
+    		"comment__": "Number of characters in the simulation in addition to the default character",
+    	"num_characters": "2",
+    		"comment__": "Use a competative pursuite Reward",
+    	"use_persuit_config": "true",
+    	"character_file": "data/characters/humanoid3d_2.txt",
+		"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
+		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt",
+		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt"
+    }
+},
 "PD_Biped3D_MutliChar_ScenarioSpace_Rugby_4_WithObstacles_OnlyVel_SimpleReward_v1": 
 {
 	"config_file": "./args/genbiped3D/RubyCrowdWithObsOnlyVel2.txt",
