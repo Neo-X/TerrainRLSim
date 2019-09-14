@@ -186,13 +186,14 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 		tVector root_pos1 = character->GetRootPos();
 		root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0.82, mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
 		bool freeSpace = true;
-		if (a < (mNumChars + 1)/2)
+		// std::cout << ((mNumChars + 1)/2) << std::endl;
+		if (a < ((mNumChars + 1)/2))
 		{
-			root_pos1[0] = -std::fabs(root_pos1[0]);
+			root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, -1.0), 0.82, mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
 		}
 		else
 		{
-			root_pos1[0] = std::fabs(root_pos1[0]);
+			root_pos1 = tVector(mRand.RandDouble(1, mSpawnRadius), 0.82, mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
 		}
 		// Find any intersections with previously placed characters
 		// Note we want to avoid any intersections with any characters, thus the inner loop which checks all characters
@@ -249,20 +250,21 @@ void cScenarioMultCharRugby::Reset()
 {
 	cScenarioExpHike::Reset();
 
+	SetBallPos(tVector(0,0.5,0,0));
 	GenerateInitialTransform(mChar, 0);
-	mChar->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChar));
+	mChar->SetCurrentGroundTarget(GetBallPos());
 	previousPosition = mChar->GetRootPos();
 
 
 	// Find random positions somewhere on the open ground for the rest of the characters
-	std::vector<std::shared_ptr<cSimCharacter>>::iterator it;
-	std::vector<tVector>::iterator pos;
+	// std::vector<std::shared_ptr<cSimCharacter>>::iterator it;
+	// std::vector<tVector>::iterator pos;
 
 	for (size_t it = 0; it <  mChars.size() ; it++)
 	{
-		GenerateInitialTransform((mChars[it]), it);
-		(*pos) = mChars[it]->GetRootPos();
-		mChars[it]->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChars[it]));
+		GenerateInitialTransform((mChars[it]), it+1);
+		// pos = mChars[it]->GetRootPos();
+		mChars[it]->SetCurrentGroundTarget(GetBallPos());
 		// (*it)->SetRootRotation(mChar->GetRootRotation());
 	}
 
@@ -272,7 +274,6 @@ void cScenarioMultCharRugby::Reset()
 		mPrevTimes[a] = mTime;
 	}
 	EnableTargetPos(false);
-	SetBallPos(tVector(0,0.5,0,0));
 }
 
 tVector cScenarioMultCharRugby::CalcTargetPosObstaclesDynamicCharacters3D(std::shared_ptr<cSimCharacter>& character)
@@ -488,6 +489,7 @@ void cScenarioMultCharRugby::SetBallPos(const tVector& pos)
 	ball->SetPos(pos);
 	ball->SetRotation(tQuaternion::Identity());
 	ball->SetLinearVelocity(tVector::Zero());
+	// ball->SetLinearVelocity(tVector(15.0,0,0,0));
 	ball->SetAngularVelocity(tVector::Zero());
 }
 /*
