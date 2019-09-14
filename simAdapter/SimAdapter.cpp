@@ -30,6 +30,8 @@
 #include "scenarios/DrawScenarioMultCharConcentricCircle.h"
 #include "scenarios/DrawScenarioMultiTaskImitateVizEval.h"
 #include "scenarios/ScenarioMultiTaskImitateVizEval.h"
+#include "scenarios/DrawScenarioMultCharRugby.h"
+#include "scenarios/ScenarioMultCharRugby.h"
 
 cSimAdapter::cSimAdapter(std::vector<std::string> args) {
 	// TODO Auto-generated constructor stub
@@ -616,6 +618,24 @@ void cSimAdapter::init()
 			gScenario = std::shared_ptr<cDrawScenario>(scenario__);
 			this->_gScenario = gScenario;
 		}
+		else if (scenario_name == "multi_char_rugby")
+		{
+			gCameraPosition = tVector(0, 100, 100, 0);
+			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioMultCharRugby>(new cDrawScenarioMultCharRugby(gCamera));
+			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__->GetScene());
+			this->_gScenario = scenario__;
+			if (this->_gScenario != NULL)
+			{
+				auto sim_char_scene = std::dynamic_pointer_cast<cDrawScenarioTerrainRL>(scenario__);
+				if (sim_char_scene != nullptr)
+				{
+					sim_char_scene->SetOutputTex(gIntermediateFrameBuffer);
+				}
+
+			}
+			gScenario = std::shared_ptr<cDrawScenario>(scenario__);
+			this->_gScenario = gScenario;
+		}
 		else if (scenario_name == "testcase_mult_char")
 		{
 			gCameraPosition = tVector(0, 100, 100, 0);
@@ -772,6 +792,13 @@ void cSimAdapter::init()
 		{
 			gCameraPosition = tVector(0, 30, 30, 0);
 			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioSpaceMultChar>(new cScenarioSpaceMultChar());
+			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__);
+			this->_gScenario = scenario__ ;
+		}
+		else if (scenario_name == "multi_char_rugby")
+		{
+			gCameraPosition = tVector(0, 30, 30, 0);
+			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioMultCharRugby>(new cScenarioMultCharRugby());
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__);
 			this->_gScenario = scenario__ ;
 		}
