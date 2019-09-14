@@ -184,16 +184,16 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 
 		// Handle position
 		tVector root_pos1 = character->GetRootPos();
-		root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0.82, mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
+		root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, mSpawnRadius), root_pos1[1], mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
 		bool freeSpace = true;
 		// std::cout << ((mNumChars + 1)/2) << std::endl;
 		if (a < ((mNumChars + 1)/2))
 		{
-			root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, -1.0), 0.82, mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
+			root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, -1.0), root_pos1[1], mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
 		}
 		else
 		{
-			root_pos1 = tVector(mRand.RandDouble(1, mSpawnRadius), 0.82, mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
+			root_pos1 = tVector(mRand.RandDouble(1, mSpawnRadius), root_pos1[1], mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
 		}
 		// Find any intersections with previously placed characters
 		// Note we want to avoid any intersections with any characters, thus the inner loop which checks all characters
@@ -221,26 +221,19 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 		// ResolveCharGroundIntersect(character);
 
 		// Handle rotation
-		if (mRandomizeInititalRotation)
-		{
-			tVector rotation_axis;
-			double rotation_angle;
+		tVector rotation_axis;
+		double rotation_angle;
 
-			rotation_angle = mRand.RandDouble(-M_PI, M_PI);
-			rotation_axis = tVector(0.0, 1.0, 0.0, 0.0);
+		rotation_angle = mRand.RandDouble(-M_PI, M_PI);
+		rotation_axis = tVector(0.0, 1.0, 0.0, 0.0);
 
-			tQuaternion new_rotation = cMathUtil::AxisAngleToQuaternion(rotation_axis, rotation_angle);
+		tQuaternion new_rotation = cMathUtil::AxisAngleToQuaternion(rotation_axis, rotation_angle);
 
-			// TODO: Need to fix this, character initial link velocities need to be lined up with this rotation
-			// character->SetRootRotation(new_rotation);
+		// TODO: Need to fix this, character initial link velocities need to be lined up with this rotation
+		// character->SetRootRotation(new_rotation);
 
-			// Sets rotation and position
-			character->SetRootTransform(root_pos1, new_rotation);
-		} else {
-			// Set position
-			character->SetRootPos(root_pos1);
-			character->SetRootPos0(root_pos1);
-		}
+		// Sets rotation and position
+		character->SetRootTransform(root_pos1, new_rotation);
 
 	}
 	// while (character->GetRootPos()[1] - 0 > 0.82); //  Ensures character finds a spot on the flat ground
