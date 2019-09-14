@@ -184,7 +184,12 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 
 		// Handle position
 		tVector root_pos1 = character->GetRootPos();
+		std::cout << root_pos1 << std::endl;
 		root_pos1 = tVector(mRand.RandDouble(-mSpawnRadius, mSpawnRadius), root_pos1[1], mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
+		if (root_pos1[1] < 0.82)
+		{
+			root_pos1[1] = 0.82;
+		}
 		bool freeSpace = true;
 		// std::cout << ((mNumChars + 1)/2) << std::endl;
 		if (a < ((mNumChars + 1)/2))
@@ -234,6 +239,8 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 
 		// Sets rotation and position
 		character->SetRootTransform(root_pos1, new_rotation);
+		// character->SetRootPos(root_pos1);
+		// character->SetRootPos0(root_pos1);
 
 	}
 	// while (character->GetRootPos()[1] - 0 > 0.82); //  Ensures character finds a spot on the flat ground
