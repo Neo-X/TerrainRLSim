@@ -197,7 +197,7 @@ class TerrainRLSimWrapper(object):
         else:
             ob = self._sim.getLLCState()
             ob = np.reshape(np.array(ob), (-1, len(ob)))
-        return ob
+        return self.checkState(ob)
     
     def updateLLCAction(self, action):
         if (self._sim.getNumAgents() > 0): ### Multi Character simulation
@@ -308,7 +308,7 @@ class TerrainRLSimWrapper(object):
                     ob = ob.flatten()
                     ob_.append(ob)
                     # print ("viz state shape:", np.array(ob_).shape)
-                    return [ob_]
+                    return self.checkState([ob_])
                 
             if ("process_visual_data" in self._config
                 and (self._config["process_visual_data"] == True)
@@ -328,7 +328,7 @@ class TerrainRLSimWrapper(object):
                     ob = np.concatenate((ob, self._sim.getState()), axis=0)
                     # print ("vis ob shape: ", ob.shape)
                     ob_.append(ob)
-                    return [ob_]
+                    return self.checkState([ob_])
                 
             if ("process_visual_data" in self._config
                 and (self._config["process_visual_data"] == True)
@@ -342,7 +342,7 @@ class TerrainRLSimWrapper(object):
                     ob = ob.flatten()
                     # print ("vis ob shape: ", ob.shape)
                     ob_.append(ob)
-                    return [ob_]
+                    return self.checkState([ob_])
             if ("process_visual_data" in self._config
                 and (self._config["process_visual_data"] == True)
                 and ("use_dual_viz_state_representations" in self._config
@@ -357,7 +357,7 @@ class TerrainRLSimWrapper(object):
                     ob = ob.flatten()
                     ob_.append(ob)
                     # print ("viz state shape:", np.array(ob_).shape)
-                    return [ob_]
+                    return self.checkState([ob_])
                 
             elif ("process_visual_data" in self._config
                     and (self._config["process_visual_data"] == True)):
@@ -373,7 +373,7 @@ class TerrainRLSimWrapper(object):
         if ("flatten_observation" in self._config
             and (self._config["flatten_observation"])):
             ob = ob.flatten()
-        return ob
+        return self.checkState(ob)
     
     def simUpdate(self):
         
@@ -443,17 +443,16 @@ class TerrainRLSimWrapper(object):
             reward = reward[0][0]
         
         # ob[0,0] = np.nan
-        if (not checkDataIsValid(ob)):
-            ob = np.zeros_like(ob)
+        
+        return self.checkState(ob), self.checkState(reward), self._done, self._config
+        
+    def checkState(self, state):
+        if (not checkDataIsValid(state)):
+            state = np.zeros_like(state)
             self._done = True
             self._sim.reload()
             print ("Found obs nan")
-        if (not checkDataIsValid(reward)):
-            reward = np.zeros_like(reward)
-            self._done = True
-            self._sim.reload()
-            print ("Found reward nan")
-        return ob, reward, self._done, self._config
+        return state
         
     def calcRewardForAgent(self, a):
         return self._sim.calcRewardForAgent(a)
