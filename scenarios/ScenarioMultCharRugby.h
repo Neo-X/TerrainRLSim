@@ -19,6 +19,9 @@ public:
 	// virtual void RemoveObj(int handle);
 	virtual const std::shared_ptr<cSimObj>& GetBall() const;
 
+	virtual double CalcReward();
+	virtual double calcRewardForAgent(size_t agent);
+
 protected:
 	int ballObjHandle;
 	std::shared_ptr<cSimObj> ball;

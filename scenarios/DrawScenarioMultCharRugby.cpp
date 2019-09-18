@@ -65,6 +65,12 @@ void cDrawScenarioMultCharRugby::DrawTarget(const std::shared_ptr<cSimCharacter>
 		cDrawObj::Draw(obj.get(), cDrawUtil::eDrawWire);
 	}
 
+	cDrawUtil::SetColor(tVector(0.6,0.8,0.6,1));
+	cDrawUtil::DrawBox(tVector(7.5,0,0,0), tVector(5,0.1,20,0), cDrawUtil::eDrawSolid);
+	cDrawUtil::DrawBox(tVector(-7.5,0,0,0), tVector(5,0.1,20,0), cDrawUtil::eDrawSolid);
+
+
+
 }
 
 

@@ -22,11 +22,38 @@ cScenarioMultCharRugby::cScenarioMultCharRugby() :
 	mNumChars=0;
 	mSpawnRadius=10.0;
 	mRandTargetBound = 10.0;
+	mReachTargetBonus = 20;
 	// mNumBallSpawns=1;
 }
 
 cScenarioMultCharRugby::~cScenarioMultCharRugby()
 {
+
+}
+
+double cScenarioMultCharRugby::CalcReward()
+{
+	double reward = cScenarioMultChar::CalcReward();
+
+	reward = reward + this->ball->GetLinearVelocity()[0];
+	return reward;
+}
+
+double cScenarioMultCharRugby::calcRewardForAgent(size_t agent)
+{
+	double reward = cScenarioMultChar::calcRewardForAgent(agent);
+	int num_agents = 1 +  mChars.size();
+
+	if ( agent < (num_agents/2)-1)
+	{
+		reward = reward + this->ball->GetLinearVelocity()[0];
+	}
+	else
+	{
+		reward = reward + -this->ball->GetLinearVelocity()[0];
+	}
+
+	return reward;
 }
 
 void cScenarioMultCharRugby::Init()
@@ -49,7 +76,7 @@ void cScenarioMultCharRugby::UpdateCharacter(double time_step)
 	if ( mCreateNewGoals && (mChar->GetCurrentGroundTarget()[0] > 5.0) ) // May be problematic because target is on ground plane
 	{
 		agentDatas[0].reachedTarget = true;
-		mChar->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChar));
+		// mChar->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChar));
 	}
 
 	for(size_t a = 0; a < (mChars.size() - (num_agents/2)); a++)
@@ -61,7 +88,7 @@ void cScenarioMultCharRugby::UpdateCharacter(double time_step)
     	if ( mCreateNewGoals && (mChars[a]->GetCurrentGroundTarget()[0] > 5.0) ) // May be problematic because target is ground plane
 		{
     		agentDatas[a+1].reachedTarget = true;
-    		mChars[a]->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChars[a]));
+    		// mChars[a]->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChars[a]));
 		}
 	}
 	for(size_t a = (num_agents/2)-1; a < mChars.size(); a++)
@@ -73,14 +100,14 @@ void cScenarioMultCharRugby::UpdateCharacter(double time_step)
 		if ( mCreateNewGoals && (mChars[a]->GetCurrentGroundTarget()[0] < -5.0) ) // May be problematic because target is ground plane
 		{
 			agentDatas[a+1].reachedTarget = true;
-			mChars[a]->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChars[a]));
+			// mChars[a]->SetCurrentGroundTarget(CalcTargetPosObstaclesDynamicCharacters3D(mChars[a]));
 		}
 	}
 	if (GetBallPos()[0] < -5 || (GetBallPos()[0] > 5.0))
 	{
 		// int handle = GetTargetBallHandle();
 		// RemoveObj(handle);
-		SetBallPos(tVector(0,1,0,0));
+		// SetBallPos(tVector(0,1,0,0));
 	}
 }
 
