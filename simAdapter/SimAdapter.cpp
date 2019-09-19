@@ -1236,8 +1236,7 @@ std::vector<double> cSimAdapter::getImitationVelocity3D() const
 	}
 	else
 	{
-		std::cerr << "This scenario does not support imitation information" << std::endl;
-		exit(1);
+		throw std::runtime_error("This scenario does not support imitation information. " + std::string(__FILE__)+ ":"+ std::to_string(__LINE__));
 	}
 
 }
@@ -1419,8 +1418,7 @@ std::vector<double> cSimAdapter::getImitationState() const
 	}
 	else
 	{
-		std::cerr << "This scenario does not support imitation information" << std::endl;
-		exit(1);
+		throw std::runtime_error("This scenario does not support imitation information. " + std::string(__FILE__)+ ":"+ std::to_string(__LINE__));
 	}
 
 }
@@ -1443,8 +1441,7 @@ std::vector<double> cSimAdapter::getImitationStateAtTime(double animTime)
 	}
 	else
 	{
-		std::cerr << "This scenario does not support imitation information" << std::endl;
-		exit(1);
+		throw std::runtime_error("This scenario does not support imitation information. " + std::string(__FILE__)+ ":"+ std::to_string(__LINE__));
 	}
 
 }
@@ -1461,8 +1458,7 @@ double cSimAdapter::getAnimationTime() const
 	}
 	else
 	{
-		std::cerr << "This scenario does not support imitation information" << std::endl;
-		exit(1);
+		throw std::runtime_error("This scenario does not support imitation information. " + std::string(__FILE__)+ ":"+ std::to_string(__LINE__));
 	}
 }
 
@@ -1488,8 +1484,7 @@ void cSimAdapter::setSimState(std::vector<double> state_)
 	}
 	else
 	{
-		std::cerr << "This scenario does not support imitation information" << std::endl;
-		exit(1);
+		throw std::runtime_error("This scenario does not support imitation information. " + std::string(__FILE__)+ ":"+ std::to_string(__LINE__));
 	}
 }
 
