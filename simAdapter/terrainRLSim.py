@@ -473,7 +473,6 @@ class TerrainRLSimWrapper(object):
                     dist = self._sim.calcVelocity(i)-1
                     reward__ = np.exp((dist*dist)*-1.5)
                     reward.append([reward__])
-                    print ("Reward vel: ", reward)
                 else:
                     reward.append([self._sim.calcRewardForAgent(i)])
         else:
@@ -482,7 +481,6 @@ class TerrainRLSimWrapper(object):
                 dist = self._sim.calcVelocity()-1
                 reward__ = np.exp((dist*dist)*-1.5)
                 reward = reward__ * (not self._done)
-                print ("Reward vel: ", reward)
             else:
                 reward = self._sim.calcReward() * (not self._done)
             
