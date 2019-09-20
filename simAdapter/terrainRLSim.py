@@ -470,14 +470,18 @@ class TerrainRLSimWrapper(object):
                 # reward.append([self._sim.calcRewardForAgent(i) * int(not self._done_multiAgent[i])])
                 if ("use_forward_vel_reward" in self._config
                     and (self._config["use_forward_vel_reward"] == True)):
-                    reward.append([self._sim.calcVelocity(i)])
+                    dist = self._sim.calcVelocity(i)-1
+                    reward__ = np.exp((dist*dist)*-1.5)
+                    reward.append([reward__])
                     print ("Reward vel: ", reward)
                 else:
                     reward.append([self._sim.calcRewardForAgent(i)])
         else:
             if ("use_forward_vel_reward" in self._config
                     and (self._config["use_forward_vel_reward"] == True)):
-                reward = self._sim.calcVelocity() * (not self._done)
+                dist = self._sim.calcVelocity()-1
+                reward__ = np.exp((dist*dist)*-1.5)
+                reward = reward__ * (not self._done)
                 print ("Reward vel: ", reward)
             else:
                 reward = self._sim.calcReward() * (not self._done)
