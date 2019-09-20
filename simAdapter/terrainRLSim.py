@@ -468,9 +468,19 @@ class TerrainRLSimWrapper(object):
                 # reward.append([self._sim.calcRewardForAgent(i)])
                 ### This might not work so well for multichar simulations. Need to make agentHasFallen for each agent
                 # reward.append([self._sim.calcRewardForAgent(i) * int(not self._done_multiAgent[i])])
-                reward.append([self._sim.calcRewardForAgent(i)])
+                if ("use_forward_vel_reward" in self._config
+                    and (self._config["use_forward_vel_reward"] == True)):
+                    reward.append([self._sim.calcVelocity(i)])
+                    print ("Reward vel: ", reward)
+                else:
+                    reward.append([self._sim.calcRewardForAgent(i)])
         else:
-            reward = self._sim.calcReward() * (not self._done)
+            if ("use_forward_vel_reward" in self._config
+                    and (self._config["use_forward_vel_reward"] == True)):
+                reward = self._sim.calcVelocity() * (not self._done)
+                print ("Reward vel: ", reward)
+            else:
+                reward = self._sim.calcReward() * (not self._done)
             
         return reward
         

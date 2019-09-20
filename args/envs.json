@@ -78,6 +78,21 @@
     }
 	
 },
+"PD_Biped2D_Flat_NoPhase_Forward_Reward_v0": 
+{
+	"config_file": "./args/genBiped2D/biped2d_full_cliff.txt",
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    		"comment__": "Specific controller type to use",
+    	"char_ctrl": "ct_pd",
+    		"comment__": "Terrain specification file",
+    	"terrain_file":	"data/terrain/flat.txt"
+    },
+    	"comment__": "The reward function is the forward velocity of the agent",
+    "use_forward_vel_reward": true
+	
+},
 "PD_Biped2D_Walls_Terrain-v0": 
 {
 	"config_file": "./args/genBiped2D/biped2d_full_walls.txt",
