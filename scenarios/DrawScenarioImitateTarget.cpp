@@ -23,7 +23,7 @@ void cDrawScenarioImitateTarget::BuildTrainScene(std::shared_ptr<cScenarioTrain>
 void cDrawScenarioImitateTarget::DrawMisc() const
 {
 	cDrawScenarioImitate::DrawMisc();
-	DrawTargetPos();
+	//DrawTargetPos();
 }
 
 void cDrawScenarioImitateTarget::DrawTargetPos() const

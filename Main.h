@@ -61,24 +61,24 @@ int gWinHeight = static_cast<int>(gWinWidth * 9.0 / 16.0);
 //int gWinHeight = 480;
 bool gReshaping = false;
 
-const tVector gBKGColor = tVector(0.97, 0.97, 1, 0);
+const tVector gBKGColor = tVector(1, 1, 1, 1);
 //const tVector gBKGColor = tVector(1, 1, 1, 0);
 
 // camera attributes
-double gViewWidth = 4.5;
-//double gViewWidth = 6.5;
+//double gViewWidth = 4.5;
+double gViewWidth = 10.5;
 double gViewHeight = (gViewWidth * gWinHeight) / gWinWidth;
-double gViewNearZ = 2;
+double gViewNearZ = 5;
 //double gViewNearZ = 25;
-double gViewFarZ = 1000;
+double gViewFarZ = -40;
 
 // intermediate frame buffers
 std::unique_ptr<cTextureDesc> gDefaultFrameBuffer;
 std::shared_ptr<cTextureDesc> gIntermediateFrameBuffer;
 
-tVector gCameraPosition = tVector(0, 0, 40, 0);
-tVector gCameraFocus = tVector(gCameraPosition[0], gCameraPosition[1], 0.0, 0.0);
-tVector gCameraUp = tVector(0, 1, 0, 0);
+tVector gCameraPosition = tVector(0, 5, 0, 0);
+tVector gCameraFocus = tVector(gCameraPosition[0], 0.0, 0.0, 0.0);
+tVector gCameraUp = tVector(0, 0, -1, 0);
 
 cCamera gCamera;
 
@@ -357,7 +357,7 @@ void DrawInfo()
 		const double line_offset = text_size;
 
 		cDrawUtil::SetLineWidth(1.5);
-		cDrawUtil::SetColor(tVector(0, 0, 0, 0.5));
+		cDrawUtil::SetColor(tVector(0, 0, 0, 1.0));
 
 		cDrawUtil::Translate(tVector(-0.96, 0.88, -1, 0));
 		double curr_fps = gUpdatesPerSec;
