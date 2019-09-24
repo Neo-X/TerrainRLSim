@@ -525,7 +525,15 @@ class TerrainRLSimWrapper(object):
         return self._done
         
     def init(self):
-        self._sim.init()
+        # self._sim.init()
+        if ("rendering_key_presses" in self._config):
+            for key_ in self._config["rendering_key_presses"]:
+                print ("Pressing key: ", key_)
+                # self.onKeyEvent(key_.decode("utf-8"), 0, 0)
+                if (type(key_) == int):
+                    self.onKeyEvent(key_, 0, 0)
+                else:
+                    self.onKeyEvent(ord(key_), 0, 0)
         
     def getEnv(self):
         return self._sim
@@ -906,6 +914,7 @@ def getEnv(env_name, render=False, GPU_device=None):
     
     sim_ = TerrainRLSimWrapper(sim, render=render, config=conf__)
     
+    sim_.init()
     return sim_
 
 if __name__ == '__main__':
