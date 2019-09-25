@@ -38,7 +38,9 @@
     {	
     		"comment__": "Specific controller type to use",
     	"char_ctrl": "ct_pd"
-    }
+    },
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["c", "k", "j"]
 	
 },
 "PD_Biped2D_Pedistal_v1": 
@@ -77,7 +79,9 @@
     	"char_ctrl": "ct_pd",
     		"comment__": "Terrain specification file",
     	"terrain_file":	"data/terrain/flat.txt"
-    }
+    },
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["c", "k", "j"]
 	
 },
 "PD_Biped2D_Flat_NoPhase_Forward_Reward_v0": 
@@ -92,7 +96,9 @@
     	"terrain_file":	"data/terrain/flat.txt"
     },
     	"comment__": "The reward function is the forward velocity of the agent",
-    "use_forward_vel_reward": true
+    "use_forward_vel_reward": true,
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["c", "k", "j"]
 	
 },
 "PD_Biped2D_Walls_Terrain-v0": 
