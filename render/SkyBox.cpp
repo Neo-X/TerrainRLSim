@@ -10,7 +10,7 @@ cSkyBox::cSkyBox() : mTurbidity( 3.f ), mAlbedo( 0.1f )
 {
 	// the sun is very bright
 	mSunColour = tVector(1000, 900, 700, 1);
-	mSunDirection = tVector(0.577, 0.277, 0.577, 0).normalized();
+	mSunDirection = tVector(0.677, 3.277, 0.677, 0);
 	mSunSize = 0.035;
 	mRelativePath = "";
 	mSkyBoxProgram = std::unique_ptr<cShader>(new cShader());
@@ -103,18 +103,29 @@ void cSkyBox::UpdateHosekModel()
 
 void cSkyBox::CalculateAmbientLighting()
 {
-	tVector up = tVector(0, 1, 0, 0);
+	// tVector up = tVector(0, 1, 0, 0);
+	// PreethamSky(up, mSunDirection, mAmbientColour[0]);
+
+	// tVector xp = tVector(1, 0, 0, 0);
+	// PreethamSky(xp, mSunDirection, mAmbientColour[1]);
+
+	// tVector zp = tVector(0, 0, 1, 0);
+	// PreethamSky(zp, mSunDirection, mAmbientColour[2]);
+
+	tVector up = tVector(1, 1, 1, 0);
 	PreethamSky(up, mSunDirection, mAmbientColour[0]);
 
-	tVector xp = tVector(1, 0, 0, 0);
+	tVector xp = tVector(1, 1, 1, 0);
 	PreethamSky(xp, mSunDirection, mAmbientColour[1]);
 
-	tVector zp = tVector(0, 0, 1, 0);
+	tVector zp = tVector(1, 1, 1, 0);
 	PreethamSky(zp, mSunDirection, mAmbientColour[2]);
+
+
 
 	// down
 	// hack hack hack
-	float down_scale = 0.4f; // scale the up colour to be the down colour
+	float down_scale = 1.4f; // scale the up colour to be the down colour
 							// taking into account that the ground will reflect
 							// some of the skylight
 	mAmbientColour[3][0] = mAmbientColour[0][0] * down_scale;

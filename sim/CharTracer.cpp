@@ -249,14 +249,14 @@ void cCharTracer::DrawTrace(const tTrace& trace) const
 {
 	cDrawUtil::SetLineWidth(3);
 	DrawTraceTraj(trace);
-	DrawTraceEndPos(trace);
+	//DrawTraceEndPos(trace);
 }
 
 void cCharTracer::DrawTrace2(const tTrace& trace) const
 {
 	cDrawUtil::SetLineWidth(3);
 	DrawTraceTraj2(trace);
-	DrawTraceEndPos2(trace);
+	//DrawTraceEndPos2(trace);
 }
 
 
