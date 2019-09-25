@@ -281,9 +281,9 @@ void cCharTracer::DrawTraceTraj(const tTrace& trace) const
 
 		tVector color_trace = col;
 
-		color_trace[0]=color_trace[0]+0.5;
-		color_trace[1]=color_trace[1]-0.5;
-		color_trace[2]=color_trace[2]-0.5;
+		color_trace[0]=1.40;
+		color_trace[1]=0.3;
+		color_trace[2]=0.3;
 		col_tmp[(4*i) + 0] = color_trace[0];
 		col_tmp[(4*i) + 1] = color_trace[1];
 		col_tmp[(4*i) + 2] = color_trace[2];
