@@ -430,7 +430,7 @@ void cDrawSimCharacter::DrawSimBody(const cSimCharacter& character, const tVecto
 
 
 			cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawSolid);
-			tVector wire_color = tVector(0.5, 0.5, 0.5, 1);
+			tVector wire_color = tVector(0.3, 0.3, 0.3, 1);
 
 			if (line_col[3] > 0)
 			{
@@ -489,7 +489,7 @@ void cDrawSimCharacter::DrawShapes(const cSimCharacter& character, const tVector
 
 				cDrawUtil::SetColor(col);
 				cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawSolid);
-				tVector wire_color = tVector(0.5, 0.5, 0.5, 1);
+				tVector wire_color = tVector(0.3, 0.3, 0.3, 1);
 
 				if (line_col[3] > 0)
 				{
