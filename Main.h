@@ -48,11 +48,15 @@
 #include "render/Camera.h"
 #include "render/DrawUtil.h"
 #include "render/TextureDesc.h"
+#include "render/ShadowMap.h"
 
 #include "util/BVHReader.h"
 #include "util/MotionDB.h"
 #  include <GL/glut.h>
 #include <GL/freeglut_ext.h>
+
+//#define USE_OpenGLES
+
 
 // Dimensions of the window we are drawing into.
 int gWinWidth = 800;
@@ -105,6 +109,7 @@ tVector gPrevCamPos = tVector::Zero();
 // arg parser
 std::shared_ptr<cArgParser> gArgParser = nullptr;
 std::shared_ptr<cDrawScenario> gScenario = nullptr;
+
 int gArgc = 0;
 char** gArgv = nullptr;
 
@@ -461,6 +466,7 @@ void Display_(void)
 
 void Reshape(int w, int h)
 {
+
 	gReshaping = true;
 
 	gWinWidth = w;

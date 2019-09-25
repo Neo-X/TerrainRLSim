@@ -208,9 +208,9 @@ void cSkyBox::ChangeSunDirection( const tVector& dir )
 
 void cSkyBox::RotSunDirection(double d_theta)
 {
-	tMatrix mat = cMathUtil::RotateMat(tVector(0, 1, 0, 0), d_theta);
-	mSunDirection = mat * mSunDirection;
-
+	//tMatrix mat = cMathUtil::RotateMat(tVector(1, 0, 0, 0), d_theta);
+	//mSunDirection = mat * mSunDirection;
+	mSunDirection[1]= mSunDirection[1]+d_theta;
 	UpdateHosekModel();
 }
 

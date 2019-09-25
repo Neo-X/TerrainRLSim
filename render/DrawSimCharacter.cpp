@@ -19,15 +19,28 @@
 
 void cDrawSimCharacter::Draw(const cSimCharacter& character, const tVector& fill_tint, const tVector& line_col, bool enable_draw_shape)
 {
+
+	{
+		tVector line_col2 = line_col;
+		line_col2[0]=0.0;
+		line_col2[1]=0.0;
+		line_col2[2]=0.0;
+
+
+		DrawSimBody(character, fill_tint, line_col2);
+	}
+
 	bool has_draw_shapes = character.HasDrawShapes();
 	if (has_draw_shapes && enable_draw_shape)
 	{
-		DrawShapes(character, fill_tint, line_col);
+				tVector line_col3 = line_col;
+		line_col3[0]=0.0;
+		line_col3[1]=0.0;
+		line_col3[2]=0.0;
+		DrawShapes(character, fill_tint, line_col3);
 	}
-	else
-	{
-		DrawSimBody(character, fill_tint, line_col);
-	}
+//	else
+
 }
 
 void cDrawSimCharacter::DrawCoM(const cSimCharacter& character, double marker_size, double vel_scale, 
@@ -427,16 +440,65 @@ void cDrawSimCharacter::DrawSimBody(const cSimCharacter& character, const tVecto
 
 void cDrawSimCharacter::DrawShapes(const cSimCharacter& character, const tVector& fill_tint, const tVector& line_col)
 {
-	assert(character.HasDrawShapes());
-	const auto& shape_defs = character.GetDrawShapeDefs();
-	size_t num_shapes = shape_defs.rows();
+	// assert(character.HasDrawShapes());
+	// const auto& shape_defs = character.GetDrawShapeDefs();
+	// size_t num_shapes = shape_defs.rows();
 
-	cDrawUtil::SetLineWidth(1);
-	for (int i = 0; i < num_shapes; ++i)
+	// cDrawUtil::SetLineWidth(1);
+	// for (int i = 1; i < num_shapes; ++i)
+	// {
+	// 	cKinTree::tDrawShapeDef curr_def = shape_defs.row(i);
+	// 	cDrawCharacter::DrawShape(character, curr_def, fill_tint, line_col);
+	// }
+
+
+	const tVector gContactCol = tVector(0.5, 0.75, 0.5, 1);
+
+
+
+
+
+	//if (character.m_id>0)
+	//{
+	if (character.m_id>4)
 	{
-		cKinTree::tDrawShapeDef curr_def = shape_defs.row(i);
-		cDrawCharacter::DrawShape(character, curr_def, fill_tint, line_col);
+		cDrawUtil::SetLineWidth(1);
+		for (int i = 0; i < character.GetNumBodyParts(); ++i)
+		{
+			if (character.IsValidBodyPart(i))
+			{
+				const std::shared_ptr<cSimBox>& curr_part = std::static_pointer_cast<cSimBox>(character.GetBodyPart(i));
+				tVector pos = curr_part->GetPos();
+
+				tVector col;
+				if (curr_part->IsInContact())
+				{
+					col = gContactCol;
+				}
+				else
+				{
+					col = character.GetPartColor(i);
+					col = col.cwiseProduct(fill_tint);
+				}
+
+				col[0]=col[0]+1;
+				col[2]=col[2]-1;
+
+				cDrawUtil::SetColor(col);
+				cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawSolid);
+
+				if (line_col[3] > 0)
+				{
+					cDrawUtil::SetColor(line_col);
+					cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawWire);
+				}
+			}
+		}
 	}
+
+
+
+
 }
 
 void cDrawSimCharacter::DrawCtrlInfoGroundSamples(const cCharController* ctrl, const tVector& offset, bool draw_3d)

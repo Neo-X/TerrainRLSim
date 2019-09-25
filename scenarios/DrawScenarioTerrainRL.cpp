@@ -163,7 +163,7 @@ cDrawScenarioTerrainRL::eDrawMode cDrawScenarioTerrainRL::GetDrawMode() const
 	eDrawMode draw_mode = eDrawMode2D;
 	if (mDraw3D)
 	{
-		draw_mode = eDrawMode3D;
+		draw_mode = eDrawMode2D;
 	}
 	return draw_mode;
 }
@@ -177,6 +177,8 @@ void cDrawScenarioTerrainRL::DrawScene()
 	checkError();
 	glCullFace(GL_BACK);
 	checkError();
+
+
 
 	eDrawMode draw_mode = GetDrawMode();
 	if (draw_mode == eDrawModeUber3D)
@@ -381,7 +383,7 @@ void cDrawScenarioTerrainRL::ToggleDraw3D()
 
 void cDrawScenarioTerrainRL::EnableDraw3D(bool enable)
 {
-	mDraw3D = enable;
+	mDraw3D = false;
 	eDrawMode draw_mode = GetDrawMode();
 	if (draw_mode == eDrawModeUber3D || draw_mode == eDrawMode3D)
 	{
@@ -628,10 +630,10 @@ void cDrawScenarioTerrainRL::InitRenderResources()
 	{
 		mSkyBox->setShaderRelativePath(fpath);
 	}
-	mSkyBox->Init();
+	//mSkyBox->Init();
 	// mSkyBox->ChangeSunDirection(tVector(0.6, 0.67, 0.45, 0));
-	mSkyBox->ChangeSunDirection(tVector(0.0, 1.0, 0.0, 0));
-	mSkyBox->SetSunSize(0.01);
+	//mSkyBox->ChangeSunDirection(tVector(0.0, 1.0, 1.0, 0));
+	//mSkyBox->SetSunSize(0.01);
 
 #ifdef USE_OpenGLES
 	int w = 800;
@@ -655,11 +657,14 @@ void cDrawScenarioTerrainRL::InitRenderResources()
 	//float shadow_near_z = 1.f;
 	//float shadow_far_z = 40.f;
 	//int shadow_res = 1024;
-	float shadow_size = 40.f;
+	float shadow_size = 2.f;
 	float shadow_near_z = 1.f;
-	float shadow_far_z = 60.f;
+	float shadow_far_z = -30.f;
 	int shadow_res = 2048;
-	mShadowCam = cCamera(tVector(0, 0, 1, 0), tVector::Zero(), tVector(0, 1, 0, 0),
+
+
+
+	mShadowCam = cCamera(tVector(0, 5, 0, 0), tVector::Zero(), tVector(0, 0, -1, 0),
 						shadow_size, shadow_size, shadow_near_z, shadow_far_z);
 	mShadowCam.SetProj(cCamera::eProjOrtho);
 	mShadowMap = std::unique_ptr<cShadowMap>(new cShadowMap());
