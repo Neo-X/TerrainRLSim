@@ -31,7 +31,7 @@ void cDrawSimCharacter::Draw(const cSimCharacter& character, const tVector& fill
 	}
 
 	bool has_draw_shapes = character.HasDrawShapes();
-	if (has_draw_shapes)
+	if (has_draw_shapes && enable_draw_shape)
 	{
 				tVector line_col3 = line_col;
 		line_col3[0]=0.0;
@@ -427,11 +427,14 @@ void cDrawSimCharacter::DrawSimBody(const cSimCharacter& character, const tVecto
 			}
 
 			cDrawUtil::SetColor(col);
+
+
 			cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawSolid);
+			tVector wire_color = tVector(0.5, 0.5, 0.5, 1);
 
 			if (line_col[3] > 0)
 			{
-				cDrawUtil::SetColor(line_col);
+				cDrawUtil::SetColor(wire_color);
 				cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawWire);
 			}
 		}
@@ -486,10 +489,11 @@ void cDrawSimCharacter::DrawShapes(const cSimCharacter& character, const tVector
 
 				cDrawUtil::SetColor(col);
 				cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawSolid);
+				tVector wire_color = tVector(0.5, 0.5, 0.5, 1);
 
 				if (line_col[3] > 0)
 				{
-					cDrawUtil::SetColor(line_col);
+					cDrawUtil::SetColor(wire_color);
 					cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawWire);
 				}
 			}
