@@ -123,10 +123,12 @@ int cCharTracer::GetNumTraces() const
 
 void cCharTracer::Draw() const
 {
-	for (int i = 0; i < GetNumTraces(); ++i)
+	for (int i = 1; i < GetNumTraces(); ++i)
 	{
 		DrawTrace(mTraces[i]);
 	}
+	DrawTrace2(mTraces[0]);
+
 }
 
 void cCharTracer::ResetTimer()
@@ -250,7 +252,88 @@ void cCharTracer::DrawTrace(const tTrace& trace) const
 	DrawTraceEndPos(trace);
 }
 
+void cCharTracer::DrawTrace2(const tTrace& trace) const
+{
+	cDrawUtil::SetLineWidth(3);
+	DrawTraceTraj2(trace);
+	DrawTraceEndPos2(trace);
+}
+
+
+
 void cCharTracer::DrawTraceTraj(const tTrace& trace) const
+{
+	if (trace.mPosTraj.GetSize() > 1)
+	{
+		static GLint attr_pos = 0, attr_color = 1;
+		GLfloat verts_tmp[trace.mPosTraj.GetSize() * 3];
+		GLfloat col_tmp[trace.mPosTraj.GetSize() * 4];
+
+		const tVector& vert0 = trace.mPosTraj[0];
+		int curr_col_idx = static_cast<int>(vert0[3]);
+
+		size_t i = 0;
+		assert(curr_col_idx < trace.mParams.mColors.size());
+		const tVector& col = trace.mParams.mColors[curr_col_idx];
+		verts_tmp[(3*i) + 0] = vert0[0];
+		verts_tmp[(3*i) + 1] = vert0[1];
+		verts_tmp[(3*i) + 2] = vert0[2];
+
+		tVector color_trace = col;
+
+		color_trace[0]=color_trace[0]+0.5;
+		color_trace[1]=color_trace[1]-0.5;
+		color_trace[2]=color_trace[2]-0.5;
+		col_tmp[(4*i) + 0] = color_trace[0];
+		col_tmp[(4*i) + 1] = color_trace[1];
+		col_tmp[(4*i) + 2] = color_trace[2];
+		col_tmp[(4*i) + 3] = color_trace[3];
+
+
+		cDrawUtil::SetColor(color_trace);
+		for (i = 1; i < trace.mPosTraj.GetSize(); ++i)
+		{
+			const tVector& vert0 = trace.mPosTraj[i];
+			const tVector& vert1 = trace.mPosTraj[i-1];
+			int curr_col_idx = static_cast<int>(vert0[3]);
+
+			assert(curr_col_idx < trace.mParams.mColors.size());
+			const tVector& col = trace.mParams.mColors[curr_col_idx];
+			verts_tmp[(3*i) + 0] = vert0[0];
+			verts_tmp[(3*i) + 1] = vert0[1];
+			verts_tmp[(3*i) + 2] = vert0[2];
+			col_tmp[(4*i) + 0] = color_trace[0];
+			col_tmp[(4*i) + 1] = color_trace[1];
+			col_tmp[(4*i) + 2] = color_trace[2];
+			col_tmp[(4*i) + 3] = color_trace[3];
+			cDrawUtil::SetColor(color_trace);
+			cDrawUtil::DrawLine( vert1, vert0 );
+		}
+
+		{
+		  glVertexAttribPointer(attr_pos, 3, GL_FLOAT, GL_FALSE, 0, verts_tmp);
+		  checkError();
+		  glVertexAttribPointer(attr_color, 4, GL_FLOAT, GL_FALSE, 0, col_tmp);
+		  checkError();
+		  glEnableVertexAttribArray(attr_pos);
+		  checkError();
+		  glEnableVertexAttribArray(attr_color);
+		  checkError();
+
+		  glDrawArrays(GL_LINE_STRIP, 0, trace.mPosTraj.GetSize());
+		  checkError();
+
+		  glDisableVertexAttribArray(attr_pos);
+		  checkError();
+		  glDisableVertexAttribArray(attr_color);
+		  checkError();
+		}
+
+	}
+}
+
+
+void cCharTracer::DrawTraceTraj2(const tTrace& trace) const
 {
 	if (trace.mPosTraj.GetSize() > 1)
 	{
@@ -313,6 +396,7 @@ void cCharTracer::DrawTraceTraj(const tTrace& trace) const
 	}
 }
 
+
 void cCharTracer::DrawTraceEndPos(const tTrace& trace) const
 {
 	const double marker_size = gMarkerSize;
@@ -350,6 +434,45 @@ void cCharTracer::DrawTraceEndPos(const tTrace& trace) const
 		}
 	}
 }
+
+void cCharTracer::DrawTraceEndPos2(const tTrace& trace) const
+{
+	const double marker_size = gMarkerSize;
+
+	for (int i = 0; i < static_cast<int>(trace.mEndEffPos.GetSize()); ++i)
+	{
+		const tEndEffectorPos& end_pos = trace.mEndEffPos[i];
+		int idx = end_pos.mIdx;
+		const tVector & pos = end_pos.mPos;
+
+		int curr_col_idx = static_cast<int>(pos[3]);
+		assert(curr_col_idx < trace.mParams.mColors.size());
+		const tVector& col = trace.mParams.mColors[curr_col_idx];
+		cDrawUtil::SetColor(col);
+
+		int draw_idx = idx % gNumEndEffMarkers;
+
+		switch (draw_idx)
+		{
+		case 0:
+			cDrawUtil::DrawRect(pos, tVector(marker_size, marker_size, 0, 0));
+			break;
+		case 1:
+			cDrawUtil::DrawTriangle(pos, marker_size);
+			break;
+		case 2:
+			cDrawUtil::DrawCross(pos, marker_size);
+			break;
+		case 3:
+			cDrawUtil::DrawDisk(pos, marker_size);
+			break;
+		default:
+			assert(false);
+			break;
+		}
+	}
+}
+
 
 void cCharTracer::SetTraceColIdx(int idx, tTrace& out_trace) const
 {

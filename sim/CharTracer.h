@@ -79,5 +79,10 @@ protected:
 	virtual void DrawTraceTraj(const tTrace& trace) const;
 	virtual void DrawTraceEndPos(const tTrace& trace) const;
 
+	virtual void DrawTrace2(const tTrace& trace) const;
+	virtual void DrawTraceTraj2(const tTrace& trace) const;
+	virtual void DrawTraceEndPos2(const tTrace& trace) const;
+
+
 	virtual void SetTraceColIdx(int idx, tTrace& out_trace) const;
 };
