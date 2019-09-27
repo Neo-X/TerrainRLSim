@@ -1,14 +1,19 @@
 {
-"Type": "var2d_gaps",
+"Type": "conveyor3d",
 
-"Params": [
+"Params": 
+[
 	{
-		"GapSpacingMin": 0.01,
-		"GapSpacingMax": 0.05,
-		"GapWMin": 10.25,
-		"GapWMax": 10.3,
-		"GapHMin": -100.85,
-		"GapHMax": -100.9
+		"ObstacleWidth0": 2,
+		"ObstacleWidth1": 2,
+		"ObstacleSpeed0": 0.0,
+		"ObstacleSpeed1": 0.0001,
+		"ObstacleSpeedLerpPow": 3,
+		"ConveyorStripLength": 1,
+		"ConveyorNumStrips": 1,
+		"ConveyorNumSlices": 5,
+		"ConveyorSpacing": 0,
+		"ConveyorDirection": 1
 	}
 ]
 }
