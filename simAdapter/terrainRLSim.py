@@ -460,6 +460,9 @@ class TerrainRLSimWrapper(object):
     def getNumAgents(self):
         return self._sim.getNumAgents()
     
+    def endOfEpochForAgent(self, a):
+        return self._sim.endOfEpochForAgent(a)
+    
     def calcRewards(self):
         reward = []
         if (self._sim.getNumAgents() > 0): ### Multi Character simulation
