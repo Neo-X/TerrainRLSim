@@ -9,10 +9,12 @@
 const std::string cCharacter::gSkeletonKey = "Skeleton";
 const std::string gPoseKey = "Pose";
 const std::string gVelKey = "Vel";
+int cCharacter::s_idGenerator = 1;
 
 cCharacter::cCharacter()
 {
 	ResetParams();
+	m_id = s_idGenerator++;
 }
 
 cCharacter::~cCharacter()

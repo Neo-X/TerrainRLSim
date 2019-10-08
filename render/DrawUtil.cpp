@@ -89,6 +89,7 @@ void cDrawUtil::DrawBoxSolid(const tVector& pos, const tVector& size, const tVec
 	const int pos_len = num_faces * 6 * cMeshUtil::gPosDim;
 	const int coord_len = num_faces * 6 * cMeshUtil::gCoordDim;
 
+
 	tVector sw0 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
 	tVector se0 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
 	tVector ne0 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
@@ -98,6 +99,21 @@ void cDrawUtil::DrawBoxSolid(const tVector& pos, const tVector& size, const tVec
 	tVector se1 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
 	tVector ne1 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
 	tVector nw1 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+
+
+	if( size[1]>1)
+	{
+	sw0 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.0 * size[1]  , pos[2] - 0.5 * size[2], 0);
+	se0 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.0 * size[1] , pos[2] - 0.5 * size[2], 0);
+	ne0 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+	nw0 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+
+	sw1 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.0 * size[1], pos[2] + 0.5 * size[2], 0);
+	se1 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.0 * size[1], pos[2] + 0.5 * size[2], 0);
+	ne1 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+	nw1 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);		
+	}
+
 
 	const float pos_data[pos_len] = {
 		ne0[0], ne0[1], ne0[2], // top
@@ -223,6 +239,23 @@ void cDrawUtil::DrawBoxWire(const tVector& pos, const tVector& size)
 	tVector se1 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
 	tVector ne1 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
 	tVector nw1 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+
+
+
+	if( size[1]>1)
+	{
+	sw0 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.0 * size[1]  , pos[2] - 0.5 * size[2], 0);
+	se0 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.0 * size[1] , pos[2] - 0.5 * size[2], 0);
+	ne0 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+	nw0 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+
+	sw1 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.0 * size[1], pos[2] + 0.5 * size[2], 0);
+	se1 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.0 * size[1], pos[2] + 0.5 * size[2], 0);
+	ne1 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+	nw1 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);		
+	}
+
+
 
 	const float pos_data[pos_len] = {
 		ne0[0], ne0[1], ne0[2], // top

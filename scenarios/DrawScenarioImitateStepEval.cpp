@@ -60,7 +60,7 @@ void cDrawScenarioImitateStepEval::DrawMisc() const
 
 	if (EnableTargetPos())
 	{
-		DrawTargetPos();
+	//	DrawTargetPos();
 	}
 }
 

@@ -674,6 +674,24 @@ void cDrawScenarioSimChar::DrawGroundObstacles3D(const std::shared_ptr<cGround>&
 		cDrawUtil::SetColor(fill_col);
 
 		auto box = dynamic_cast<const cSimBox*>(&obj);
+
+		{
+			cDrawObj::Draw(&obj, cDrawUtil::eDrawSolid);
+			
+			// cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
+
+			// std::cout << "Drawing box" << std::endl;
+			// cDrawUtil::DrawBox(fill_col, fill_col);
+			// cDrawUtil::DrawSphere(1.0);
+		}
+
+		if (line_col[3] > 0)
+		{
+			cDrawUtil::SetColor(line_col);
+			cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
+		}
+		//cDrawUtil::DrawBoxWire(pos, size);
+
 		/*
 		if (box != nullptr)
 		{
@@ -688,20 +706,20 @@ void cDrawScenarioSimChar::DrawGroundObstacles3D(const std::shared_ptr<cGround>&
 		}
 		else
 		 */
-		{
-			cDrawObj::Draw(&obj, cDrawUtil::eDrawSolid);
-			// cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
+		// {
+		// 	cDrawObj::Draw(&obj, cDrawUtil::eDrawSolid);
+		// 	// cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
 
-			// std::cout << "Drawing box" << std::endl;
-			// cDrawUtil::DrawBox(fill_col, fill_col);
-			// cDrawUtil::DrawSphere(1.0);
-		}
+		// 	// std::cout << "Drawing box" << std::endl;
+		// 	// cDrawUtil::DrawBox(fill_col, fill_col);
+		// 	// cDrawUtil::DrawSphere(1.0);
+		// }
 
-		if (line_col[3] > 0)
-		{
-			cDrawUtil::SetColor(line_col);
-			cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
-		}
+		// if (line_col[3] > 0)
+		// {
+		// 	cDrawUtil::SetColor(line_col);
+		// 	cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
+		// }
 		// cDrawUtil::PopMatrix();
 	}
 	// cDrawUtil::PopMatrix();

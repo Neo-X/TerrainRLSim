@@ -12,6 +12,8 @@ class cSimCharacter : public cCharacter
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
+
+
 	struct tParams
 	{
 		EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -118,6 +120,7 @@ protected:
 	Eigen::MatrixXd mBodyDefs;
 	Eigen::MatrixXd mDrawShapeDefs;
 	double mFriction;
+
 
 	std::shared_ptr<cCharController> mController;
 
