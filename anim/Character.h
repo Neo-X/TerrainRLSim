@@ -6,7 +6,9 @@ class cCharacter
 {
 public:
 	static const std::string gSkeletonKey;
-
+    static int s_idGenerator;
+    int m_id;
+	
 	virtual ~cCharacter();
 
 	virtual bool Init(const std::string& char_file);

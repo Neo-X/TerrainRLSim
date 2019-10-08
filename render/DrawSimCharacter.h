@@ -15,6 +15,7 @@ class cMonopedHopperController;
 class cDrawSimCharacter
 {
 public:
+
 	static void Draw(const cSimCharacter& character, const tVector& fill_tint, const tVector& line_col, bool enable_draw_shape = false);
 	static void DrawCoM(const cSimCharacter& character, double marker_size, double vel_scale,
 						const tVector& col, const tVector& offset);

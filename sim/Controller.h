@@ -4,6 +4,7 @@
 #include "util/MathUtil.h"
 #include "sim/World.h"
 
+
 class cSimCharacter;
 
 class cController : public std::enable_shared_from_this<cController>

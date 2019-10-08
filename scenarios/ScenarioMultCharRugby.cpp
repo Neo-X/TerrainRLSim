@@ -23,6 +23,7 @@ cScenarioMultCharRugby::cScenarioMultCharRugby() :
 	mSpawnRadius=10.0;
 	mRandTargetBound = 10.0;
 	mReachTargetBonus = 20;
+	mReachTargetBonus = 5;
 	// mNumBallSpawns=1;
 }
 

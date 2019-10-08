@@ -20,7 +20,8 @@ cSimCharacter::cSimCharacter()
 	: mWorld(nullptr)
 {
 	mFriction = 0.9;
-}
+ 
+ }
 
 cSimCharacter::~cSimCharacter()
 {

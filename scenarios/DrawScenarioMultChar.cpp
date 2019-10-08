@@ -31,7 +31,7 @@ void cDrawScenarioMultChar::ResetCallback()
 
 void cDrawScenarioMultChar::DrawStepPlan() const
 {
-	cDrawScenarioImitateStepEval::DrawStepPlan();
+	//cDrawScenarioImitateStepEval::DrawStepPlan();
 
 	const tVector& pos0_col = tVector(0, 1, 0, 0.5);
 	const tVector& pos1_col = tVector(0, 0.5, 0, 0.5);
@@ -58,9 +58,9 @@ void cDrawScenarioMultChar::DrawStepPlan() const
 		{
 			const auto& step_plan = ctrl_->GetStepPlan();
 
-			DrawStepPos(step_plan.mStepPos0, pos0_col);
-			DrawStepPos(step_plan.mStepPos1, pos1_col);
-			DrawRootHeading(step_plan, heading_col);
+		//	DrawStepPos(step_plan.mStepPos0, pos0_col);
+		//	DrawStepPos(step_plan.mStepPos1, pos1_col);
+		//	DrawRootHeading(step_plan, heading_col);
 		}
 		else
 		{

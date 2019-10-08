@@ -367,7 +367,7 @@ void cGroundVar2D::BuildSegment(int seg_id, double bound_min, double bound_max,
 void cGroundVar2D::AddPadding(int seg_id, double bound_min, double bound_max)
 {
 	std::unique_ptr<tSegment>& seg = mSegments[seg_id];
-	double padding_width = 0.7;
+	double padding_width = 0.5;
 	double flat_w = std::min(bound_max - bound_min, padding_width - bound_min);
 	cTerrainGen2D::BuildFlat(flat_w, mBlendParams, mRand, seg->mData);
 
