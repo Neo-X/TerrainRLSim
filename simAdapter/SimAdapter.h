@@ -249,6 +249,8 @@ public:
 
 	virtual bool endOfEpoch();
 	virtual bool agentHasFallen();
+	virtual bool agent_contact(size_t agent_num);
+
 	/// check whether or not the last action has completed and a new action is needed
 	virtual bool needUpdatedAction();
 

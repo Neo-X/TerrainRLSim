@@ -523,6 +523,23 @@ bool cSimCharacter::IsInContact() const
 	return false;
 }
 
+bool cSimCharacter::IsInContact_for_collision() const
+{
+	// std::cout << this << " is might contact: " << std::endl;
+	for (int i = 0; i < GetNumBodyParts(); ++i)
+	{
+		if (IsValidBodyPart(i) && i!=4 && i!=7)
+		{
+			if (IsInContact(i))
+			{
+				// std::cout << this << " is in contact: " << i << std::endl;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 bool cSimCharacter::IsInContact(int idx) const
 {
 	return GetBodyPart(idx)->IsInContact();

@@ -80,6 +80,8 @@ public:
 	virtual bool HasExploded() const;
 
 	virtual bool IsInContact() const;
+	virtual bool IsInContact_for_collision() const;
+
 	virtual bool IsInContact(int idx) const;
 	virtual tVector GetContactPt(int idx) const;
 

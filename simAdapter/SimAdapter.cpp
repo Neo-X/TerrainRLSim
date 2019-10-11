@@ -1541,6 +1541,20 @@ bool cSimAdapter::agentHasFallen()
 	return this->_scene->HasFallen();
 }
 
+
+bool cSimAdapter::agent_contact(size_t agent_num)
+{
+	// const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();
+
+	// this->_scene->HasFallen();
+	std::shared_ptr<cSimCharacter> agent = this->getAgent(agent_num);
+	return agent->IsInContact_for_collision();
+
+
+}
+
+
+
 bool cSimAdapter::needUpdatedAction()
 {
 	const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();
