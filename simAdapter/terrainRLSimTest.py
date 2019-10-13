@@ -41,7 +41,7 @@ if __name__ == '__main__':
     
     for e in range(100):
         env.reset()
-        for t in range(50):
+        for t in range(256):
             observation, reward,  done, info = env.step(actions)
             # env.getImitationState()
             print ("Done: ", done)
