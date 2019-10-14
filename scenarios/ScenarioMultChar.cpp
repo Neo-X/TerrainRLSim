@@ -720,6 +720,9 @@ void cScenarioMultChar::SetupGround()
 	{
 		dynamic_obstacles_characters->SetChar(mChar);
 		dynamic_obstacles_characters->SetChars(mChars);
+		// std::shared_ptr<cScenario> _scenario = std::shared_ptr<cScenario>(this);
+		// std::cout << "_scenario: " << _scenario << std::endl;
+		// dynamic_obstacles_characters->setScenario(_scenario);
 	}
 	auto dynamic_obstacles = std::dynamic_pointer_cast<cGroundDynamicObstacles3D>(mGround);
 	if (dynamic_obstacles != nullptr)
@@ -731,6 +734,7 @@ void cScenarioMultChar::SetupGround()
 	{
 		dynamic_characters->SetChar(mChar);
 		dynamic_characters->SetChars(mChars);
+		/// dynamic_obstacles_characters->setScenario(std::shared_ptr<cScenario>(this));
 	}
 }
 

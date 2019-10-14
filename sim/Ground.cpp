@@ -173,6 +173,12 @@ void cGround::Init(std::shared_ptr<cWorld> world, const tParams& params)
 	FlagUpdate();
 }
 
+void cGround::setScenario(const std::shared_ptr<cScenario>& scenario_)
+{
+	this->scenario = scenario_;
+}
+
+
 void cGround::Update(double time_elapsed, const tVector& bound_min, const tVector& bound_max)
 {
 	mTime += time_elapsed;
