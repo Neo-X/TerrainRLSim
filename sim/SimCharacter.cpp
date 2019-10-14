@@ -528,7 +528,8 @@ bool cSimCharacter::IsInContact_for_collision() const
 	// std::cout << this << " is might contact: " << std::endl;
 	for (int i = 0; i < GetNumBodyParts(); ++i)
 	{
-		if (IsValidBodyPart(i) && i!=4 && i!=7)
+
+		if (IsValidBodyPart(i) && !IsEndEffector(i))
 		{
 			if (IsInContact(i))
 			{
