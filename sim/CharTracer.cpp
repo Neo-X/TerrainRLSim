@@ -123,11 +123,12 @@ int cCharTracer::GetNumTraces() const
 
 void cCharTracer::Draw() const
 {
-	for (int i = 1; i < GetNumTraces(); ++i)
+	for (int i = 0; i < GetNumTraces(); ++i)
 	{
-		DrawTrace(mTraces[i]);
+//		DrawTrace(mTraces[i]);
+		DrawTrace2(mTraces[i]);
+
 	}
-	DrawTrace2(mTraces[0]);
 
 }
 

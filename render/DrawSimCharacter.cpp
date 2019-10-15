@@ -31,14 +31,14 @@ void cDrawSimCharacter::Draw(const cSimCharacter& character, const tVector& fill
 	}
 
 	bool has_draw_shapes = character.HasDrawShapes();
-	if (has_draw_shapes )
-	{
-				tVector line_col3 = line_col;
-		line_col3[0]=0.0;
-		line_col3[1]=0.0;
-		line_col3[2]=0.0;
-		DrawShapes(character, fill_tint, line_col3);
-	}
+	// if (has_draw_shapes )
+	// {
+	// 			tVector line_col3 = line_col;
+	// 	line_col3[0]=0.0;
+	// 	line_col3[1]=0.0;
+	// 	line_col3[2]=0.0;
+	// 	DrawShapes(character, fill_tint, line_col3);
+	// }
 //	else
 
 }
