@@ -327,6 +327,16 @@ void cGroundObstaclesDynamicCharacters3D::BuildObstacle(tObstacle& out_obstacle)
 	// out_obstacle = box;
 }
 
+void cGroundObstaclesDynamicCharacters3D::AddObstacle(std::shared_ptr<cSimObj>& obj)
+{
+	tObstacle curr_obstacle;
+	// BuildObstacle(curr_obstacle);
+	curr_obstacle.mObj = obj;
+	mObstacles.push_back(curr_obstacle);
+}
+
+
+
 double cGroundObstaclesDynamicCharacters3D::FindMaxBoundHeight(const tVector& aabb_min, const tVector& aabb_max) const
 {
 	double h = gDefaultHeight;

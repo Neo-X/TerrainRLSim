@@ -2,6 +2,7 @@
 
 #include "sim/SimObj.h"
 #include "sim/SimCharacter.h"
+#include "scenarios/Scenario.h"
 
 class cGround : public cSimObj
 {
@@ -92,6 +93,7 @@ public:
 	virtual ~cGround();
 
 	virtual void Init(std::shared_ptr<cWorld> world, const tParams& params);
+	virtual void setScenario(const std::shared_ptr<cScenario>& scenario);
 	virtual void Update(double time_elapsed, const tVector& bound_min, const tVector& bound_max);
 	virtual void Clear();
 
@@ -126,6 +128,7 @@ protected:
 	Eigen::VectorXd mBlendParams;
 	size_t mUpdateCount;
 	double mTime;
+	std::shared_ptr<cScenario> scenario;
 
 	cGround();
 

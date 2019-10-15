@@ -29,6 +29,8 @@ public:
 	virtual void SetChar(const std::shared_ptr<cSimCharacter>& character);
 	virtual eClass GetGroundClass() const;
 
+	virtual void AddObstacle(std::shared_ptr<cSimObj>& obj);
+
 protected:
 
 	struct tObstacle

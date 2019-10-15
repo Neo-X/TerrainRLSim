@@ -60,6 +60,8 @@ public:
 		eParamsSlopeDeltaMin,
 		eParamsSlopeDeltaMax,
 
+		eParamsInitialPaddingWidth,
+
 		eParamsMax
 	};
 

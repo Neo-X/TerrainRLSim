@@ -117,7 +117,6 @@ void cScenarioMultCharRugby::BuildChars()
 {
 	// Initialize all of the characters
 	BuildBall();
-
 	double rand_rot = mRand.RandDouble(-M_PI, M_PI);
 	for(int i = 0; i < mNumChars; i++) 
 	{
@@ -228,7 +227,7 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 		{
 			root_pos1 = tVector(mRand.RandDouble(1, mSpawnRadius), root_pos1[1], mRand.RandDouble(-mSpawnRadius, mSpawnRadius), 0);
 		}
-		tVector ballVector = GetBallPos() - root_pos1;
+		tVector ballVector = (GetBallPos() - root_pos1).normalized();
 		tQuaternion ballRot = cMathUtil::VecDiffQuat(ballVector, tVector(1.0,0,0,0));
 		double ballAngle = cMathUtil::QuatTheta(ballRot);
 		// Find any intersections with previously placed characters
@@ -260,7 +259,11 @@ void cScenarioMultCharRugby::GenerateInitialTransform(std::shared_ptr<cSimCharac
 		tVector rotation_axis;
 		double rotation_angle;
 
-		rotation_angle = mRand.RandDouble(-0.1, 0.1) + ballAngle;
+		rotation_angle = mRand.RandDouble(-0.051, 0.051) + ballAngle;
+		if (root_pos1[2] < 0)
+		{
+			rotation_angle = -rotation_angle;
+		}
 		rotation_axis = tVector(0.0, 1.0, 0.0, 0.0);
 
 		tQuaternion new_rotation = cMathUtil::AxisAngleToQuaternion(rotation_axis, rotation_angle);
@@ -303,6 +306,11 @@ void cScenarioMultCharRugby::Reset()
 	{
 		mPrevCOMs[a] = mChars[a]->CalcCOM();
 		mPrevTimes[a] = mTime;
+	}
+	auto dynamic_obstacles_characters = std::dynamic_pointer_cast<cGroundObstaclesDynamicCharacters3D>(mGround);
+	if (dynamic_obstacles_characters != nullptr)
+	{
+		dynamic_obstacles_characters->AddObstacle(this->ball);
 	}
 	EnableTargetPos(false);
 }
