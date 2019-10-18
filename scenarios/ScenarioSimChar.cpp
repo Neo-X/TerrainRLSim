@@ -65,6 +65,7 @@ cScenarioSimChar::cScenarioSimChar()
 	mExpLayer = "";
 
 	mEnableRandPerturbs = false;
+	mEnableRandProjectiles = false;
 	mRandPerturbTimer = 0;
 	mPerturbTimeMin = std::numeric_limits<double>::infinity();
 	mPerturbTimeMax = std::numeric_limits<double>::infinity();
@@ -73,6 +74,7 @@ cScenarioSimChar::cScenarioSimChar()
 	mMaxPerturb = 100;
 	mMinPerturbDuration = 0.1;
 	mMaxPerturbDuration = 0.5;
+	mProjectileFrequency = 0.05;
 
 	mPreSubstepCallback = nullptr;
 	mPostSubstepCallback = nullptr;
@@ -132,12 +134,14 @@ void cScenarioSimChar::ParseArgs(const std::shared_ptr<cArgParser>& parser)
 	parser->ParseBool("enable_char_soft_contact", mCharParams.mEnableSoftContact);
 
 	parser->ParseBool("enable_rand_perturbs", mEnableRandPerturbs);
+	parser->ParseBool("enable_rand_projectiles", mEnableRandProjectiles);
 	parser->ParseDouble("perturb_time_min", mPerturbTimeMin);
 	parser->ParseDouble("perturb_time_max", mPerturbTimeMax);
 	parser->ParseDouble("min_perturb", mMinPerturb);
 	parser->ParseDouble("max_perturb", mMaxPerturb);
 	parser->ParseDouble("min_pertrub_duration", mMinPerturbDuration);
 	parser->ParseDouble("max_perturb_duration", mMaxPerturbDuration);
+	parser->ParseDouble("projectile_frequency", mProjectileFrequency);
 
 	mPerturbPartIDs.clear();
 	parser->ParseIntArray("perturb_part_ids", mPerturbPartIDs);
@@ -700,6 +704,10 @@ void cScenarioSimChar::UpdateRandPerturb(double time_step)
 	{
 		ApplyRandForce();
 		ResetRandPertrub();
+	}
+	if (mEnableRandProjectiles && ( mRand.RandDouble(0, 1) < mProjectileFrequency) )
+	{
+		this->SpawnProjectile();
 	}
 }
 
