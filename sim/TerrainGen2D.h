@@ -61,6 +61,7 @@ public:
 		eParamsSlopeDeltaMax,
 
 		eParamsInitialPaddingWidth,
+		eParamsInitialPaddingBoundWidth,
 
 		eParamsMax
 	};
