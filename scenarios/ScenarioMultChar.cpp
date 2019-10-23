@@ -27,6 +27,7 @@ cScenarioMultChar::cScenarioMultChar() :
 	mCreateNewGoals = false;
 	mReachTargetBonus = 200;
 	mUsePursuitConfig = false;
+	mTargetRewardWeight = 1;
 }
 
 cScenarioMultChar::~cScenarioMultChar()
@@ -282,7 +283,7 @@ double cScenarioMultChar::CalcReward()
 				tVector groundTargetNormal = (mChar->GetCurrentGroundTarget() - groundPosition).normalized();
 				double targetRewardExponent = groundTargetNormal.transpose() * groundVelocity - 1.0;
 
-				reward = std::exp( -std::pow( std::min(0.0, targetRewardExponent), 2.0 ) );
+				reward = mTargetRewardWeight * std::exp( -std::pow( std::min(0.0, targetRewardExponent), 2.0 ) );
 				if (agentDatas[0].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;
@@ -465,7 +466,7 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 				tVector groundTargetNormal = (char_->GetCurrentGroundTarget() - groundPosition).normalized();
 				double targetRewardExponent = groundTargetNormal.transpose() * groundVelocity - 1;
 
-				reward = std::exp( -std::pow( std::min(0.0, targetRewardExponent), 2.0 ) );
+				reward = mTargetRewardWeight * std::exp( -std::pow( std::min(0.0, targetRewardExponent), 2.0 ) );
 				if (agentDatas[agent+1].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;

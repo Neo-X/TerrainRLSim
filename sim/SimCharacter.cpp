@@ -1242,3 +1242,13 @@ void cSimCharacter::SetCurrentGroundTarget(tVector newGroundTarget)
 {
 	currentGroundTarget = newGroundTarget;
 }
+
+tVector cSimCharacter::GetCurrentGroundTargetVel()
+{
+	return currentGroundTargetVel;
+}
+
+void cSimCharacter::SetCurrentGroundTargetVel(tVector newGroundTargetVel)
+{
+	currentGroundTargetVel = newGroundTargetVel;
+}
