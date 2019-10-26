@@ -63,6 +63,7 @@ protected:
 	bool mRandomizeInititalRotation;
 	bool mCreateNewGoals;
 	bool mUseSimpleReward;
+	bool mUseSimpleDistanceReward;
 	double mReachTargetBonus;
 	bool mUseRepulsiveReward;
 	bool mUsePursuitConfig;
