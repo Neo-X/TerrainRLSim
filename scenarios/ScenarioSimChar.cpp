@@ -530,6 +530,7 @@ void cScenarioSimChar::BuildGround()
 	mGroundParams.mGroundWidth = 2 * char_view_dist;
 	mGroundParams.mHasRandSeed = mHasRandSeed;
 	mGroundParams.mRandSeed = mRandSeed;
+	// mGroundParams.mOrigin[1] = -1000;
 
 	cGroundFactory::BuildGround(mWorld, mGroundParams, mGround);
 }

@@ -1,6 +1,7 @@
 #include "sim/GroundConveyor3D.h"
 #include "sim/TerrainGen3D.h"
 #include "sim/SimBox.h"
+#include "iostream"
 
 const tVector gObstaclePosMin = tVector(-20, 0, -20, 0);
 const tVector gObstaclePosMax = tVector(20, 0, 20, 0);
@@ -76,10 +77,12 @@ void cGroundConveyor3D::Init(std::shared_ptr<cWorld> world, const tParams& param
 		mParams = params;
 		mPrevCenter.setZero();
 
+		mParams.mOrigin[1] = mParams.mOrigin[1]-1000;
 		btVector3 normal = btVector3(0, 1, 0);
-		btVector3 origin = btVector3(static_cast<btScalar>(params.mOrigin[0]),
-									static_cast<btScalar>(params.mOrigin[1]-1000),
-									static_cast<btScalar>(params.mOrigin[2]));
+		btVector3 origin = btVector3(static_cast<btScalar>(mParams.mOrigin[0]),
+									static_cast<btScalar>(mParams.mOrigin[1]),
+									static_cast<btScalar>(mParams.mOrigin[2]));
+		// this->SetPos(mParams.mOrigin);
 		normal.normalize();
 		btScalar w = normal.dot(origin);
 		mShape = std::unique_ptr<btCollisionShape>(new btStaticPlaneShape(normal, w));
@@ -87,6 +90,10 @@ void cGroundConveyor3D::Init(std::shared_ptr<cWorld> world, const tParams& param
 		btRigidBody::btRigidBodyConstructionInfo cons_info(0, this, mShape.get(), btVector3(0, 0, 0));
 		mSimBody = std::unique_ptr<btRigidBody>(new btRigidBody(cons_info));
 		mSimBody->setFriction(static_cast<btScalar>(params.mFriction));
+		btTransform trans = mSimBody->getWorldTransform();
+		// btScalar scale = static_cast<btScalar>(world->GetScale());
+		trans.setOrigin(origin);
+		mSimBody->setWorldTransform(trans);
 		cGround::Init(world, params);
 	}
 	BuildObstacles();
@@ -228,6 +235,7 @@ void cGroundConveyor3D::BuildStripSlice(const tVector& pos, double strip_width, 
 	params.mSize = size;
 	params.mPos = pos_start;
 	params.mFriction = mParams.mFriction;
+	params.mMass = 10000.0;
 
 	std::shared_ptr<cSimBox> box = std::shared_ptr<cSimBox>(new cSimBox());
 	box->Init(mWorld, params);
@@ -280,8 +288,8 @@ void cGroundConveyor3D::UpdateStrips()
 			tVector pos = curr_slice.CalcPos();
 			tVector vel = curr_slice.CalcVel();
 
-			bool at_end = (vel[direction_index] > 0 && (pos[direction_index] - slice_len / 2 > strip.mLen / 2))
-						|| (vel[direction_index] < 0 && (pos[direction_index] + slice_len / 2 < -strip.mLen / 2));
+			bool at_end = (vel[direction_index] > 0 && (pos[direction_index] - (slice_len / 2) > strip.mLen / 2))
+						|| (vel[direction_index] < 0 && (pos[direction_index] + (slice_len / 2) < -strip.mLen / 2));
 
 			if (at_end)
 			{
@@ -292,14 +300,15 @@ void cGroundConveyor3D::UpdateStrips()
 
 				if (vel[direction_index] > 0)
 				{
-					new_pos[direction_index] -= slice_len;
+					new_pos[direction_index] -= (strip.mLen/2);
 				}
 				else
 				{
-					new_pos[direction_index] += slice_len;
+					new_pos[direction_index] += (strip.mLen/2);
 				}
 
 				curr_slice.mObj->SetPos(new_pos);
+				// std::cout << "new_pos" << new_pos << std::endl;
 				strip.IncHead();
 			}
 		}
