@@ -103,6 +103,8 @@ public:
 
 	virtual tVector GetCurrentGroundTarget();
 	virtual void SetCurrentGroundTarget(tVector newGroundTarget);
+	virtual tVector GetCurrentGroundTargetVel();
+	virtual void SetCurrentGroundTargetVel(tVector newGroundTarget);
 
 #if defined(ENABLE_TRAINING)
 	virtual double CalcEffort() const;
@@ -116,6 +118,7 @@ public:
 
 protected:
 	tVector currentGroundTarget;
+	tVector currentGroundTargetVel;
 	std::shared_ptr<cWorld> mWorld;
 	std::vector<std::shared_ptr<cSimObj>> mBodyParts;
 	std::vector<cJoint, Eigen::aligned_allocator<cJoint>> mJoints;

@@ -58,7 +58,8 @@ const cTerrainGen2D::tParamDef cTerrainGen2D::gParamDefs[] =
 	{ "SlopeDeltaMin", -0.35 },
 	{"SlopeDeltaMax", 0.35},
 
-	{"InitialPaddingWidth", 0.7}
+	{"InitialPaddingWidth", 0.7},
+	{"InitialPaddingBoundWidth", -1.0}
 };
 
 void cTerrainGen2D::GetDefaultParams(Eigen::VectorXd& out_params)

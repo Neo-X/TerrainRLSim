@@ -23,7 +23,7 @@ cScenarioMultCharRugby::cScenarioMultCharRugby() :
 	mSpawnRadius=10.0;
 	mRandTargetBound = 10.0;
 	mReachTargetBonus = 20;
-	mReachTargetBonus = 5;
+	mTargetRewardWeight = 5;
 	// mNumBallSpawns=1;
 }
 
@@ -74,6 +74,7 @@ void cScenarioMultCharRugby::UpdateCharacter(double time_step)
 	int num_agents = 1 +  mChars.size();
 	// Update default mChar Target if reached
 	mChar->SetCurrentGroundTarget(GetBallPos());
+	mChar->SetCurrentGroundTargetVel(GetBall()->GetLinearVelocity());
 	if ( mCreateNewGoals && (mChar->GetCurrentGroundTarget()[0] > 5.0) ) // May be problematic because target is on ground plane
 	{
 		agentDatas[0].reachedTarget = true;
@@ -85,6 +86,7 @@ void cScenarioMultCharRugby::UpdateCharacter(double time_step)
     	mChars[a]->Update(time_step);
 
 		mChars[a]->SetCurrentGroundTarget(GetBallPos());
+		mChars[a]->SetCurrentGroundTargetVel(GetBall()->GetLinearVelocity());
     	// Update target if reached for this char
     	if ( mCreateNewGoals && (mChars[a]->GetCurrentGroundTarget()[0] > 5.0) ) // May be problematic because target is ground plane
 		{
@@ -97,6 +99,7 @@ void cScenarioMultCharRugby::UpdateCharacter(double time_step)
 		mChars[a]->Update(time_step);
 
 		mChars[a]->SetCurrentGroundTarget(GetBallPos());
+		mChars[a]->SetCurrentGroundTargetVel(GetBall()->GetLinearVelocity());
 		// Update target if reached for this char
 		if ( mCreateNewGoals && (mChars[a]->GetCurrentGroundTarget()[0] < -5.0) ) // May be problematic because target is ground plane
 		{
@@ -363,34 +366,6 @@ void cScenarioMultCharRugby::HandleNewActionUpdate()
 
 	// mPrevBallPos = GetBallPos();
 }
-/*
-bool cScenarioMultCharRugby::EndEpisode() const
-{
-	bool is_end = cScenarioExpHike::EndEpisode();
-	int num_balls = GetNumBalls();
-	is_end |= (num_balls < 1);
-	return is_end;
-}
-
-double cScenarioMultCharRugby::GetRandTargetMaxDist() const
-{
-	return gMaxTargetDist;
-}
-
-double cScenarioMultCharRugby::GetRandBallMaxDist() const
-{
-	return gMaxBallDist;
-}
-
-void cScenarioMultCharRugby::BuildBalls()
-{
-	for (int i = 0; i < mNumBallSpawns; ++i)
-	{
-		int curr_handle = BuildBall();
-		mBallObjHandles.push_back(curr_handle);
-	}
-	// UpdateTargetBall();
-}*/
 
 int cScenarioMultCharRugby::BuildBall()
 {
@@ -429,100 +404,12 @@ const std::shared_ptr<cSimObj>& cScenarioMultCharRugby::GetBall() const
 {
 	return this->ball;
 }
-/*
-const std::shared_ptr<cSimObj>& cScenarioMultCharRugby::GetBall(int ball_handle) const
-{
-	assert(ball_handle != gInvalidIdx);
-	const tObjEntry& entry = mObjs[ball_handle];
-	return entry.mObj;
-}
-*/
 
 tVector cScenarioMultCharRugby::GetBallPos() const
 {
 	return this->ball->GetPos();
 }
-/*
-tVector cScenarioMultCharRugby::GetBallPos(int ball_handle) const
-{
-	const auto& ball = GetBall(ball_handle);
-	return ball->GetPos();
-}*/
 
-/*
-tVector cScenarioMultCharRugby::CalcTargetPosDefault()
-{
-	//return cScenarioExpHike::CalcTargetPosDefault();
-	const double max_dist = GetRandTargetMaxDist();
-	const double min_dist = 0;
-
-	tVector rand_pos = tVector::Zero();
-	tVector ball_pos = tVector::Zero();
-	int ball_handle = GetTargetBallHandle();
-	if (ball_handle != gInvalidIdx)
-	{
-		ball_pos = GetBallPos(ball_handle);
-	}
-
-	double r = mRand.RandDouble(min_dist, max_dist);
-	double theta = mRand.RandDouble(-M_PI, M_PI);
-	rand_pos[0] = ball_pos[0] + r * std::cos(theta);
-	rand_pos[2] = ball_pos[2] + r * std::sin(theta);
-
-	return rand_pos;
-}
-
-void cScenarioMultCharRugby::UpdateBallPos(double time_elapsed)
-{
-	std::cout << "update ball" << std::endl;
-	int ball_handle = GetTargetBallHandle();
-
-#if defined(ENABLE_PHANTOM_BALL)
-	const double dist_threshold = 0.2;
-	tVector root_pos = mChar->GetRootPos();
-	tVector ball_pos = GetBallPos();
-	root_pos[1] = 0;
-	ball_pos[1] = 0;
-
-	double dist_sq = (ball_pos - root_pos).squaredNorm();
-	if (dist_sq < dist_threshold)
-	{
-		tVector com_vel = mChar->CalcCOMVel();
-		com_vel[1] = 0;
-		tVector com_vel_dir = com_vel.normalized();
-		ball_pos += 0.5 * com_vel_dir;
-		SetBallPos(ball_pos);
-	}
-#endif
-}
-
-void cScenarioMultCharRugby::ResetBallPosAll()
-{
-	for (int i = 0; i < GetNumBalls(); ++i)
-	{
-		ResetBallPos(mBallObjHandles[i]);
-	}
-
-	UpdateTargetBall();
-	ResetBallTimer();
-}
-
-void cScenarioMultCharRugby::ResetBallPos(int ball_handle)
-{
-	const double min_dist = 0.7;
-	const double max_dist = GetRandBallMaxDist();
-	assert(min_dist <= max_dist);
-
-	tVector rand_pos = tVector::Zero();
-	tVector root_pos = mChar->GetRootPos();
-	double r = mRand.RandDouble(min_dist, max_dist);
-	double theta = mRand.RandDouble(-M_PI, M_PI);
-	rand_pos[0] = root_pos[0] + r * std::cos(theta);
-	rand_pos[2] = root_pos[2] + r * std::sin(theta);
-
-	SetBallPos(ball_handle, rand_pos);
-}
-*/
 void cScenarioMultCharRugby::SetBallPos(const tVector& pos)
 {
 	ball->SetPos(pos);
@@ -531,83 +418,3 @@ void cScenarioMultCharRugby::SetBallPos(const tVector& pos)
 	// ball->SetLinearVelocity(tVector(15.0,0,0,0));
 	ball->SetAngularVelocity(tVector::Zero());
 }
-/*
-int cScenarioMultCharRugby::GetNumBalls() const
-{
-	return static_cast<int>(mBallObjHandles.size());
-}
-
-
-void cScenarioMultCharRugby::RemoveObj(int handle)
-{
-	int num_objs = GetNumObjs();
-	cScenarioExpHike::RemoveObj(handle);
-
-	// update ball handle since removing objects might have caused it to change
-	auto end_ball = std::find(mBallObjHandles.begin(), mBallObjHandles.end(), num_objs - 1);
-	if (end_ball != mBallObjHandles.end())
-	{
-		*end_ball = handle;
-
-		if (handle == GetTargetBallHandle())
-		{
-			mBallObjHandles.pop_back();
-			UpdateTargetBall();
-		}
-	}
-}
-
-void cScenarioMultCharRugby::SetBallPos(int ball_handle, const tVector& pos)
-{
-	const auto& ball = GetBall(ball_handle);
-	double r = gBallRadius;
-
-	tVector ground_pos = pos;
-	ground_pos[1] = r + mGround->SampleHeight(ground_pos);
-	
-	ball->SetPos(ground_pos);
-	ball->SetRotation(tQuaternion::Identity());
-	ball->SetLinearVelocity(tVector::Zero());
-	ball->SetAngularVelocity(tVector::Zero());
-}
-
-void cScenarioMultCharRugby::ResetBallTimer()
-{
-	mRandBallPosTimer = mRand.RandDouble(mRandBallPosTimeMin, mRandBallPosTimeMax);
-}
-
-int cScenarioMultCharRugby::GetTargetBallHandle() const
-{
-	int handle = gInvalidIdx;
-	int num_balls = GetNumBalls();
-	if (num_balls > 0)
-	{
-		handle = mBallObjHandles[num_balls - 1];
-	}
-	return handle;
-}
-
-
-int cScenarioMultCharRugby::FindNearestBall(const tVector& pos) const
-{
-	int nearest_idx = gInvalidIdx;
-	double min_dist = std::numeric_limits<double>::infinity();
-
-	int num_balls = GetNumBalls();
-	for (int i = 0; i < num_balls; ++i)
-	{
-		int curr_handle = mBallObjHandles[i];
-		tVector ball_pos = GetBallPos(curr_handle);
-		tVector delta = ball_pos - pos;
-		delta[1] = 0;
-		double dist = delta.squaredNorm();
-		if (dist < min_dist)
-		{
-			min_dist = dist;
-			nearest_idx = i;
-		}
-	}
-
-	return nearest_idx;
-}
-*/

@@ -66,6 +66,7 @@ public:
 		eCharCtrlMultiCharWaypointVel,
 		eCharCtrlCrowd,
 		eCharVelCtrlCrowd,
+		eCharVelCtrlCrowdVelGoal,
 		eCharCtrlWaypointVel,
 		eCharCtrlSoccer,
 		eCharCtrlBiped3DStep,
@@ -202,6 +203,7 @@ protected:
 	static bool BuildMultiCharWaypointVelController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
 	static bool BuildCrowdCharController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
 	static bool BuildCrowdCharVelController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
+	static bool BuildCrowdCharVelGoalVelController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
 	static bool BuildWaypointVelController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
 	static bool BuildSoccerController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
 	static bool BuildBipedStepController3D(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
