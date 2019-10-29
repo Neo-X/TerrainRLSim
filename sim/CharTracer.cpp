@@ -14,7 +14,7 @@ cCharTracer::tParams::tParams()
 	mColors[0] = tVector(0, 0, 1, 0.5);
 }
 
-bool cCharTracer::tParams::IsValid() const
+bool cCharTracer::tParams::IsValid() 
 {
 	bool valid = true;
 
@@ -24,6 +24,9 @@ bool cCharTracer::tParams::IsValid() const
 	}
 	else
 	{
+		tVector tray_color = mChar->GetPartColor(0);
+		mColors[0]= tray_color;
+
 		if (mType == eTraceJoint || mType == eTracePart)
 		{
 			if (mTraceID < 0 || mTraceID >= mChar->GetNumJoints())
@@ -92,7 +95,7 @@ void cCharTracer::Clear()
 	mTraces.clear();
 }
 
-int cCharTracer::AddTrace(const tParams& params)
+int cCharTracer::AddTrace(tParams& params)
 {
 	int handle = gInvalidIdx;
 	if (params.IsValid())
@@ -280,62 +283,66 @@ void cCharTracer::DrawTraceTraj(const tTrace& trace) const
 		verts_tmp[(3*i) + 1] = vert0[1];
 		verts_tmp[(3*i) + 2] = vert0[2];
 
-		tVector color_trace = col;
+	// 	tVector color_trace = colo;
 
-		color_trace[0]=1.40;
-		color_trace[1]=0.3;
-		color_trace[2]=0.3;
-		col_tmp[(4*i) + 0] = color_trace[0];
-		col_tmp[(4*i) + 1] = color_trace[1];
-		col_tmp[(4*i) + 2] = color_trace[2];
-		col_tmp[(4*i) + 3] = color_trace[3];
+	// 	color_trace[0]=1.40;
+	// 	color_trace[1]=0.3;
+	// 	color_trace[2]=0.3;
+	// 	col_tmp[(4*i) + 0] = color_trace[0];
+	// 	col_tmp[(4*i) + 1] = color_trace[1];
+	// 	col_tmp[(4*i) + 2] = color_trace[2];
+	// 	col_tmp[(4*i) + 3] = color_trace[3];
 
 
-		cDrawUtil::SetColor(color_trace);
-		for (i = 1; i < trace.mPosTraj.GetSize(); ++i)
-		{
-			const tVector& vert0 = trace.mPosTraj[i];
-			const tVector& vert1 = trace.mPosTraj[i-1];
-			int curr_col_idx = static_cast<int>(vert0[3]);
+	// 	cDrawUtil::SetColor(color_trace);
+	// 	for (i = 1; i < trace.mPosTraj.GetSize(); ++i)
+	// 	{
+	// 		const tVector& vert0 = trace.mPosTraj[i];
+	// 		const tVector& vert1 = trace.mPosTraj[i-1];
+	// 		int curr_col_idx = static_cast<int>(vert0[3]);
 
-			assert(curr_col_idx < trace.mParams.mColors.size());
-			const tVector& col = trace.mParams.mColors[curr_col_idx];
-			verts_tmp[(3*i) + 0] = vert0[0];
-			verts_tmp[(3*i) + 1] = vert0[1];
-			verts_tmp[(3*i) + 2] = vert0[2];
-			col_tmp[(4*i) + 0] = color_trace[0];
-			col_tmp[(4*i) + 1] = color_trace[1];
-			col_tmp[(4*i) + 2] = color_trace[2];
-			col_tmp[(4*i) + 3] = color_trace[3];
-			cDrawUtil::SetColor(color_trace);
-			cDrawUtil::DrawLine( vert1, vert0 );
-		}
+	// 		assert(curr_col_idx < trace.mParams.mColors.size());
+	// 		const tVector& col = trace.mParams.mColors[curr_col_idx];
+	// 		verts_tmp[(3*i) + 0] = vert0[0];
+	// 		verts_tmp[(3*i) + 1] = vert0[1];
+	// 		verts_tmp[(3*i) + 2] = vert0[2];
+	// 		col_tmp[(4*i) + 0] = color_trace[0];
+	// 		col_tmp[(4*i) + 1] = color_trace[1];
+	// 		col_tmp[(4*i) + 2] = color_trace[2];
+	// 		col_tmp[(4*i) + 3] = color_trace[3];
+	// 		cDrawUtil::SetColor(color_trace);
+	// 		cDrawUtil::DrawLine( vert1, vert0 );
+	// 	}
 
-		{
-		  glVertexAttribPointer(attr_pos, 3, GL_FLOAT, GL_FALSE, 0, verts_tmp);
-		  checkError();
-		  glVertexAttribPointer(attr_color, 4, GL_FLOAT, GL_FALSE, 0, col_tmp);
-		  checkError();
-		  glEnableVertexAttribArray(attr_pos);
-		  checkError();
-		  glEnableVertexAttribArray(attr_color);
-		  checkError();
+	// 	{
+	// 	  glVertexAttribPointer(attr_pos, 3, GL_FLOAT, GL_FALSE, 0, verts_tmp);
+	// 	  checkError();
+	// 	  glVertexAttribPointer(attr_color, 4, GL_FLOAT, GL_FALSE, 0, col_tmp);
+	// 	  checkError();
+	// 	  glEnableVertexAttribArray(attr_pos);
+	// 	  checkError();
+	// 	  glEnableVertexAttribArray(attr_color);
+	// 	  checkError();
 
-		  glDrawArrays(GL_LINE_STRIP, 0, trace.mPosTraj.GetSize());
-		  checkError();
+	// 	  glDrawArrays(GL_LINE_STRIP, 0, trace.mPosTraj.GetSize());
+	// 	  checkError();
 
-		  glDisableVertexAttribArray(attr_pos);
-		  checkError();
-		  glDisableVertexAttribArray(attr_color);
-		  checkError();
-		}
+	// 	  glDisableVertexAttribArray(attr_pos);
+	// 	  checkError();
+	// 	  glDisableVertexAttribArray(attr_color);
+	// 	  checkError();
+	// 	}
 
+	// }
 	}
 }
 
 
 void cCharTracer::DrawTraceTraj2(const tTrace& trace) const
 {
+
+
+
 	if (trace.mPosTraj.GetSize() > 1)
 	{
 		static GLint attr_pos = 0, attr_color = 1;

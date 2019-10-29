@@ -97,6 +97,7 @@ public:
 	virtual std::vector<double> CalcRewards();
 
 protected:
+	int count_box=0;
 	static const double gGroundSpawnOffset;
 	bool mHasRandSeed;
 	unsigned long mRandSeed;

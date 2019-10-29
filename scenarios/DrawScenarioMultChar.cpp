@@ -181,7 +181,8 @@ void cDrawScenarioMultChar::DrawTarget(const std::shared_ptr<cSimCharacter>& cha
 	const double r = 0.1;
 	const double line_h = 2;
 	const double line_w = 2;
-	const tVector col = tVector(1, 0, 0, 0.5);
+	tVector col = tVector(1, 0, 0, 0.5);
+	col = character->GetPartColor(0);
 
 	auto scene = std::dynamic_pointer_cast<cScenarioExpImitateTarget>(mScene);
 	const tVector& target_pos = character->GetCurrentGroundTarget();
@@ -195,21 +196,21 @@ void cDrawScenarioMultChar::DrawTarget(const std::shared_ptr<cSimCharacter>& cha
 
 	cDrawUtil::Translate(tVector(0, 0.1, 0, 0));
 	cDrawUtil::Rotate(0.5 * M_PI, tVector(1, 0, 0, 0));
-	cDrawUtil::DrawDisk(reset_dist, cDrawUtil::eDrawWire);
+	//cDrawUtil::DrawDisk(reset_dist, cDrawUtil::eDrawWire);
 
 	cDrawUtil::PopMatrix();
 
 	cDrawUtil::SetLineWidth(line_w);
-	cDrawUtil::DrawLine(target_pos, target_pos + tVector(0, line_h, 0, 0));
+	//cDrawUtil::DrawLine(target_pos, target_pos + tVector(0, line_h, 0, 0));
 	cDrawUtil::SetLineWidth(0.5 * line_w);
 
 	cDrawUtil::PushMatrix();
 	cDrawUtil::Translate(target_pos + tVector(0, 0.1, 0, 0));
 	cDrawUtil::Rotate(0.5 * M_PI, tVector(1, 0, 0, 0));
-	cDrawUtil::DrawDisk(reset_dist, cDrawUtil::eDrawWire);
+	//cDrawUtil::DrawDisk(reset_dist, cDrawUtil::eDrawWire);
 	cDrawUtil::PopMatrix();
 	// cDrawUtil::SetColor(tVector(0.2, 1.0, 0.2, 0.5));
-	cDrawUtil::DrawLine( groundProjectedPosition, character->GetCurrentGroundTarget() );
+	//cDrawUtil::DrawLine( groundProjectedPosition, character->GetCurrentGroundTarget() );
 }
 
 void cDrawScenarioMultChar::UpdateTracer(double time_elapsed)

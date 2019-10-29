@@ -26,7 +26,7 @@ public:
 		tVectorArr mColors;
 
 		tParams();
-		bool IsValid() const;
+		bool IsValid();
 	};
 
 	cCharTracer();
@@ -37,7 +37,7 @@ public:
 	virtual void Reset();
 	virtual void Clear();
 
-	virtual int AddTrace(const tParams& params);
+	virtual int AddTrace(tParams& params);
 	virtual int GetNumTraces() const;
 	virtual void SetTraceColIdx(int handle, int col_idx);
 

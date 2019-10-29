@@ -170,8 +170,8 @@ public:
 	static int GetRoot(const Eigen::MatrixXd& joint_mat);
 	static void FindChildren(const Eigen::MatrixXd& joint_mat, int joint_id, Eigen::VectorXi& out_children);
 
-	static bool LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_body_defs);
-	static bool ParseBodyDef(const Json::Value& root, tBodyDef& out_def);
+	static bool LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_body_defs, int agent_id);
+	static bool ParseBodyDef(const Json::Value& root, tBodyDef& out_def, tVector color);
 	static bool ParseBodyShape(const std::string& str, eBodyShape& out_shape);
 
 	static bool LoadDrawShapeDefs(const std::string& char_file, Eigen::MatrixXd& out_draw_defs);

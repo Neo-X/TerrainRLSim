@@ -124,7 +124,7 @@ void cKinTree::FindChildren(const Eigen::MatrixXd& joint_desc, int joint_id, Eig
 	}
 }
 
-bool cKinTree::LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_body_defs)
+bool cKinTree::LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_body_defs, int agent_id)
 {
 	bool succ = true;
 	std::string str;
@@ -134,6 +134,38 @@ bool cKinTree::LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_b
 	Json::Reader reader;
 	succ = reader.parse(f_stream, root);
 	f_stream.close();
+	tVector random_color;
+    //double random_color = (double)rand() / RAND_MAX;
+
+	switch (agent_id)
+	{
+		case 1: // code to be executed if n = 1;
+			random_color= tVector(0.0,0.0,0.0,1.0);
+			break;
+		case 2: // code to be executed if n = 2;
+			random_color= tVector(1.0,0.0,0.0,1.0);
+			break;
+		case 3: // code to be executed if n = 2;
+			random_color= tVector(0.0,1.0,0.0,1.0);
+			break;
+		case 4: // code to be executed if n = 2;
+			random_color= tVector(0.0,0.0,1.0,1.0);
+			break;
+		case 5: // code to be executed if n = 2;
+			random_color= tVector(1.0,1.0,0.0,1.0);
+			break;
+		case 6: // code to be executed if n = 2;
+			random_color= tVector(1.0,0.0,1.0,1.0);
+			break;
+		case 7: // code to be executed if n = 2;
+			random_color= tVector(0.5,1.0,0.5,1.0);
+			break;
+		default: // code to be executed if n doesn't match any cases
+			random_color= tVector(0.5,1.0,1.0,1.0);
+			break;
+
+	}
+	
 
 	if (succ)
 	{
@@ -149,7 +181,7 @@ bool cKinTree::LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_b
 			{
 				tBodyDef curr_def = BuildBodyDef();
 				Json::Value body_json = body_defs.get(b, 0);
-				bool succ_def = ParseBodyDef(body_json, curr_def);
+				bool succ_def = ParseBodyDef(body_json, curr_def, random_color);
 
 				if (succ)
 				{
@@ -173,7 +205,7 @@ bool cKinTree::LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_b
 	return succ;
 }
 
-bool cKinTree::ParseBodyDef(const Json::Value& root, cKinTree::tBodyDef& out_def)
+bool cKinTree::ParseBodyDef(const Json::Value& root, cKinTree::tBodyDef& out_def, tVector color)
 {
 	std::string shape_str = root.get(gBodyDescKeys[eBodyParamShape], "").asString();
 	eBodyShape shape;
@@ -191,6 +223,13 @@ bool cKinTree::ParseBodyDef(const Json::Value& root, cKinTree::tBodyDef& out_def
 		{
 			Json::Value json_val = root[curr_key];
 			double val = json_val.asDouble();
+			if(curr_key=="ColorR")
+				val = color[0];
+			if(curr_key=="ColorG")
+				val = color[1];
+			if(curr_key=="ColorB")
+				val = color[2];
+
 			out_def(i) = val;
 		}
 	}

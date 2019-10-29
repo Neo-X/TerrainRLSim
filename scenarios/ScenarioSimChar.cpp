@@ -860,14 +860,18 @@ int cScenarioSimChar::GetNumObjs() const
 void cScenarioSimChar::SpawnProjectile()
 {
 	double density = 100;
-	double min_size = 0.1;
+	double min_size = 0.3;
 	double max_size = 0.3;
 	double min_speed = 10;
 	double max_speed = 20;
-	double life_time = 2;
+	double life_time = 3.5;
 	double y_offset = 0;
+	count_box = count_box+1;
+	if(count_box>150)
+	{
 	SpawnProjectile(density, min_size, max_size, min_speed, max_speed, y_offset, life_time);
-}
+	count_box=0;
+	}}
 
 void cScenarioSimChar::SpawnBigProjectile()
 {
@@ -878,7 +882,12 @@ void cScenarioSimChar::SpawnBigProjectile()
 	double max_speed = 12;
 	double life_time = 2;
 	double y_offset = 0.5;
+	count_box = count_box+1;
+	if(count_box>15)
+	{
 	SpawnProjectile(density, min_size, max_size, min_speed, max_speed, y_offset, life_time);
+	count_box=0;
+	}
 }
 
 const std::vector<cScenarioSimChar::tObjEntry, Eigen::aligned_allocator<cScenarioSimChar::tObjEntry>>& cScenarioSimChar::GetObjs() const

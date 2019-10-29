@@ -24,6 +24,7 @@ const std::string gOutputCharFile = "output/char_state.txt";
 cDrawScenarioSimChar::cDrawScenarioSimChar(cCamera& cam)
 					: cDrawScenarioSimInteractive(cam)
 {
+	count_box=0;
 	mDrawInfo = false;
 	mDrawGround = true;
 	mDrawCharacter = true;
@@ -382,7 +383,7 @@ void cDrawScenarioSimChar::DrawObstacles() const
 	if (mDrawGround)
 	{
 		const auto& ground = mScene->GetGround();
-		cDrawUtil::SetColor(tVector(0.1, 0.1, 0.1, 1.0));
+		cDrawUtil::SetColor(tVector(0.05, 0.05, 0.05, 1.0));
 		if (ground->GetGroundClass() == cGround::eClassDynamicObstacles3D
 			// || ground->GetGroundClass() == cGround::eClassObstaclesDynamicCharacters3D
 			|| ground->GetGroundClass() == cGround::eClassConveyor3D)
@@ -403,7 +404,10 @@ void cDrawScenarioSimChar::DrawCharacters() const
 	{
 		const auto& character = mScene->GetCharacter();
 		DrawCharacter(character);
+		//mScene->SpawnProjectile();
 	}
+
+
 }
 
 void cDrawScenarioSimChar::DrawCharacter(const std::shared_ptr<cSimCharacter>& character) const
@@ -437,7 +441,7 @@ void cDrawScenarioSimChar::DrawObjs() const
 	{
 		const cScenarioSimChar::tObjEntry& entry = obj_entries[i];
 		const auto& obj = entry.mObj;
-		cDrawUtil::SetColor(entry.mColor);
+		cDrawUtil::SetColor(entry.mColor);		
 		cDrawObj::Draw(obj.get(), cDrawUtil::eDrawSolid);
 
 		tVector line_col = GetLineColor();
@@ -607,7 +611,7 @@ void cDrawScenarioSimChar::DrawCharMuscles(const std::shared_ptr<cSimCharacter>&
 
 void cDrawScenarioSimChar::DrawGroundDynamicObstacles3D(const std::shared_ptr<cGround>& ground) const
 {
-	const tVector fill_col = tVector(0.75, 0.75, 0.75, 1.0);
+	const tVector fill_col = tVector(0.65, 0.65, 0.65, 1.0);
 	const tVector line_col = GetLineColor();
 
 	auto obstacles3d = std::dynamic_pointer_cast<cGroundDynamicObstacles3D>(ground);
@@ -643,7 +647,7 @@ void cDrawScenarioSimChar::DrawGroundDynamicObstacles3D(const std::shared_ptr<cG
 
 void cDrawScenarioSimChar::DrawGroundObstacles3D(const std::shared_ptr<cGround>& ground) const
 {
-	const tVector fill_col = tVector(0.35, 0.35, 0.35, 1.0);
+	const tVector fill_col = tVector(0.65, 0.65, 0.65, 1.0);
 	// cDrawUtil::PushMatrix();
 	// cDrawUtil::LoadIdentity();
 	/*
@@ -688,7 +692,7 @@ void cDrawScenarioSimChar::DrawGroundObstacles3D(const std::shared_ptr<cGround>&
 		if (line_col[3] > 0)
 		{
 			cDrawUtil::SetColor(line_col);
-			cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
+			//cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
 		}
 		//cDrawUtil::DrawBoxWire(pos, size);
 

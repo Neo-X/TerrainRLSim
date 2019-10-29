@@ -80,7 +80,7 @@ double gViewFarZ = -40;
 std::unique_ptr<cTextureDesc> gDefaultFrameBuffer;
 std::shared_ptr<cTextureDesc> gIntermediateFrameBuffer;
 
-tVector gCameraPosition = tVector(0, 0, 40, 0);
+tVector gCameraPosition = tVector(0, 0, 10, 0);
 tVector gCameraFocus = tVector(gCameraPosition[0], gCameraPosition[1], 0.0, 0.0);
 tVector gCameraUp = tVector(0, 1, 0, 0);
 

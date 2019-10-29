@@ -27,10 +27,14 @@ public:
 
 	virtual std::string GetName() const;
 	virtual const std::shared_ptr<cScenarioSimChar>& GetScene() const;
+	virtual void SpawnProjectile();
+
+
 
 protected:
 	std::shared_ptr<cScenarioSimChar> mScene;
 	
+	int count_box;
 	bool mDrawInfo;
 	bool mDrawGround;
 	bool mDrawCharacter;
@@ -96,7 +100,6 @@ protected:
 	virtual std::string GetOutputCharFile() const;
 	virtual void OutputCharState(const std::string& out_file) const;
 
-	virtual void SpawnProjectile();
 	virtual void SpawnBigProjectile();
 
 	virtual void BuildGroundDrawMesh();

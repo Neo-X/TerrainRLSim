@@ -55,7 +55,7 @@ void cDrawScenarioMultCharRugby::DrawTarget(const std::shared_ptr<cSimCharacter>
 	auto scene = std::dynamic_pointer_cast<cScenarioMultCharRugby>(mScene);
 
 	const auto& obj = scene->GetBall();
-	cDrawUtil::SetColor(tVector(0.8,0.8,0.8,1));
+	cDrawUtil::SetColor(tVector(0.9,0.9,0.9,1));
 	cDrawObj::Draw(obj.get(), cDrawUtil::eDrawSolid);
 
 	tVector line_col = GetLineColor();

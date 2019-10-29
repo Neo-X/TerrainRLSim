@@ -353,7 +353,7 @@ void cKinSimCharacter::BuildCylinderPart(int part_id, const tVector& root_pos, d
 
 bool cKinSimCharacter::LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_body_defs) const
 {
-	bool succ = cKinTree::LoadBodyDefs(char_file, out_body_defs);
+	bool succ = cKinTree::LoadBodyDefs(char_file, out_body_defs, m_id);
 	int num_joints = GetNumJoints();
 	int num_body_defs = static_cast<int>(out_body_defs.rows());
 	assert(num_joints == num_body_defs);
