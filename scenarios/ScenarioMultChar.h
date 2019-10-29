@@ -63,9 +63,11 @@ protected:
 	bool mRandomizeInititalRotation;
 	bool mCreateNewGoals;
 	bool mUseSimpleReward;
+	bool mUseSimpleDistanceReward;
 	double mReachTargetBonus;
 	bool mUseRepulsiveReward;
 	bool mUsePursuitConfig;
+	double mTargetRewardWeight;
 
 	virtual void GenerateInitialTransform(std::shared_ptr<cSimCharacter>& character);
 	virtual tVector CalcTargetPosObstaclesDynamicCharacters3D(std::shared_ptr<cSimCharacter>& character);

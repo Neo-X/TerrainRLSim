@@ -37,7 +37,8 @@
 	"TerrainRL_Parameters":
     {	
     		"comment__": "Specific controller type to use",
-    	"char_ctrl": "ct_pd"
+    	"char_ctrl": "ct_pd",
+    	"InitialPaddingWidth": "0.7"
     },
     	"comment__": "Key Presses that change some of the rendered parts of the simulation",
     "rendering_key_presses": ["c", "k", "j"]
@@ -93,6 +94,36 @@
 		"max_perturb": "50",
 		"min_pertrub_duration": "0.2",
 		"max_perturb_duration": "0.5",
+			"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "false"
+    },
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["c", "k", "j"]
+},
+"PD_Biped2D_Pedistal_v3": 
+{
+	"config_file": "./args/genBiped2D/biped2d_full_cliff.txt",
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    	"scenario": "sim_char",
+    		"comment__": "Specific controller type to use",
+    	"char_ctrl": "ct_pd",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"terrain_file": "data/terrain/precipice_humanoid.txt",
+    		"comment__": "Use a different state file",
+    	"state_file": "data/states/biped2D_full_stand_state.txt",
+    		"comment__": "Randomly add forces to the links of the agent",
+    	"enable_rand_perturbs": "true",
+    	"enable_rand_projectiles": "true",
+    		"comment__": "Setting for how much to preterb the agent, these are added to random links",
+    	"perturb_time_min": "0.5",
+		"perturb_time_max": "1",
+		"min_perturb":  "50",
+		"max_perturb": "100",
+		"min_pertrub_duration": "0.2",
+		"max_perturb_duration": "0.5",
+		"projectile_frequency": "0.025",
 			"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
     	"enable_rand_state_reset": "false"
     },
@@ -461,7 +492,7 @@
     		"comment__": "Use a repulsive reward penalty when agents get close together.",
     	"use_repulsive_reward": "true",
     		"comment__": "Number of characters in the simulation in addition to the default character",
-    	"num_characters": "20"
+    	"num_characters": "4"
     }
 },
 "PD_Biped3D_MutliChar_ScenarioSpace_5_WithObstacles_OnlyVel_SimpleReward_v1": 
@@ -567,6 +598,47 @@
     	"enable_rand_state_reset": "true",
     		"comment__": "Use simple DeepLoco HLC reward function",
     	"use_simple_reward": "true",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
+    		"comment__": "Number of characters in the simulation in addition to the default character",
+    	"num_characters": "3"
+    }
+},
+"PD_Biped3D_MutliChar_ScenarioSpace_Rugby_4_WithObstacles_OnlyVel_SimpleReward_v2": 
+{
+	"config_file": "./args/genbiped3D/RubyCrowdWithObsOnlyVel2.txt",
+	"time_limit": 256,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {		"comment": "A specific version of the character controller",
+    	"char_ctrl": "multi_char_crowd_vel_goal_vel",
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"use_simple_reward": "true",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
+    		"comment__": "Number of characters in the simulation in addition to the default character",
+    	"num_characters": "3"
+    }
+},
+"PD_Biped3D_MutliChar_ScenarioSpace_Rugby_4_WithObstacles_OnlyVel_SimpleReward_v3": 
+{
+	"config_file": "./args/genbiped3D/RubyCrowdWithObsOnlyVel2.txt",
+	"time_limit": 256,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {		"comment": "A specific version of the character controller",
+    	"char_ctrl": "multi_char_crowd_vel_goal_vel",
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"use_simple_reward": "false",
+    	"use_simple_distance_reward": "true",
     		"comment__": "Change the location of the target position if the agent reaches the target",
     	"create_new_goals": "true",
     		"comment__": "Use a repulsive reward penalty when agents get close together.",
@@ -968,6 +1040,35 @@
     	"add_torque_penalty": "true",
     		"comment__": "Randomly add forces to the links of the agent",
     	"enable_rand_perturbs": "true"
+    }
+},        
+"PD_Biped3D_LLC_Symetric_Step_MultiAgent_Terrain_WithObs_v1": 
+{
+	"config_file": "./args/genbiped3D/biped3d_LLC_waypoint_sysemtric_step_controller.txt",
+	"time_limit": 512,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Use a different rotation representation for the policy learning state [quaternion|axisangle|euler]",
+    	"terrain_file": "data/terrain/dynamicCharacters3D_Obs_0.txt",
+    		"comment__": "If true the initial faceing direction of the agent will be random",
+    	"randomize_initial_rotation": "true",
+    		"comment__": "Add a joint torque penalty to the reward",
+    	"add_torque_penalty": "true",
+    		"comment__": "Randomly add forces to the links of the agent",
+    	"enable_rand_perturbs": "true",
+    	"enable_rand_projectiles": "true",
+    		"comment__": "Setting for how much to preterb the agent, these are added to random links",
+    	"perturb_time_min": "0.5",
+		"perturb_time_max": "1",
+		"min_perturb":  "50",
+		"max_perturb": "100",
+		"min_pertrub_duration": "0.2",
+		"max_perturb_duration": "0.5",
+		"step_sharp_turn_prob": "0.25",
+		"projectile_frequency": "0.025"
     }
 },        
 "PD_Humanoid3D_LLC_Symetric_Step_MultiAgent_Terrain_WithObs_v0": 

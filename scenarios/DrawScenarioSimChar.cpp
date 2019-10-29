@@ -346,6 +346,7 @@ void cDrawScenarioSimChar::DrawGround() const
 	if (mDrawGround)
 	{
 		const auto& ground = mScene->GetGround();
+		// std::cout << "ground pos"  << ground->GetSimBody()->getCenterOfMassPosition().getY() << std::endl;
 		/// Could put some kind of axis vectors here...
 		cDrawUtil::PushMatrix();
 		tVector target_pos = tVector(0,0,0,0);
@@ -357,7 +358,8 @@ void cDrawScenarioSimChar::DrawGround() const
 
 		cDrawUtil::PushMatrix();
 		cDrawUtil::LoadIdentity();
-
+		// target_pos = tVector(0,ground->GetSimBody()->getCenterOfMassPosition().getY(),0,0);
+		// cDrawUtil::Translate(target_pos);
 
 		tVector focus = mCam.GetFocus();
 		double cam_w = mCam.GetWidth();

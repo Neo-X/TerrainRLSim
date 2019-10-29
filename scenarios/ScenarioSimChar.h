@@ -121,6 +121,7 @@ protected:
 	cGround::tParams mGroundParams;
 
 	bool mEnableRandPerturbs;
+	bool mEnableRandProjectiles;
 	double mRandPerturbTimer;
 	double mPerturbTimeMin;
 	double mPerturbTimeMax;
@@ -129,6 +130,7 @@ protected:
 	double mMaxPerturb;
 	double mMinPerturbDuration;
 	double mMaxPerturbDuration;
+	double mProjectileFrequency;
 	std::vector<int> mPerturbPartIDs;
 
 	std::vector<tObjEntry, Eigen::aligned_allocator<tObjEntry>> mObjs;
