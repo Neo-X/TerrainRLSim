@@ -1319,7 +1319,12 @@
 "PD_Dog2D_LLC_Imitate_Flat-v0": 
 {
 	"config_file": "./args/imitation/pd/dog2d_imitate_eval_flat.txt",
-	"time_limit": 256
+	"time_limit": 256,
+    "TerrainRL_Parameters":
+    {    
+            "comment__": "Use simple DeepLoco HLC reward function",
+        "render_mode": "3d"
+    }
 },
 "PD_Biped2D_LLC_Imitate_Flat-v0": 
 {
