@@ -46,6 +46,9 @@ if __name__ == '__main__':
             observation, reward,  done, info = env.step(actions)
             # env.getImitationState()
             print ("Done: ", done)
+            print("Reward: ", reward)
+            states = np.array(observation)
+            print("states shape ", np.array(states[0]).shape)
             if ( done ):
                 break
             """
@@ -59,11 +62,8 @@ if __name__ == '__main__':
                 sim.updateActionForAgent(i, actions[i])
                 """
             # print("Observation: ", observation)
-            print("Reward: ", reward)
             # print("action: ", actions)
                 
-            states = np.array(observation)
-            print("states shape ", np.array(states[0]).shape)
             # print ("state: ", states)
             # print ("std length: ", len(np.std(states, axis=0)) )
             # print ("std for states: ", np.std(states))

@@ -424,22 +424,21 @@ void cScenarioMultCharRugby::SetBallPos(const tVector& pos)
 	ball->SetPos(pos);
 	ball->SetRotation(tQuaternion::Identity());
 	ball->SetLinearVelocity(tVector::Zero());
-	// ball->SetLinearVelocity(tVector(15.0,0,0,0));
+	// ball->SetLinearVelocity(tVector(-15.0,0,0,0));
 	ball->SetAngularVelocity(tVector::Zero());
 }
 
 bool cScenarioMultCharRugby::endOfEpoch() const
 {
 	tVector b_pos = GetBallPos();
-
-	if (std::fabs(b_pos[0]) > 5.0)
+	double goal_dist = 5.0;
+	if (std::fabs(b_pos[0]) > goal_dist)
 	{
 		// std::cout << "rugby end of epoch" << std::endl;
  		return true;
 	}
-	if (std::fabs(b_pos[2]) > 10.0)
+	if (std::fabs(b_pos[2]) > (goal_dist*2))
 	{
-		// std::cout << "rugby end of epoch" << std::endl;
 		return true;
 	}
 	return false;
