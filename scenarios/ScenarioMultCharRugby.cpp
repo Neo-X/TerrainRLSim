@@ -23,7 +23,7 @@ cScenarioMultCharRugby::cScenarioMultCharRugby() :
 	mSpawnRadius=10.0;
 	mRandTargetBound = 10.0;
 	mReachTargetBonus = 200;
-	mTargetRewardWeight = 5;
+	mTargetRewardWeight = 1;
 	// mNumBallSpawns=1;
 }
 
@@ -38,7 +38,7 @@ double cScenarioMultCharRugby::CalcReward()
 
 	if (this->ball->GetLinearVelocity()[0] > 0)
 	{
-		reward = reward + this->ball->GetLinearVelocity()[0];
+		// reward = reward + this->ball->GetLinearVelocity()[0]/5;
 	}
 	return reward;
 }
@@ -52,14 +52,14 @@ double cScenarioMultCharRugby::calcRewardForAgent(size_t agent)
 	{
 		if (this->ball->GetLinearVelocity()[0] > 0)
 		{
-			reward = reward + this->ball->GetLinearVelocity()[0];
+			// reward = reward + this->ball->GetLinearVelocity()[0]/5;
 		}
 	}
 	else
 	{
 		if (this->ball->GetLinearVelocity()[0] < 0)
 		{
-			reward = reward + -this->ball->GetLinearVelocity()[0];
+			// reward = reward + -this->ball->GetLinearVelocity()[0]/5;
 		}
 	}
 
