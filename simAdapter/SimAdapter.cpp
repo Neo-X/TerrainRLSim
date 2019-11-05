@@ -1524,7 +1524,7 @@ bool cSimAdapter::endOfEpoch()
 	const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();
 
 	// std::cout << "Fallen: " << char_->HasFallen() << std::endl;
-	if (char_->HasFallen() || char_->HasExploded())
+	if (char_->HasFallen() || char_->HasExploded() || this->_scene->endOfEpoch())
 	{
 		// std::cout << "End of Epoch:" << std::endl;
 		return true;
@@ -1538,7 +1538,7 @@ bool cSimAdapter::agentHasFallen()
 
 	// this->_scene->HasFallen();
 
-	return this->_scene->HasFallen();
+	return this->_scene->HasFallen() || this->_scene->endOfEpoch();
 }
 
 bool cSimAdapter::needUpdatedAction()
@@ -1788,7 +1788,7 @@ bool cSimAdapter::endOfEpochForAgent(size_t agent_num)
 	Eigen::VectorXd pose0 = agent->GetPose();
 	// std::cout << "agent " << agent_num << " Fallen: " << agent->HasFallen() << " Exploded?: " << agent->HasExploded() << std::endl;
 	if (agent->HasFallen() || agent->HasExploded() ||
-			(pose0[1] < -10.0))
+			(pose0[1] < -10.0) || this->_scene->endOfEpoch())
 	{
 		// std::cout << "End of Epoch:" << std::endl;
 		return true;

@@ -73,6 +73,7 @@ public:
 
 	virtual bool HasFallen() const;
 	virtual bool HasStumbled() const;
+	virtual bool endOfEpoch() const;
 	virtual eCharType GetCharType() const;
 
 	virtual void SpawnProjectile();

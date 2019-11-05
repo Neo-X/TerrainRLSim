@@ -486,6 +486,11 @@ bool cScenarioSimChar::HasStumbled() const
 	return mChar->HasStumbled();
 }
 
+bool cScenarioSimChar::endOfEpoch() const
+{
+	return false;
+}
+
 cScenarioSimChar::eCharType cScenarioSimChar::GetCharType() const
 {
 	return mCharType;
