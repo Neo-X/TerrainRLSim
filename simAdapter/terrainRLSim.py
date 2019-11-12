@@ -580,12 +580,12 @@ class TerrainRLSimWrapper(object):
         ### Get pixel data from view
         img = self.getEnv().getPixels(0,
                            0, 
-                           800, 
-                           450)
+                           1600, 
+                           900)
         # assert(np.sum(img) > 0.0)
         ### reshape into image, colour last
-        img = np.reshape(img, (450, 
-                           800, 3))
+        img = np.reshape(img, (900, 
+                           1600, 3))
         ### downsample image
         ### convert to greyscale
         # assert(np.sum(img) > 0.0)

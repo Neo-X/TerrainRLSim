@@ -119,7 +119,9 @@ void cDrawScenario::UpdateCamera()
 		|| mCamTrackMode == eCamTrackModeY
 		|| mCamTrackMode == eCamTrackModeXYZ)
 	{
-		UpdateCameraTracking();
+//		UpdateCameraTracking();
+		UpdateCameraStill();
+
 	}
 	else if (mCamTrackMode == eCamTrackModeStill)
 	{
@@ -217,7 +219,12 @@ void cDrawScenario::UpdateCameraStill()
 		}
 	}
 
-	mCam.TranslateFocus(cam_focus);
+
+	//mCam.TranslateFocus(cam_focus);
+
+
+
+
 }
 
 double cDrawScenario::GetCamStillSnapDistX() const
@@ -272,11 +279,10 @@ void cDrawScenario::ToggleCamTrackMode(eCamTrackMode mode)
 void cDrawScenario::ResetCamera()
 {
 	tVector target_pos = GetDefaultCamFocus();
-
 	if (mCamTrackMode == eCamTrackModeXZ
 		|| mCamTrackMode == eCamTrackModeY)
 	{
-		target_pos = GetCamTrackPos();
+		target_pos = GetCamStillPos();
 	}
 	else if (mCamTrackMode == eCamTrackModeStill)
 	{
@@ -287,7 +293,7 @@ void cDrawScenario::ResetCamera()
 	cam_pos[0] = target_pos[0];
 	cam_pos[1] = target_pos[1];
 
-	mCam.TranslateFocus(cam_pos);
+	//mCam.TranslateFocus(cam_pos);
 }
 
 tVector cDrawScenario::GetDefaultCamFocus() const

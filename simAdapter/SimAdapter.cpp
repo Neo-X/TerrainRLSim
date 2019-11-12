@@ -602,7 +602,7 @@ void cSimAdapter::init()
 		}
 		else if (scenario_name == "space_mult_char")
 		{
-			gCameraPosition = tVector(0, 100, 100, 0);
+			gCameraPosition = tVector(0, 200, 200, 0);
 			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioSpaceMultChar>(new cDrawScenarioSpaceMultChar(gCamera));
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__->GetScene());
 			this->_gScenario = scenario__;
@@ -620,7 +620,7 @@ void cSimAdapter::init()
 		}
 		else if (scenario_name == "multi_char_rugby")
 		{
-			gCameraPosition = tVector(0, 100, 100, 0);
+			gCameraPosition = tVector(0, 200, 200, 0);
 			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioMultCharRugby>(new cDrawScenarioMultCharRugby(gCamera));
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__->GetScene());
 			this->_gScenario = scenario__;
@@ -790,14 +790,14 @@ void cSimAdapter::init()
 		}
 		else if (scenario_name == "space_mult_char")
 		{
-			gCameraPosition = tVector(0, 30, 30, 0);
+			gCameraPosition = tVector(0, 100, 100, 0);
 			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioSpaceMultChar>(new cScenarioSpaceMultChar());
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__);
 			this->_gScenario = scenario__ ;
 		}
 		else if (scenario_name == "multi_char_rugby")
 		{
-			gCameraPosition = tVector(0, 30, 30, 0);
+			gCameraPosition = tVector(0, 200, 200, 0);
 			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioMultCharRugby>(new cScenarioMultCharRugby());
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__);
 			this->_gScenario = scenario__ ;
@@ -886,8 +886,9 @@ void cSimAdapter::init()
 	}
 	// return EXIT_SUCCESS;
 	// Zoom out a little for viz environments
-	double zoom = -0.2;
+	double zoom = -5.2;
 	tVector focus = gCamera.GetFocus();
+	gCamera.SetPosition(tVector(0, 45, -100, 0));
 	tVector cam_offset = -(gCamera.GetFocus() - gCamera.GetPosition());
 	double w = gCamera.GetWidth();
 	double h = gCamera.GetHeight();

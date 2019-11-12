@@ -149,13 +149,13 @@ bool cKinTree::LoadBodyDefs(const std::string& char_file, Eigen::MatrixXd& out_b
 			random_color= tVector(0.0,1.0,0.0,1.0);
 			break;
 		case 4: // code to be executed if n = 2;
-			random_color= tVector(0.0,0.0,1.0,1.0);
+			random_color= tVector(0.0,0.4,1.0,1.0);
 			break;
-		case 5: // code to be executed if n = 2;
-			random_color= tVector(1.0,1.0,0.0,1.0);
+		case 5: // code to be executed if n = 2;              // second
+			random_color= tVector(1.0,0.0,0.4,1.0);
 			break;
-		case 6: // code to be executed if n = 2;
-			random_color= tVector(1.0,0.0,1.0,1.0);
+		case 6: // code to be executed if n = 2;              // third
+			random_color= tVector(1.0,0.0,0.4,1.0);
 			break;
 		case 7: // code to be executed if n = 2;
 			random_color= tVector(0.5,1.0,0.5,1.0);
