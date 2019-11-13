@@ -602,7 +602,7 @@ void cSimAdapter::init()
 		}
 		else if (scenario_name == "space_mult_char")
 		{
-			gCameraPosition = tVector(0, 200, 200, 0);
+			gCameraPosition = tVector(0, 100, 100, 0);
 			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioSpaceMultChar>(new cDrawScenarioSpaceMultChar(gCamera));
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__->GetScene());
 			this->_gScenario = scenario__;
@@ -620,7 +620,7 @@ void cSimAdapter::init()
 		}
 		else if (scenario_name == "multi_char_rugby")
 		{
-			gCameraPosition = tVector(0, 200, 200, 0);
+			gCameraPosition = tVector(0, 100, 100, 0);
 			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioMultCharRugby>(new cDrawScenarioMultCharRugby(gCamera));
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__->GetScene());
 			this->_gScenario = scenario__;
@@ -886,8 +886,8 @@ void cSimAdapter::init()
 	}
 	// return EXIT_SUCCESS;
 	// Zoom out a little for viz environments
-	double zoom = -5.2;
-	gCamera.SetPosition(tVector(0, 75, -150, 0));
+	double zoom = -1.2;
+	//gCamera.SetPosition(tVector(0, 75, -150, 0));
 	tVector focus = gCamera.GetFocus();
 	tVector cam_offset = -(gCamera.GetFocus() - gCamera.GetPosition());
 	double w = gCamera.GetWidth();

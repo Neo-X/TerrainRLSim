@@ -68,21 +68,30 @@ bool gReshaping = false;
 const tVector gBKGColor = tVector(0.97, 0.97, 1, 0);
 //const tVector gBKGColor = tVector(1, 1, 1, 0);
 
+// // camera attributes
+// double gViewWidth = 4.5;
+// // double gViewWidth = 10.5;
+// double gViewHeight = (gViewWidth * gWinHeight) / gWinWidth;
+// double gViewNearZ = 25;
+// //double gViewNearZ = 25;
+// double gViewFarZ = -160;
+
 // camera attributes
-double gViewWidth = 4.5;
+double gViewWidth = 10.5;
 // double gViewWidth = 10.5;
 double gViewHeight = (gViewWidth * gWinHeight) / gWinWidth;
 double gViewNearZ = 5;
 //double gViewNearZ = 25;
-double gViewFarZ = -250;
+double gViewFarZ = -400;
+
 
 // intermediate frame buffers
 std::unique_ptr<cTextureDesc> gDefaultFrameBuffer;
 std::shared_ptr<cTextureDesc> gIntermediateFrameBuffer;
 
-tVector gCameraPosition = tVector(0, 75, -100, 0);
+tVector gCameraPosition = tVector(0, 0, 40, 0);
 tVector gCameraFocus = tVector(gCameraPosition[0], gCameraPosition[1], 0.0, 0.0);
-tVector gCameraUp = tVector(0, 0, 1, 0);
+tVector gCameraUp = tVector(0, 1, 1, 0);
 
 cCamera gCamera;
 
@@ -102,7 +111,7 @@ const double gPlaybackDelta = 0.05;
 
 bool gForceClear = false;
 bool gRenderFilmStrip = false;
-bool gDrawInfo = true;
+bool gDrawInfo = false;
 const double gFilmStripPeriod = 0.5;
 tVector gPrevCamPos = tVector::Zero();
 

@@ -10,7 +10,8 @@ cSkyBox::cSkyBox() : mTurbidity( 3.f ), mAlbedo( 0.1f )
 {
 	// the sun is very bright
 	mSunColour = tVector(1000, 900, 700, 1);
-	mSunDirection = tVector(0.577, 0.277, 0.577, 0).normalized();
+//	mSunDirection = tVector(0.577, 0.277, 0.577, 0).normalized();
+	mSunDirection = tVector(0.677, 0.71325, 0.2076, 0).normalized();
 	mSunSize = 0.035;
 	mRelativePath = "";
 	mSkyBoxProgram = std::unique_ptr<cShader>(new cShader());
