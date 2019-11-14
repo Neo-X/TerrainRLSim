@@ -22,6 +22,8 @@ public:
 	virtual double CalcReward();
 	virtual double calcRewardForAgent(size_t agent);
 
+	virtual bool endOfEpoch() const;
+
 protected:
 	int ballObjHandle;
 	std::shared_ptr<cSimObj> ball;

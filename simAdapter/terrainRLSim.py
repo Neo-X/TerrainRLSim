@@ -422,7 +422,7 @@ class TerrainRLSimWrapper(object):
         self.updateAction(action)
         
         # for i in range(15):
-        reward = np.array(self.calcRewards()) * 0
+        reward = np.zeros((self.getNumAgents(),1))
         if ( "control_return" in self._config and (self._config["control_return"] == True) ):
             i=0
             while ( (not self._sim.needUpdatedAction()) and (i < 50 )):
@@ -494,9 +494,9 @@ class TerrainRLSimWrapper(object):
                     and (self._config["use_forward_vel_reward"] == True)):
                 dist = self._sim.calcVelocity()-1
                 reward__ = np.exp((dist*dist)*-1.5)
-                reward = reward__ * (not self._done)
+                reward = reward__
             else:
-                reward = self._sim.calcReward() * (not self._done)
+                reward = self._sim.calcReward()
             
         return reward
         

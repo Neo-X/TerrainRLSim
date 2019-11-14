@@ -22,8 +22,8 @@ cScenarioMultCharRugby::cScenarioMultCharRugby() :
 	mNumChars=0;
 	mSpawnRadius=10.0;
 	mRandTargetBound = 10.0;
-	mReachTargetBonus = 20;
-	mTargetRewardWeight = 5;
+	mReachTargetBonus = 200;
+	mTargetRewardWeight = 1;
 	// mNumBallSpawns=1;
 }
 
@@ -36,7 +36,10 @@ double cScenarioMultCharRugby::CalcReward()
 {
 	double reward = cScenarioMultChar::CalcReward();
 
-	reward = reward + this->ball->GetLinearVelocity()[0];
+	if (this->ball->GetLinearVelocity()[0] > 0)
+	{
+		// reward = reward + this->ball->GetLinearVelocity()[0]/5;
+	}
 	return reward;
 }
 
@@ -47,11 +50,17 @@ double cScenarioMultCharRugby::calcRewardForAgent(size_t agent)
 
 	if ( agent < (num_agents/2)-1)
 	{
-		reward = reward + this->ball->GetLinearVelocity()[0];
+		if (this->ball->GetLinearVelocity()[0] > 0)
+		{
+			// reward = reward + this->ball->GetLinearVelocity()[0]/5;
+		}
 	}
 	else
 	{
-		reward = reward + -this->ball->GetLinearVelocity()[0];
+		if (this->ball->GetLinearVelocity()[0] < 0)
+		{
+			// reward = reward + -this->ball->GetLinearVelocity()[0]/5;
+		}
 	}
 
 	return reward;
@@ -415,6 +424,22 @@ void cScenarioMultCharRugby::SetBallPos(const tVector& pos)
 	ball->SetPos(pos);
 	ball->SetRotation(tQuaternion::Identity());
 	ball->SetLinearVelocity(tVector::Zero());
-	// ball->SetLinearVelocity(tVector(15.0,0,0,0));
+	// ball->SetLinearVelocity(tVector(-15.0,0,0,0));
 	ball->SetAngularVelocity(tVector::Zero());
+}
+
+bool cScenarioMultCharRugby::endOfEpoch() const
+{
+	tVector b_pos = GetBallPos();
+	double goal_dist = 5.0;
+	if (std::fabs(b_pos[0]) > goal_dist)
+	{
+		// std::cout << "rugby end of epoch" << std::endl;
+ 		return true;
+	}
+	if (std::fabs(b_pos[2]) > (goal_dist*2))
+	{
+		return true;
+	}
+	return false;
 }

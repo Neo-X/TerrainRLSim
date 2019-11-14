@@ -55,6 +55,7 @@
 #include "sim/TerrainRLCrowdCharController.h"
 #include "sim/TerrainRLCrowdCharVelController.h"
 #include "sim/TerrainRLCrowdCharVelGoalVelController.h"
+#include "sim/TerrainRLCrowdCharVelGoalVelPosController.h"
 #include "sim/MultiCharWaypointController.h"
 #include "sim/MultiCharWaypointVelController.h"
 #include "sim/CtPDGRFController.h"
@@ -114,6 +115,7 @@ const std::string gCharCtrlName[cTerrainRLCtrlFactory::eCharCtrlMax] =
 	"multi_char_crowd",
 	"multi_char_crowd_vel",
 	"multi_char_crowd_vel_goal_vel",
+	"multi_char_crowd_vel_goal_vel_pos",
 	"waypoint_vel",
 	"soccer",
 	"biped3d_step",
@@ -343,6 +345,9 @@ bool cTerrainRLCtrlFactory::BuildController(const tCtrlParams& params, std::shar
 		break;
 	case eCharVelCtrlCrowdVelGoal:
 		succ = BuildCrowdCharVelGoalVelController(params, out_ctrl);
+		break;
+	case eCharVelCtrlCrowdVelPosGoal:
+		succ = BuildCrowdCharVelGoalVelPosController(params, out_ctrl);
 		break;
 	case eCharCtrlWaypointVel:
 		succ = BuildWaypointVelController(params, out_ctrl);
@@ -2334,6 +2339,66 @@ bool cTerrainRLCtrlFactory::BuildCrowdCharVelGoalVelController(const tCtrlParams
 
 	auto step_ctrl = std::dynamic_pointer_cast<cBipedStepController3D>(llc);
 	auto ctrl = std::shared_ptr<cTerrainRLCrowdCharVelGoalVelController>(new cTerrainRLCrowdCharVelGoalVelController());
+
+	ctrl->SetGround(params.mGround);
+	ctrl->EnableSymmetricStep(params.mEnableSymmetricStep);
+	ctrl->SetInitStepLen(params.mWaypointInitStepLen);
+	ctrl->Init(params.mChar.get());
+	ctrl->SetLLC(step_ctrl);
+	if(params.mGroundSampleRes3d >= 0)
+	{
+		ctrl->SetGroundSampleRes(params.mGroundSampleRes3d);
+	}
+    if(params.mViewDist >= 0)
+    {
+        ctrl->SetViewDist(params.mViewDist);
+    }
+
+	const std::string& poli_net_file = params.mNetFiles[eNetFileActor1];
+	const std::string& poli_model_file = params.mNetFiles[eNetFileActor1Model];
+	const std::string& critic_net_file = params.mNetFiles[eNetFileCritic1];
+	const std::string& critic_model_file = params.mNetFiles[eNetFileCritic1Model];
+
+	if (poli_net_file != "")
+	{
+		succ &= ctrl->LoadNet(poli_net_file);
+		if (succ && poli_model_file != "")
+		{
+			ctrl->LoadModel(poli_model_file);
+		}
+	}
+
+	if (critic_net_file != "")
+	{
+		bool critic_succ = ctrl->LoadCriticNet(critic_net_file);
+		succ &= critic_succ;
+		if (critic_succ && critic_model_file != "")
+		{
+			ctrl->LoadCriticModel(critic_model_file);
+		}
+	}
+
+	out_ctrl = ctrl;
+
+	return succ;
+}
+
+bool cTerrainRLCtrlFactory::BuildCrowdCharVelGoalVelPosController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl)
+{
+	bool succ = true;
+
+	std::shared_ptr<cCharController> llc;
+	if (params.mEnableSymmetricLLC)
+	{
+		BuildBipedSymStepController3D(params, llc);
+	}
+	else
+	{
+		BuildBipedStepController3D(params, llc);
+	}
+
+	auto step_ctrl = std::dynamic_pointer_cast<cBipedStepController3D>(llc);
+	auto ctrl = std::shared_ptr<cTerrainRLCrowdCharVelGoalVelPosController>(new cTerrainRLCrowdCharVelGoalVelPosController());
 
 	ctrl->SetGround(params.mGround);
 	ctrl->EnableSymmetricStep(params.mEnableSymmetricStep);
