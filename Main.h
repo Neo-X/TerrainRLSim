@@ -41,6 +41,7 @@
 #include "scenarios/DrawScenarioMultCharRugby.h"
 #include "scenarios/DrawScenarioMultCharConcentricCircle.h"
 #include "scenarios/DrawScenarioMultiTaskImitateVizEval.h"
+#include "scenarios/DrawScenarioImitateEvalMultiTask.h"
 
 // #include "optimizer/scenarios/OptScenarioClimb.h"
 // #include "optimizer/scenarios/OptScenarioPoliEval.h"
@@ -248,6 +249,10 @@ void SetupScenario()
 	else if (scenario_name == "imitate_eval")
 	{
 		gScenario = std::shared_ptr<cDrawScenarioImitateEval>(new cDrawScenarioImitateEval(gCamera));
+	}
+	else if (scenario_name == "imitate_eval_multitask")
+	{
+		gScenario = std::shared_ptr<cDrawScenarioImitateEvalMultiTask>(new cDrawScenarioImitateEvalMultiTask(gCamera));
 	}
 	else if (scenario_name == "imitate_viz_eval")
 	{
