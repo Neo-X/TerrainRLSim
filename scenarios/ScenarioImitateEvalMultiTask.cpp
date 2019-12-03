@@ -10,8 +10,7 @@
 const std::string gTerrainFilesKey = "TerrainFiles";
 
 cScenarioImitateEvalMultiTask::cScenarioImitateEvalMultiTask() :
-	cScenarioImitateEval(),
-	cScenarioPoliEval()
+		cScenarioImitateEval()
 {
 }
 
@@ -19,8 +18,17 @@ cScenarioImitateEvalMultiTask::~cScenarioImitateEvalMultiTask()
 {
 }
 
+void cScenarioImitateEvalMultiTask::ParseArgs(const std::shared_ptr<cArgParser>& parser)
+{
+	cScenarioImitateEval::ParseArgs(parser);
+
+	ParseGroundParams(parser, mGroundParams);
+
+}
+
 void cScenarioImitateEvalMultiTask::ParseGroundParams(const std::shared_ptr<cArgParser>& parser, cGround::tParams& out_params) const
 {
+	std::cout << "Parsing terrains file" << std::endl;
 	std::string terrain_file = "";
 	parser->ParseString("terrain_file", terrain_file);
 	std::string fpath;
@@ -37,6 +45,7 @@ void cScenarioImitateEvalMultiTask::ParseGroundParams(const std::shared_ptr<cArg
 
 	if (terrain_file != "")
 	{
+		std::cout << "Loading terrains" << std::endl;
 		// bool succ = cGroundFactory::ParseParamsJson(terrain_file, out_params);
 		succ = this->LoadTerrains(root["TerrainFiles"], out_params);
 		if (!succ)
@@ -72,7 +81,7 @@ bool cScenarioImitateEvalMultiTask::LoadTerrains(const Json::Value& json, cGroun
 	return succ;
 }
 
-void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>& motion_files, cGround::tParams& out_params)
+void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>& motion_files, cGround::tParams& out_params) const
 {
 	int num_files = static_cast<int>(motion_files.size());
 
@@ -85,7 +94,7 @@ void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>&
 		bool succ = cGroundFactory::ParseParamsJson(curr_file, out_params);
 		if (succ)
 		{
-
+			std::cout << "loaded terrain file: " << curr_file << std::endl;
 		}
 		else
 		{

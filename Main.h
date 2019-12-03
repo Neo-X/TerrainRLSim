@@ -252,6 +252,7 @@ void SetupScenario()
 	}
 	else if (scenario_name == "imitate_eval_multitask")
 	{
+		std::cout << "Starting multi task terrain sim" << std::endl;
 		gScenario = std::shared_ptr<cDrawScenarioImitateEvalMultiTask>(new cDrawScenarioImitateEvalMultiTask(gCamera));
 	}
 	else if (scenario_name == "imitate_viz_eval")
