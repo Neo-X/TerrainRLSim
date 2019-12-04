@@ -18,7 +18,15 @@ cScenarioImitateEvalMultiTask::~cScenarioImitateEvalMultiTask()
 {
 }
 
-void cScenarioImitateEvalMultiTask::ParseGroundParams(const std::shared_ptr<cArgParser>& parser, cGround::tParams& out_params) const
+void cScenarioImitateEvalMultiTask::ParseArgs(const std::shared_ptr<cArgParser>& parser)
+{
+	cScenarioImitateEval::ParseArgs(parser);
+
+
+	ParseGroundParams(parser, groundParams);
+}
+
+void cScenarioImitateEvalMultiTask::ParseGroundParams(const std::shared_ptr<cArgParser>& parser, std::vector<cGround::tParams>& out_params) const
 {
 	std::cout << "Parsing terrains file" << std::endl;
 	std::string terrain_file = "";
@@ -48,7 +56,7 @@ void cScenarioImitateEvalMultiTask::ParseGroundParams(const std::shared_ptr<cArg
 	}
 }
 
-bool cScenarioImitateEvalMultiTask::LoadTerrains(const Json::Value& json, cGround::tParams& out_params) const
+bool cScenarioImitateEvalMultiTask::LoadTerrains(const Json::Value& json, std::vector<cGround::tParams>& out_params) const
 {
 	bool succ = true;
 	bool is_array = json.isArray();
@@ -73,7 +81,7 @@ bool cScenarioImitateEvalMultiTask::LoadTerrains(const Json::Value& json, cGroun
 	return succ;
 }
 
-void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>& motion_files, cGround::tParams& out_params) const
+void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>& motion_files, std::vector<cGround::tParams>& out_params) const
 {
 	int num_files = static_cast<int>(motion_files.size());
 
@@ -83,10 +91,13 @@ void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>&
 
 		cMotion curr_motion;
 		// bool succ = curr_motion.Load(_relativeFilePath + curr_file);
-		bool succ = cGroundFactory::ParseParamsJson(curr_file, out_params);
+		cGround::tParams out_params_tmp;
+		bool succ = cGroundFactory::ParseParamsJson(curr_file, out_params_tmp);
+
 		if (succ)
 		{
 			std::cout << "loaded terrain file: " << curr_file << std::endl;
+			out_params.push_back(out_params_tmp);
 		}
 		else
 		{
@@ -94,4 +105,19 @@ void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>&
 		}
 	}
 
+}
+
+void cScenarioImitateEvalMultiTask::setTaskID(size_t task)
+{
+	std::cout << "This scenario does not support multiple tasks" << std::endl;
+}
+
+size_t cScenarioImitateEvalMultiTask::getTaskID() const
+{
+	return _taskID;
+}
+
+size_t cScenarioImitateEvalMultiTask::GetNumTasks() const
+{
+	return 1;
 }

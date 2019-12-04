@@ -10,10 +10,18 @@ public:
 	cScenarioImitateEvalMultiTask();
 	virtual ~cScenarioImitateEvalMultiTask();
 
+	virtual void setTaskID(size_t task);
+	virtual size_t getTaskID() const;
+	virtual size_t GetNumTasks() const;
+
+	virtual void ParseArgs(const std::shared_ptr<cArgParser>& parser);
+
 protected:
 
-	virtual void ParseGroundParams(const std::shared_ptr<cArgParser>& parser, cGround::tParams& out_params) const;
-	virtual bool LoadTerrains(const Json::Value& json, cGround::tParams& out_params) const;
-	virtual void LoadTerrains(const std::vector<std::string>& motion_files, cGround::tParams& out_params) const;
+	std::vector<cGround::tParams> groundParams;
+
+	virtual void ParseGroundParams(const std::shared_ptr<cArgParser>& parser, std::vector<cGround::tParams>& out_params) const;
+	virtual bool LoadTerrains(const Json::Value& json, std::vector<cGround::tParams>& out_params) const;
+	virtual void LoadTerrains(const std::vector<std::string>& motion_files, std::vector<cGround::tParams>& out_params) const;
 
 };

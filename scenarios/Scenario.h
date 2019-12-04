@@ -28,9 +28,15 @@ public:
 	virtual void setRelativeFilePath(std::string path);
 	virtual std::string getRelativeFilePath();
 
+	virtual void setTaskID(size_t task);
+	virtual size_t getTaskID() const;
+	virtual size_t GetNumTasks() const;
+
 protected:
 	tCallbackFunc mResetCallback;
 	std::string _relativeFilePath;
+
+	size_t _taskID;
 
 	cScenario();
 };
