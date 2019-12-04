@@ -6,6 +6,8 @@
 #include "sim/SimCharSoftFall.h"
 #include "util/FileUtil.h"
 #include "sim/GroundFactory.h"
+#include "util/MathUtil.h"
+#include "sim/GroundVar2D.h"
 
 const std::string gTerrainFilesKey = "TerrainFiles";
 
@@ -26,7 +28,18 @@ void cScenarioImitateEvalMultiTask::ParseArgs(const std::shared_ptr<cArgParser>&
 	ParseGroundParams(parser, groundParams);
 }
 
-void cScenarioImitateEvalMultiTask::ParseGroundParams(const std::shared_ptr<cArgParser>& parser, std::vector<cGround::tParams>& out_params) const
+
+void cScenarioImitateEvalMultiTask::Reset()
+{
+	cScenarioImitateEval::Reset();
+	// int taskID = cMathUtil::RandInt(0, GetNumTasks()-1);
+	// std::cout << "Setting new task: " << taskID << std::endl;
+	// setTaskID(taskID);
+
+}
+
+
+void cScenarioImitateEvalMultiTask::ParseGroundParams(const std::shared_ptr<cArgParser>& parser, std::vector<cGround::tParams>& out_params)
 {
 	std::cout << "Parsing terrains file" << std::endl;
 	std::string terrain_file = "";
@@ -56,7 +69,7 @@ void cScenarioImitateEvalMultiTask::ParseGroundParams(const std::shared_ptr<cArg
 	}
 }
 
-bool cScenarioImitateEvalMultiTask::LoadTerrains(const Json::Value& json, std::vector<cGround::tParams>& out_params) const
+bool cScenarioImitateEvalMultiTask::LoadTerrains(const Json::Value& json, std::vector<cGround::tParams>& out_params)
 {
 	bool succ = true;
 	bool is_array = json.isArray();
@@ -81,7 +94,7 @@ bool cScenarioImitateEvalMultiTask::LoadTerrains(const Json::Value& json, std::v
 	return succ;
 }
 
-void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>& motion_files, std::vector<cGround::tParams>& out_params) const
+void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>& motion_files, std::vector<cGround::tParams>& out_params)
 {
 	int num_files = static_cast<int>(motion_files.size());
 
@@ -91,13 +104,12 @@ void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>&
 
 		cMotion curr_motion;
 		// bool succ = curr_motion.Load(_relativeFilePath + curr_file);
-		cGround::tParams out_params_tmp;
-		bool succ = cGroundFactory::ParseParamsJson(curr_file, out_params_tmp);
+		bool succ = cGroundFactory::ParseParamsJson(curr_file, mGroundParams);
 
 		if (succ)
 		{
 			std::cout << "loaded terrain file: " << curr_file << std::endl;
-			out_params.push_back(out_params_tmp);
+			out_params.push_back(mGroundParams);
 		}
 		else
 		{
@@ -109,7 +121,17 @@ void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>&
 
 void cScenarioImitateEvalMultiTask::setTaskID(size_t task)
 {
-	std::cout << "This scenario does not support multiple tasks" << std::endl;
+	// std::cout << "This scenario does not support multiple tasks" << std::endl;
+	_taskID = task;
+	mGroundParams = groundParams[_taskID];
+	mGround->SetParams(mGroundParams);
+	mGround->SetParamBlend(mGroundParams.mBlend);
+	auto ground_var2d = std::dynamic_pointer_cast<cGroundVar2D>(mGround);
+	if ( ground_var2d != nullptr )
+	{
+		auto terrain_func = cTerrainGen2D::GetTerrainFunc(mGroundParams.mType);
+		ground_var2d->SetTerrainFunc(terrain_func);
+	}
 }
 
 size_t cScenarioImitateEvalMultiTask::getTaskID() const
@@ -119,5 +141,7 @@ size_t cScenarioImitateEvalMultiTask::getTaskID() const
 
 size_t cScenarioImitateEvalMultiTask::GetNumTasks() const
 {
-	return 1;
+	return groundParams.size();
 }
+
+
