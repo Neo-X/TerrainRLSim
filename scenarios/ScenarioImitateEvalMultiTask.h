@@ -10,8 +10,6 @@ public:
 	cScenarioImitateEvalMultiTask();
 	virtual ~cScenarioImitateEvalMultiTask();
 
-	virtual void ParseArgs(const std::shared_ptr<cArgParser>& parser);
-
 protected:
 
 	virtual void ParseGroundParams(const std::shared_ptr<cArgParser>& parser, cGround::tParams& out_params) const;

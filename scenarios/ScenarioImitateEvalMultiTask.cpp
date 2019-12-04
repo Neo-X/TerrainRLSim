@@ -18,14 +18,6 @@ cScenarioImitateEvalMultiTask::~cScenarioImitateEvalMultiTask()
 {
 }
 
-void cScenarioImitateEvalMultiTask::ParseArgs(const std::shared_ptr<cArgParser>& parser)
-{
-	cScenarioImitateEval::ParseArgs(parser);
-
-	ParseGroundParams(parser, mGroundParams);
-
-}
-
 void cScenarioImitateEvalMultiTask::ParseGroundParams(const std::shared_ptr<cArgParser>& parser, cGround::tParams& out_params) const
 {
 	std::cout << "Parsing terrains file" << std::endl;
