@@ -823,10 +823,12 @@ class TerrainRLSimWrapper(object):
         # print ("task id: ", id[0], type(id[0]))
         self.getEnv().setTaskID(id)
         
+    def getNumTasks(self):
+        return self.getEnv().GetNumTasks()
         
     def sample_tasks(self, tasks):
         import random
-        tasks = random.sample(range(self.getEnv().GetNumMotions()), tasks)
+        tasks = random.sample(range(self.getEnv().GetNumTasks()), tasks)
         return tasks 
     
     def log_diagnostics(self, paths, prefix):

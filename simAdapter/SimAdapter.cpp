@@ -32,6 +32,8 @@
 #include "scenarios/ScenarioMultiTaskImitateVizEval.h"
 #include "scenarios/DrawScenarioMultCharRugby.h"
 #include "scenarios/ScenarioMultCharRugby.h"
+#include "scenarios/DrawScenarioImitateEvalMultiTask.h"
+#include "scenarios/ScenarioImitateEvalMultiTask.h"
 
 cSimAdapter::cSimAdapter(std::vector<std::string> args) {
 	// TODO Auto-generated constructor stub
@@ -546,6 +548,23 @@ void cSimAdapter::init()
 			}
 			gScenario = std::shared_ptr<cDrawScenario>(scenario__);
 			this->_gScenario = gScenario;
+		}if (scenario_name == "imitate_eval_multitask")
+		{
+			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioImitateEvalMultiTask>(new cDrawScenarioImitateEvalMultiTask(gCamera));
+			// std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioSimChar>(new cDrawScenarioSimChar(gCamera));
+			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__->GetScene());
+			this->_gScenario = scenario__;
+			if (this->_gScenario != NULL)
+			{
+				auto sim_char_scene = std::dynamic_pointer_cast<cDrawScenarioTerrainRL>(scenario__);
+				if (sim_char_scene != nullptr)
+				{
+					sim_char_scene->SetOutputTex(gIntermediateFrameBuffer);
+				}
+
+			}
+			gScenario = std::shared_ptr<cDrawScenario>(scenario__);
+			this->_gScenario = gScenario;
 		}
 		else if (scenario_name == "sim_char")
 		{
@@ -762,6 +781,14 @@ void cSimAdapter::init()
 		{
 			// std::shared_ptr<cScenarioImitate> scenario__ = std::shared_ptr<cScenarioImitate>(new cScenarioImitate());
 			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioSimChar>(new cScenarioImitateEval() );
+			this->_scene = std::dynamic_pointer_cast<cScenarioSimChar>(scenario__);
+			// gScenario = std::shared_ptr<cScenario>(scenario__);
+			this->_gScenario = scenario__ ;
+		}
+		else if (scenario_name == "imitate_eval")
+		{
+			// std::shared_ptr<cScenarioImitate> scenario__ = std::shared_ptr<cScenarioImitate>(new cScenarioImitate());
+			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioSimChar>(new cScenarioImitateEvalMultiTask() );
 			this->_scene = std::dynamic_pointer_cast<cScenarioSimChar>(scenario__);
 			// gScenario = std::shared_ptr<cScenario>(scenario__);
 			this->_gScenario = scenario__ ;
@@ -1879,6 +1906,13 @@ size_t cSimAdapter::getTaskID() const
 	{
 		return sc->getMotionID() + 1;
 	}
+
+	auto sc2 = std::dynamic_pointer_cast<cScenarioImitateEvalMultiTask>(this->_scene);
+	if ( sc2 != nullptr )
+	{
+		 return sc2->getTaskID();
+	}
+
 	return 0;
 }
 
@@ -1890,14 +1924,26 @@ void cSimAdapter::setTaskID(size_t task)
 		 sc->setMotionID(task);
 	}
 
+	auto sc2 = std::dynamic_pointer_cast<cScenarioImitateEvalMultiTask>(this->_scene);
+	if ( sc2 != nullptr )
+	{
+		 return sc2->setTaskID(task);
+	}
+
 }
 
-size_t cSimAdapter::GetNumMotions() const
+size_t cSimAdapter::GetNumTasks() const
 {
 	auto sc = std::dynamic_pointer_cast<cScenarioMultiTaskImitateVizEval>(this->_scene);
 	if ( sc != nullptr )
 	{
 		 return sc->GetNumMotions();
+	}
+
+	auto sc2 = std::dynamic_pointer_cast<cScenarioImitateEvalMultiTask>(this->_scene);
+	if ( sc2 != nullptr )
+	{
+		 return sc2->GetNumTasks();
 	}
 
 	return 1;

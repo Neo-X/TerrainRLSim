@@ -100,7 +100,8 @@ void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>&
 
 	for (int f = 0; f < num_files; ++f)
 	{
-		const std::string& curr_file = motion_files[f];
+		std::string curr_file = motion_files[f];
+		curr_file = getRelativeFilePath() + curr_file;
 
 		cMotion curr_motion;
 		// bool succ = curr_motion.Load(_relativeFilePath + curr_file);
