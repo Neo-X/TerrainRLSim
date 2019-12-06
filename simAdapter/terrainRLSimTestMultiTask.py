@@ -41,6 +41,9 @@ if __name__ == '__main__':
     print("Actions space max: ", env.action_space.getMaximum())
     
     for e in range(100):
+        numTasks = env.getNumTasks()
+        task_id = np.random.randint(0,numTasks)
+        env.set_task(task_id)
         env.reset()
         for t in range(256):
             observation, reward,  done, info = env.step(actions)

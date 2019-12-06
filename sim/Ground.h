@@ -121,6 +121,8 @@ public:
 	virtual int GetNumObstacles() const;
 	virtual const cSimObj& GetObj(int i) const;
 
+	virtual void SetParams(const tParams& params);
+
 protected:
 
 	cRand mRand;
