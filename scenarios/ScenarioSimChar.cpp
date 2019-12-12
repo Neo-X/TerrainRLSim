@@ -535,7 +535,6 @@ void cScenarioSimChar::BuildGround()
 	mGroundParams.mGroundWidth = 2 * char_view_dist;
 	mGroundParams.mHasRandSeed = mHasRandSeed;
 	mGroundParams.mRandSeed = mRandSeed;
-	// mGroundParams.mOrigin[1] = -1000;
 
 	cGroundFactory::BuildGround(mWorld, mGroundParams, mGround);
 }
@@ -546,7 +545,6 @@ void cScenarioSimChar::SetupGround()
 	if (dynamic_obstacles_characters != nullptr)
 	{
 		dynamic_obstacles_characters->SetChar(mChar);
-		// dynamic_obstacles_characters->SetChars(mChars);
 	}
 	auto dynamic_obstacles = std::dynamic_pointer_cast<cGroundDynamicObstacles3D>(mGround);
 	if (dynamic_obstacles != nullptr)
@@ -557,7 +555,6 @@ void cScenarioSimChar::SetupGround()
 	if (dynamic_characters != nullptr)
 	{
 		dynamic_characters->SetChar(mChar);
-		// dynamic_characters->SetChars(mChars);
 	}
 }
 

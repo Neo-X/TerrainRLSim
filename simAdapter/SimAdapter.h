@@ -301,7 +301,7 @@ public:
 
 	virtual size_t getTaskID() const;
 	virtual void setTaskID(size_t task);
-	virtual size_t GetNumMotions() const;
+	virtual size_t GetNumTasks() const;
 
 	void handleUpdatedAction();
 

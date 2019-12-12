@@ -235,7 +235,6 @@
 	"config_file": "./args/genBiped2D/dog/walls.txt",
 	"time_limit": 256
 },
-
 "PD_Raptor2D_Incline_Terrain-v0": 
 {
 	"config_file": "./args/genBiped2D/raptor/incline_with_terrain_features.txt",
@@ -245,6 +244,18 @@
     		"comment__": "Use simple DeepLoco HLC reward function",
     	"render_mode": "3d"
     }
+},
+"PD_Biped2D_MultiTask_Terrain-v0": 
+{
+	"config_file": "./args/genBiped2D/biped2d_full_multitask.txt",
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"render_mode": "3d"
+    },
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["k", "j"]
 },
 "PD_Raptor2D_Steps_Terrain-v0": 
 {
@@ -1153,7 +1164,7 @@
     		"comment__": "Add a joint torque penalty to the reward",
     	"add_torque_penalty": "true",
     		"comment__": "Randomly add forces to the links of the agent",
-    	"enable_rand_perturbs": "true",
+    	"enable_rand_perturbs": "false",
     	"character_file": "data/characters/humanoid3d_colourful2.txt",
 		"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
 		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt",
@@ -7207,7 +7218,7 @@
     		"comment__": "Type of controller to use, controls the environment state",
     	"char_ctrl": "ct_pd_grf",
     		"comment__": "Motion File to use for task",
-    	"motion_file": "data/motions/humanoid3d_getup_faceup.txt",
+    	"motion_file": "data/motions/humanoid3d_getup_facedown.txt",
     		"comment__": "Specific character controller to use (in this case does not detect ground fall conteacts)",
     	"character_file": "data/characters/humanoid3d_colourful_contacts.txt"
     },

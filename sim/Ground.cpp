@@ -173,6 +173,11 @@ void cGround::Init(std::shared_ptr<cWorld> world, const tParams& params)
 	FlagUpdate();
 }
 
+void cGround::SetParams(const tParams& params)
+{
+	mParams = params;
+}
+
 void cGround::setScenario(const std::shared_ptr<cScenario>& scenario_)
 {
 	this->scenario = scenario_;
