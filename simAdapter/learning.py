@@ -81,9 +81,9 @@ class Policy(nn.Module):
 
 if __name__ == '__main__':
     envs_list = terrainRLSim.getEnvsList()
-    #print("# of envs ", len(envs_list))
-    #print("Envs:\n ", json.dumps(envs_list, sort_keys=True, indent=4))
-    env = terrainRLSim.getEnv(env_name="PD_Dog2D_Steps_Terrain-v0", render=True)
+#    print("# of envs ", len(envs_list))
+#    print("Envs:\n ", json.dumps(envs_list, sort_keys=True, indent=4))
+    env = terrainRLSim.getEnv(env_name="PD_Humanoid_GRF_3D_Punch_Viz3D_WithCamVel_128x128_1Sub_Imitate_30FPS_DualState_v0", render=True)
     pi = Policy()
 
     env.reset()
@@ -104,17 +104,17 @@ if __name__ == '__main__':
     score = 0.0
     print_interval = 20
 
-    for e in range(10):
+    for e in range(100):
         s =env.reset()
 
-        for t in range(10):
+        for t in range(1000):
 #            prob = pi(torch.from_numpy(s).float())
-            print(torch.Tensor(s).shape)
-            print(torch.Tensor(s).unsqueeze(0).shape)
-            mu,std, _ = pi(torch.Tensor(s).unsqueeze(0))
-            action = get_action(mu, std)[0]
+#            print(torch.Tensor(s).shape)
+#            print(torch.Tensor(s).unsqueeze(0).shape)
+#            mu,std, _ = pi(torch.Tensor(s).unsqueeze(0))
+#            action = get_action(mu, std)[0]
             observation, reward, done, info = env.step(action)
-            print(action)
+#            print(action)
             s = observation
             score += reward[0][0]
             pi.put_data((pi, reward[0][0], s, action))
