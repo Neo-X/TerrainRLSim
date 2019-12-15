@@ -104,8 +104,6 @@ class TerrainRLSimWrapper(object):
         self._render = render
         self._done = None
         self._done_multiAgent = None
-        self._collision_multiAgent = None
-
         self._steps = 0
         
         self._config = config
@@ -226,10 +224,6 @@ class TerrainRLSimWrapper(object):
                 fall_ = fall_ and self._sim.endOfEpochForAgent(a)
             self._done = fall_
             """
-            ### Update collision stats
-            self._collision_multiAgent = [ self._sim.agent_contact(i)
-                                      for i in range(self._sim.getNumAgents())]
-            
             ### Update fall stats
             self._done_multiAgent = [ self._done_multiAgent[i] or self._sim.endOfEpochForAgent(i) 
                                       for i in range(self._sim.getNumAgents())]
@@ -252,12 +246,7 @@ class TerrainRLSimWrapper(object):
     def agentHasFallenMultiAgent(self):
         # print ("Done_MA: ", self._done_multiAgent)
         return self._done_multiAgent
-
-    def agent_collision_MultiAgent(self):
-        # print ("Done_MA: ", self._done_multiAgent)
-        return self._collision_multiAgent
-
-
+        
     def agentHasFallen(self):
         if (self._sim.getNumAgents() > 0): ### Multi Character simulation
             ### End of epoch when first agent falls
@@ -504,8 +493,6 @@ class TerrainRLSimWrapper(object):
         self._sim.initEpoch()
         self._done = False
         self._done_multiAgent = [False for i in range(self._sim.getNumAgents())]
-        self._collision_multiAgent = [False for i in range(self._sim.getNumAgents())]
-
         if ( "timestep_subsampling" in self._config ):
             for i in range(self._config["timestep_subsampling"]):
                 if ("process_visual_data" in self._config
@@ -580,12 +567,12 @@ class TerrainRLSimWrapper(object):
         ### Get pixel data from view
         img = self.getEnv().getPixels(0,
                            0, 
-                           1600, 
-                           900)
+                           800, 
+                           450)
         # assert(np.sum(img) > 0.0)
         ### reshape into image, colour last
-        img = np.reshape(img, (900, 
-                           1600, 3))
+        img = np.reshape(img, (450, 
+                           800, 3))
         ### downsample image
         ### convert to greyscale
         # assert(np.sum(img) > 0.0)
