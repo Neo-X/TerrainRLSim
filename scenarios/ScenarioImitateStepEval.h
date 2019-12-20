@@ -12,8 +12,11 @@ public:
 	virtual ~cScenarioImitateStepEval();
 
 	virtual std::string GetName() const;
+	virtual bool endOfEpoch() const;
+
 
 protected:
+	std::shared_ptr<cScenarioSimChar> mScene;
 
 	virtual bool HasFallen() const;
 };

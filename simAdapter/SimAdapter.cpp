@@ -1829,14 +1829,10 @@ bool cSimAdapter::endOfEpochForAgent(size_t agent_num)
 
 	Eigen::VectorXd pose0 = agent->GetPose();
 
-	tVector groundPosition = agent->GetRootPos();
-	groundPosition[1] = 0.0;
-	tVector groundTargetNormal = (agent->GetCurrentGroundTarget() - groundPosition);
-	double disntace_g_a= groundTargetNormal.norm();
-	std::cout << " Ground Target Normal "  << disntace_g_a << std::endl;
+	//std::cout << " Ground Target Normal "  << disntace_g_a << std::endl;
 	// std::cout << "agent " << agent_num << " Fallen: " << agent->HasFallen() << " Exploded?: " << agent->HasExploded() << std::endl;
 	if (agent->HasFallen() || agent->HasExploded() ||
-			(pose0[1] < -10.0) || this->_scene->endOfEpoch() || disntace_g_a > 1.0)
+			(pose0[1] < -10.0) || this->_scene->endOfEpoch() )
 	{
 //		std::cout << "End of Epoch:" << std::endl;
 		return true;

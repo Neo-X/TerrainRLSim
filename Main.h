@@ -60,7 +60,7 @@
 
 
 // Dimensions of the window we are drawing into.
-int gWinWidth = 1600;
+int gWinWidth = 720;
 int gWinHeight = static_cast<int>(gWinWidth * 9.0 / 16.0);
 //int gWinWidth = 720;
 //int gWinHeight = 480;
