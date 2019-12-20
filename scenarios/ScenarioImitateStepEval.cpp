@@ -29,12 +29,9 @@ bool cScenarioImitateStepEval::HasFallen() const
 
 bool cScenarioImitateStepEval::endOfEpoch() const
 {
-	auto step_scene = std::dynamic_pointer_cast<cScenarioExpImitateStep>(mScene);
-	const auto& step_plan = step_scene->GetStepPlan();
-	double step_pose0 = step_plan.mStepPos0.norm();
-	double step_pose1 = step_plan.mStepPos1.norm();
-
-	if (step_pose0 >1.0 || step_pose1>1.0)
+	double step_pose0 = 	mStepPlan.mStepPos0.norm();
+	double step_pose1 = 	mStepPlan.mStepPos1.norm();
+	if (step_pose0 >3.0 || step_pose1>3.0)
 		return true;
 
 

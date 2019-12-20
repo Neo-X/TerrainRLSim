@@ -16,7 +16,6 @@ public:
 
 
 protected:
-	std::shared_ptr<cScenarioSimChar> mScene;
 
 	virtual bool HasFallen() const;
 };
