@@ -29,9 +29,18 @@ bool cScenarioImitateStepEval::HasFallen() const
 
 bool cScenarioImitateStepEval::endOfEpoch() const
 {
-	double step_pose0 = 	mStepPlan.mStepPos0.norm();
-	double step_pose1 = 	mStepPlan.mStepPos1.norm();
-	if (step_pose0 >3.0 || step_pose1>3.0)
+
+	tVector groundPosition = mChar->GetRootPos();
+//	groundPosition[1] = 0.0;
+//	tVector groundTargetNormal = (agent->GetCurrentGroundTarget() - groundPosition);
+//	double disntace_g_a= groundTargetNormal.norm();
+
+	double step_pose0 = (mStepPlan.mStepPos0 - groundPosition).norm();
+	double step_pose1 = (mStepPlan.mStepPos1 - groundPosition).norm();
+
+	// double step_pose0 = 	mStepPlan.mStepPos0.norm();
+	// double step_pose1 = 	mStepPlan.mStepPos1.norm();
+	if (step_pose0 >6.0 || step_pose1>6.0)
 		return true;
 
 
