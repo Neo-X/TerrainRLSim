@@ -785,7 +785,7 @@ void cSimAdapter::init()
 			// gScenario = std::shared_ptr<cScenario>(scenario__);
 			this->_gScenario = scenario__ ;
 		}
-		else if (scenario_name == "imitate_eval")
+		else if (scenario_name == "imitate_eval_multitask")
 		{
 			// std::shared_ptr<cScenarioImitate> scenario__ = std::shared_ptr<cScenarioImitate>(new cScenarioImitate());
 			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioSimChar>(new cScenarioImitateEvalMultiTask() );
