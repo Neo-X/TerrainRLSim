@@ -5,6 +5,8 @@
 #include "sim/GroundDynamicCharacters3D.h"
 #include "sim/GroundDynamicObstacles3D.h"
 #include "sim/WaypointController.h"
+#include <ios>
+#include <fstream>
 
 cScenarioMultChar::tAgentData::tAgentData()
 {
@@ -289,6 +291,11 @@ double cScenarioMultChar::CalcReward()
 				if (agentDatas[0].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;
+					std::cout << "Agent reached target1: " << reward  << std::endl;
+					std::ofstream log("goals.txt", std::ios_base::app | std::ios_base::out);
+					log << "1\n";
+//					cScenarioMultChar::Reset();
+//					mChar->Reset();
 					agentDatas[0].reachedTarget = false;
 				}
 			}
@@ -304,6 +311,12 @@ double cScenarioMultChar::CalcReward()
 				if (agentDatas[0].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;
+					std::cout << "Agent reached target2: " << reward  << std::endl;
+					std::ofstream log("goals.txt", std::ios_base::app | std::ios_base::out);
+					log << "2\n";
+//					mChar->Reset();
+//					cScenarioMultChar::Reset();
+					
 					agentDatas[0].reachedTarget = false;
 				}
 			}
@@ -487,7 +500,12 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 				if (agentDatas[agent+1].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;
-					// std::cout << "Agent reached target: " << reward  << std::endl;
+					std::cout << "Agent reached target3: " << reward  << std::endl;
+					std::ofstream log("goals.txt", std::ios_base::app | std::ios_base::out);
+					log << "3\n";
+//					char_->Reset();
+//					cScenarioMultChar::Reset();
+
 					agentDatas[agent+1].reachedTarget = false;
 				}
 			} else if (mUseSimpleDistanceReward)
@@ -501,6 +519,11 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 				if (agentDatas[agent+1].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;
+					std::cout << "Agent reached target4: " << reward  << std::endl;
+					std::ofstream log("goals.txt", std::ios_base::app | std::ios_base::out);
+					log << "4\n";
+//					cScenarioMultChar::Reset();
+//					char_->Reset();
 					agentDatas[agent+1].reachedTarget = false;
 				}
 			}

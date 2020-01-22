@@ -118,9 +118,9 @@ void cScenarioMultCharRugby::UpdateCharacter(double time_step)
 	}
 	if (GetBallPos()[0] < -5 || (GetBallPos()[0] > 5.0))
 	{
-		// int handle = GetTargetBallHandle();
-		// RemoveObj(handle);
-		// SetBallPos(tVector(0,1,0,0));
+//		int handle = GetTargetBallHandle();
+//		RemoveObj(handle);
+		SetBallPos(tVector(0,1,0,0));
 	}
 }
 
