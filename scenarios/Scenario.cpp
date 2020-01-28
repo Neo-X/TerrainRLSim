@@ -1,9 +1,11 @@
 #include "Scenario.h"
+#include <iostream>
 
 cScenario::cScenario()
 {
 	mResetCallback = nullptr;
 	_relativeFilePath = "";
+	_taskID=0;
 }
 
 void cScenario::Init()
@@ -25,6 +27,21 @@ void cScenario::Reset()
 
 void cScenario::Clear()
 {
+}
+
+void cScenario::setTaskID(size_t task)
+{
+	std::cout << "This scenario does not support multiple tasks" << std::endl;
+}
+
+size_t cScenario::getTaskID() const
+{
+	return _taskID;
+}
+
+size_t cScenario::GetNumTasks() const
+{
+	return 1;
 }
 
 void cScenario::Run()
