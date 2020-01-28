@@ -8,8 +8,8 @@
 
 //const double gMaxTargetDist = 3;
 //const double gMaxBallDist = 3;
-const double gMaxTargetDist = 10;
-const double gMaxBallDist = 10;
+const double gMaxTargetDist = 4;
+const double gMaxBallDist = 4;
 //const double gMaxTargetDist = 5;
 //const double gMaxBallDist = 5;
 const double gComBallDistThreshold = 2;
@@ -29,8 +29,8 @@ double cScenarioExpSoccer::CalcReward() const
 	double com_ball_pos_w = 0.2;
 	//double target_vel_w = 0.8;
 	//double target_pos_w = 0;
-	double target_vel_w = 0.4;
-	double target_pos_w = 0.4;
+	double target_vel_w = 0.3;
+	double target_pos_w = 0.3;
 	
 	const double total_w = com_ball_vel_w + com_ball_pos_w + target_vel_w + target_pos_w;
 	com_ball_vel_w /= total_w;
