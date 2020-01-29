@@ -4,7 +4,7 @@
 #include "render/opengl.h"
 
 cDrawScenarioSoccerGeneralEval::cDrawScenarioSoccerGeneralEval(cCamera& cam)
-	: cDrawScenarioImitateTargetEval(cam)
+	: cDrawScenarioImitateStepEval(cam)
 {
 }
 
@@ -27,7 +27,7 @@ void cDrawScenarioSoccerGeneralEval::HandleRayTest(const cWorld::tRayTestResult&
 	else
 #endif
 	{
-		// cDrawScenarioHikeEval::HandleRayTest(result);
+		cDrawScenarioImitateStepEval::HandleRayTest(result);
 	}
 }
 

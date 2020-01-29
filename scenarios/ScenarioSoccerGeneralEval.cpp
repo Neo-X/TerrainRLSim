@@ -2,8 +2,10 @@
 
 cScenarioSoccerGeneralEval::cScenarioSoccerGeneralEval() :
 					cScenarioExpSoccerGeneral(),
-					cScenarioExpImitateStep()
+					cScenarioImitateStepEval()
 {
+	EnableTargetPos(true);
+	EnableRandTargetPos(true);
 }
 
 cScenarioSoccerGeneralEval::~cScenarioSoccerGeneralEval()

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "scenarios/ScenarioExpImitateStep.h"
+#include "scenarios/ScenarioImitateStepEval.h"
 #include "scenarios/ScenarioExpSoccerGeneral.h"
 
-class cScenarioSoccerGeneralEval : virtual public cScenarioExpImitateStep, virtual public cScenarioExpSoccerGeneral
+class cScenarioSoccerGeneralEval : virtual public cScenarioImitateStepEval, virtual public cScenarioExpSoccerGeneral
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW

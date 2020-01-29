@@ -1,7 +1,7 @@
 #pragma once
-#include "scenarios/DrawScenarioImitateTargetEval.h"
+#include "scenarios/DrawScenarioImitateStepEval.h"
 
-class cDrawScenarioSoccerGeneralEval : public cDrawScenarioImitateTargetEval
+class cDrawScenarioSoccerGeneralEval : public cDrawScenarioImitateStepEval
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW

@@ -1,4 +1,4 @@
--scenario= soccer_eval_general
+-scenario= imitate_step_eval
 
 -character_file= data/characters/biped3d_mocap.txt
 -motion_file= data/motions/biped3d_walk.txt
@@ -19,6 +19,14 @@
 -num_update_steps= 20
 -num_sim_substeps= 5
 -world_scale= 4
+
+// -policy_solver= data/policies/biped3d/nets/biped3d_ct_target_terr_actor_solver.prototxt
+// -policy_net= data/policies/biped3d/nets/biped3d_ct_target_terr_actor_net.prototxt
+//-policy_model= data/policies/biped3d/models/biped3d_target_model.h5
+
+// -critic_solver= data/policies/biped3d/nets/biped3d_ct_target_terr_critic_solver.prototxt
+// -critic_net= data/policies/biped3d/nets/biped3d_ct_target_terr_critic_net.prototxt
+//-critic_model= data/policies/biped3d/models/biped3d_target_model_critic.h5
 
 -enable_rand_state_reset= true
 -rand_seed= 21
