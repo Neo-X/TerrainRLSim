@@ -1,15 +1,14 @@
 #pragma once
 
 #include "scenarios/ScenarioExpImitateStep.h"
-#include "scenarios/ScenarioExpSoccerGeneral.h"
 
-class cScenarioSoccerGeneralEval : virtual public cScenarioExpImitateStep, virtual public cScenarioExpSoccerGeneral
+class cScenarioExpSoccerGeneral : virtual public cScenarioExpImitateStep
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-	cScenarioSoccerGeneralEval();
-	virtual ~cScenarioSoccerGeneralEval();
+	cScenarioExpSoccerGeneral();
+	virtual ~cScenarioExpSoccerGeneral();
 
 	virtual void ParseArgs(const std::shared_ptr<cArgParser>& parser);
 	virtual void Init();
@@ -35,11 +34,11 @@ protected:
 	double mRandBallPosTimeMin;
 	double mRandBallPosTimeMax;
 	double mRandBallPosTimer;
-
+	
 	virtual void ResetParams();
 	virtual bool CheckResetTarget() const;
 	virtual void ClearObjs();
-
+	
 	virtual double GetRandTargetMaxDist() const;
 	virtual double GetRandBallMaxDist() const;
 	virtual void HandleNewActionUpdate();
@@ -64,4 +63,3 @@ protected:
 	virtual void UpdateTargetBall();
 	virtual int FindNearestBall(const tVector& pos) const;
 };
-
