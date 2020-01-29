@@ -159,7 +159,7 @@ void cScenarioExpSoccerGeneral::Update(double time_elapsed)
 
 std::string cScenarioExpSoccerGeneral::GetName() const
 {
-	return "Soccer Exploration";
+	return "Soccer General Exploration";
 }
 
 void cScenarioExpSoccerGeneral::ResetParams()

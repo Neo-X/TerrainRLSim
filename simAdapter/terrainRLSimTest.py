@@ -29,16 +29,16 @@ if __name__ == '__main__':
     
     actions = []
     for i in range(11):
-        action = ((actionSpace.getMaximum() - actionSpace.getMinimum()) * np.random.uniform(size=actionSpace.getMinimum().shape[0])  ) + actionSpace.getMinimum()
+        action = actionSpace.sample()
         actions.append(action * 0)
     # actions = np.array(actions) * 100            
     print("Actions: ", actions)
     
-    print("observation_space: ", env.observation_space.getMaximum())
+    print("observation_space: ", env.observation_space.high)
     
-    print("Actions space max: ", len(env.action_space.getMaximum()))
-    print("Actions space min: ", env.action_space.getMinimum())
-    print("Actions space max: ", env.action_space.getMaximum())
+    print("Actions space max: ", len(env.action_space.high))
+    print("Actions space min: ", env.action_space.low)
+    print("Actions space max: ", env.action_space.high)
     
     for e in range(100):
         env.reset()
