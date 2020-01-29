@@ -1,8 +1,8 @@
--scenario= imitate_step_eval
+-scenario= soccer_eval_general
 
--character_file= data/characters/biped3d_mocap.txt
+-character_file= data/characters/biped3d.txt
 -motion_file= data/motions/biped3d_walk.txt
--state_file= data/states/biped3d_sim_walk_state.txt
+-state_file= data/states/biped3d_stand_state.txt
 
 -output_path= output/int_step_eval.txt
 -record_reward= false
@@ -52,4 +52,4 @@
 
 -num_threads= 8
 
--kin_ctrl_file= data/controllers/biped3D/biped3d_mocap_step_ctrl0.txt
+// -kin_ctrl_file= data/controllers/biped3D/biped3d_mocap_step_ctrl0.txt
