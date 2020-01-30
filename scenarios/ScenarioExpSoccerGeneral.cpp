@@ -467,16 +467,13 @@ void cScenarioExpSoccerGeneral::UpdateTargetBall()
 			auto ball = GetBall();
 			soccer_ctrl->SetBall(ball);
 		}
-
-#if defined(HACK_SOCCER_LLC)
-		// hack hack
+		// This is for a Soccer LLC type controller
 		auto tar_soccer_ctrl = std::dynamic_pointer_cast<cCtTargetSoccerController>(mChar->GetController());
 		if (tar_soccer_ctrl != nullptr)
 		{
 			auto ball = GetBall();
 			tar_soccer_ctrl->SetBall(ball);
 		}
-#endif
 	}
 	else
 	{
@@ -486,14 +483,11 @@ void cScenarioExpSoccerGeneral::UpdateTargetBall()
 			soccer_ctrl->SetBall(nullptr);
 		}
 
-#if defined(HACK_SOCCER_LLC)
-		// hack hack
 		auto tar_soccer_ctrl = std::dynamic_pointer_cast<cCtTargetSoccerController>(mChar->GetController());
 		if (tar_soccer_ctrl != nullptr)
 		{
 			tar_soccer_ctrl->SetBall(nullptr);
 		}
-#endif
 	}
 }
 
