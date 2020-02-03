@@ -66,40 +66,29 @@ def checkDataIsValid(data, verbose=False, scale=1.0, identifier="Data"):
     
     return True
 
-class ActionSpace(object):
-    """
-        Wrapper for the action space of an env
-    """
-    
-    def __init__(self, action_space):
-        self._minimum = np.array(action_space[0])
-        self._maximum = np.array(action_space[1])
-        self._shape = np.array(action_space[1]).shape
-        
-    def getMinimum(self):
-        return self._minimum
+import gym
 
-    def getMaximum(self):
-        return self._maximum
-    
-    @property
-    def low(self):
-        return self._minimum
-    
-    @property
-    def high(self):
-        return self._maximum
-    
-    @property
-    def shape(self):
-        return self._shape
-
-class TerrainRLSimWrapper(object):
+class TerrainRLSimWrapper(gym.Env):
     """
         Wrapper for the TerrainRLSim env to make function calls more simple
     """
-    def __init__(self, sim, render=False, config=None):
+    def __init__(self, sim=None, render=False, config=None):
         
+        if sim is None:
+            import os, sys
+            ## place holder  
+            terrainRL_PATH = os.environ['TERRAINRL_PATH']
+            print ("terrainRL_PATH: ", terrainRL_PATH)
+            sys.path.append(terrainRL_PATH+'/lib')
+            from simAdapter import terrainRLAdapter
+            more_args = []
+            if ("TerrainRL_Parameters" in config):
+                more_args = paramsToKeyValues(env_data[env_name]["TerrainRL_Parameters"])
+            args_ = ['train', '-arg_file=', terrainRL_PATH+'/'+config["config_file"], 
+                                                '-relative_file_path=', terrainRL_PATH+'/'] + more_args
+            print ("TerrainRL args: ", args_)
+            sim = terrainRLAdapter.cSimAdapter(args_)
+            sim.init()
         self._sim = sim
         self._render = render
         self._done = None
@@ -142,18 +131,16 @@ class TerrainRLSimWrapper(object):
             act_high = [1] * self.getEnv().getActionSpaceSize() 
             action_space = [act_low, act_high]
             action_space = self.getEnv().getActionSpaceBounds()
-            self._action_space = ActionSpace(action_space)
+            self.action_space = gym.spaces.Box(low=np.array(act_low), high=np.array(act_high))
             if ("process_visual_data" in self._config
                 and (self._config["process_visual_data"] == True)):
                 ob_low = (np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [0]
                 ob_high = (np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [1]
-                observation_space = [ob_low, ob_high]
-                self._observation_space = ActionSpace(observation_space)
+                self.observation_space = gym.spaces.Box(low=ob_low, high=ob_high)
             else:
                 ob_low = [-1] * self.getEnv().getObservationSpaceSize()
                 ob_high = [1] * self.getEnv().getObservationSpaceSize() 
-                observation_space = [ob_low, ob_high]
-                self._observation_space = ActionSpace(observation_space)
+            self.observation_space = gym.spaces.Box(low=np.array(ob_low), high=np.array(ob_high))
         
     def render(self, headless_step=False):
         if (self._render):
@@ -531,15 +518,7 @@ class TerrainRLSimWrapper(object):
         self._sim.finish()
         
     def getActionSpace(self):
-        return self._action_space
-    
-    @property
-    def action_space(self):
-        return self._action_space
-    
-    @property
-    def observation_space(self):
-        return self._observation_space
+        return self.action_space
     
     def endOfEpoch(self):
         return self._done
@@ -941,6 +920,21 @@ def getEnv(env_name, render=False, GPU_device=None):
     sim_.init()
     return sim_
 
+
+from gym.envs.registration import register as gym_register
+# Use the gym_register because it allows us to set the max_episode_steps.
+env_data = getEnvsList()
+# print (env_data)
+config__ = env_data["PD-Biped3D-HLC-Soccer-v1"]
+print ("config__", config__)
+gym_register(
+    id='PD-Biped3D-HLC-Soccer-v1',
+    entry_point='terrainRLSim:TerrainRLSimWrapper',
+    reward_threshold=0.95,
+    max_episode_steps=512,
+    kwargs={'config': config__}
+)
+   
 if __name__ == '__main__':
 
     env = getEnv(env_name="PD_Biped2D_Gaps_Terrain-v0", render=True)

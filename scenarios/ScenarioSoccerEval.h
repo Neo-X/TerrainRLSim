@@ -2,6 +2,7 @@
 
 #include "scenarios/ScenarioHikeEval.h"
 #include "scenarios/ScenarioExpSoccer.h"
+#include "scenarios/ScenarioExpHike.h"
 
 class cScenarioSoccerEval : virtual public cScenarioHikeEval, virtual public cScenarioExpSoccer
 {

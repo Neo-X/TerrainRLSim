@@ -1,4 +1,4 @@
-#include "scenarios/ScenarioExpSoccer.h"
+#include "scenarios/ScenarioExpSoccerGeneral.h"
 #include "sim/SimSphere.h"
 #include "sim/SoccerController.h"
 #include "sim/CtTargetSoccerController.h"
@@ -17,7 +17,7 @@ const double gComBallDistThreshold = 2;
 const double gBallRadius = 0.2;
 const tVector gBallColor = tVector(0.8, 0.8, 0.8, 1);
 
-double cScenarioExpSoccer::CalcReward() const
+double cScenarioExpSoccerGeneral::CalcReward() const
 {
 	const double desired_com_ball_vel = 1;
 	const double desired_ball_target_vel = 1;
@@ -111,7 +111,7 @@ double cScenarioExpSoccer::CalcReward() const
 	return reward;
 }
 
-cScenarioExpSoccer::cScenarioExpSoccer()
+cScenarioExpSoccerGeneral::cScenarioExpSoccerGeneral()
 {
 	mRandBallPosTimeMin = 200;
 	mRandBallPosTimeMax = 200;
@@ -121,13 +121,13 @@ cScenarioExpSoccer::cScenarioExpSoccer()
 	mRemoveBallAtGoal = false;
 }
 
-cScenarioExpSoccer::~cScenarioExpSoccer()
+cScenarioExpSoccerGeneral::~cScenarioExpSoccerGeneral()
 {
 }
 
-void cScenarioExpSoccer::ParseArgs(const std::shared_ptr<cArgParser>& parser)
+void cScenarioExpSoccerGeneral::ParseArgs(const std::shared_ptr<cArgParser>& parser)
 {
-	cScenarioExpHike::ParseArgs(parser);
+	cScenarioExpImitateStep::ParseArgs(parser);
 	parser->ParseDouble("rand_ball_pos_time_min", mRandBallPosTimeMin);
 	parser->ParseDouble("rand_ball_pos_time_max", mRandBallPosTimeMax);
 	parser->ParseInt("num_ball_spawns", mNumBallSpawns);
@@ -136,76 +136,76 @@ void cScenarioExpSoccer::ParseArgs(const std::shared_ptr<cArgParser>& parser)
 	parser->ParseBool("remove_ball_at_goal", mRemoveBallAtGoal);
 }
 
-void cScenarioExpSoccer::Init()
+void cScenarioExpSoccerGeneral::Init()
 {
-	cScenarioExpHike::Init();
+	cScenarioExpImitateStep::Init();
 	BuildBalls();
 	ResetBallPosAll();
 }
 
-void cScenarioExpSoccer::Reset()
+void cScenarioExpSoccerGeneral::Reset()
 {
-	cScenarioExpHike::Reset();
+	cScenarioExpImitateStep::Reset();
 	BuildBalls();
 	ResetBallPosAll();
 	ResetTargetPos();
 }
 
-void cScenarioExpSoccer::Update(double time_elapsed)
+void cScenarioExpSoccerGeneral::Update(double time_elapsed)
 {
-	cScenarioExpHike::Update(time_elapsed);
+	cScenarioExpImitateStep::Update(time_elapsed);
 	UpdateBallPos(time_elapsed);
 }
 
-std::string cScenarioExpSoccer::GetName() const
+std::string cScenarioExpSoccerGeneral::GetName() const
 {
-	return "Soccer Exploration";
+	return "Soccer General Exploration";
 }
 
-void cScenarioExpSoccer::ResetParams()
+void cScenarioExpSoccerGeneral::ResetParams()
 {
-	cScenarioExpHike::ResetParams();
+	cScenarioExpImitateStep::ResetParams();
 	mPrevBallPos.setZero();
 }
 
-bool cScenarioExpSoccer::CheckResetTarget() const
+bool cScenarioExpSoccerGeneral::CheckResetTarget() const
 {
 	bool reset_target = (mRandTargetPosTimer <= 0);
 	return reset_target;
 }
 
-void cScenarioExpSoccer::ClearObjs()
+void cScenarioExpSoccerGeneral::ClearObjs()
 {
-	cScenarioExpHike::ClearObjs();
+	cScenarioExpImitateStep::ClearObjs();
 	mBallObjHandles.clear();
 }
 
-void cScenarioExpSoccer::HandleNewActionUpdate()
+void cScenarioExpSoccerGeneral::HandleNewActionUpdate()
 {
-	cScenarioExpHike::HandleNewActionUpdate();
+	cScenarioExpImitateStep::HandleNewActionUpdate();
 
 	mPrevBallPos = GetBallPos();
 }
 
-bool cScenarioExpSoccer::EndEpisode() const
+bool cScenarioExpSoccerGeneral::EndEpisode() const
 {
-	bool is_end = cScenarioExpHike::EndEpisode();
+	bool is_end = cScenarioExpImitateStep::EndEpisode();
 	int num_balls = GetNumBalls();
 	is_end |= (num_balls < 1);
 	return is_end;
 }
 
-double cScenarioExpSoccer::GetRandTargetMaxDist() const
+double cScenarioExpSoccerGeneral::GetRandTargetMaxDist() const
 {
 	return gMaxTargetDist;
 }
 
-double cScenarioExpSoccer::GetRandBallMaxDist() const
+double cScenarioExpSoccerGeneral::GetRandBallMaxDist() const
 {
 	return gMaxBallDist;
 }
 
-void cScenarioExpSoccer::BuildBalls()
+void cScenarioExpSoccerGeneral::BuildBalls()
 {
 	for (int i = 0; i < mNumBallSpawns; ++i)
 	{
@@ -215,7 +215,7 @@ void cScenarioExpSoccer::BuildBalls()
 	UpdateTargetBall();
 }
 
-int cScenarioExpSoccer::BuildBall()
+int cScenarioExpSoccerGeneral::BuildBall()
 {
 	const double r = gBallRadius;
 	const double mass = 0.1;
@@ -262,32 +262,32 @@ int cScenarioExpSoccer::BuildBall()
 	return ball_handle;
 }
 
-const std::shared_ptr<cSimObj>& cScenarioExpSoccer::GetBall() const
+const std::shared_ptr<cSimObj>& cScenarioExpSoccerGeneral::GetBall() const
 {
 	return GetBall(GetTargetBallHandle());
 }
 
-const std::shared_ptr<cSimObj>& cScenarioExpSoccer::GetBall(int ball_handle) const
+const std::shared_ptr<cSimObj>& cScenarioExpSoccerGeneral::GetBall(int ball_handle) const
 {
 	assert(ball_handle != gInvalidIdx);
 	const tObjEntry& entry = mObjs[ball_handle];
 	return entry.mObj;
 }
 
-tVector cScenarioExpSoccer::GetBallPos() const
+tVector cScenarioExpSoccerGeneral::GetBallPos() const
 {
 	return GetBallPos(GetTargetBallHandle());
 }
 
-tVector cScenarioExpSoccer::GetBallPos(int ball_handle) const
+tVector cScenarioExpSoccerGeneral::GetBallPos(int ball_handle) const
 {
 	const auto& ball = GetBall(ball_handle);
 	return ball->GetPos();
 }
 
-tVector cScenarioExpSoccer::CalcTargetPosDefault()
+tVector cScenarioExpSoccerGeneral::CalcTargetPosDefault()
 {
-	//return cScenarioExpHike::CalcTargetPosDefault();
+	//return cScenarioExpImitateStep::CalcTargetPosDefault();
 	const double max_dist = GetRandTargetMaxDist();
 	const double min_dist = 0;
 
@@ -307,7 +307,7 @@ tVector cScenarioExpSoccer::CalcTargetPosDefault()
 	return rand_pos;
 }
 
-void cScenarioExpSoccer::UpdateBallPos(double time_elapsed)
+void cScenarioExpSoccerGeneral::UpdateBallPos(double time_elapsed)
 {
 	int ball_handle = GetTargetBallHandle();
 	if (EnabledRandTargetPos())
@@ -360,7 +360,7 @@ void cScenarioExpSoccer::UpdateBallPos(double time_elapsed)
 #endif
 }
 
-void cScenarioExpSoccer::ResetBallPosAll()
+void cScenarioExpSoccerGeneral::ResetBallPosAll()
 {
 	for (int i = 0; i < GetNumBalls(); ++i)
 	{
@@ -371,7 +371,7 @@ void cScenarioExpSoccer::ResetBallPosAll()
 	ResetBallTimer();
 }
 
-void cScenarioExpSoccer::ResetBallPos(int ball_handle)
+void cScenarioExpSoccerGeneral::ResetBallPos(int ball_handle)
 {
 	const double min_dist = 0.7;
 	const double max_dist = GetRandBallMaxDist();
@@ -387,20 +387,20 @@ void cScenarioExpSoccer::ResetBallPos(int ball_handle)
 	SetBallPos(ball_handle, rand_pos);
 }
 
-void cScenarioExpSoccer::SetBallPos(const tVector& pos)
+void cScenarioExpSoccerGeneral::SetBallPos(const tVector& pos)
 {
 	SetBallPos(GetTargetBallHandle(), pos);
 }
 
-int cScenarioExpSoccer::GetNumBalls() const
+int cScenarioExpSoccerGeneral::GetNumBalls() const
 {
 	return static_cast<int>(mBallObjHandles.size());
 }
 
-void cScenarioExpSoccer::RemoveObj(int handle)
+void cScenarioExpSoccerGeneral::RemoveObj(int handle)
 {
 	int num_objs = GetNumObjs();
-	cScenarioExpHike::RemoveObj(handle);
+	cScenarioExpImitateStep::RemoveObj(handle);
 
 	// update ball handle since removing objects might have caused it to change
 	auto end_ball = std::find(mBallObjHandles.begin(), mBallObjHandles.end(), num_objs - 1);
@@ -416,7 +416,7 @@ void cScenarioExpSoccer::RemoveObj(int handle)
 	}
 }
 
-void cScenarioExpSoccer::SetBallPos(int ball_handle, const tVector& pos)
+void cScenarioExpSoccerGeneral::SetBallPos(int ball_handle, const tVector& pos)
 {
 	const auto& ball = GetBall(ball_handle);
 	double r = gBallRadius;
@@ -430,12 +430,12 @@ void cScenarioExpSoccer::SetBallPos(int ball_handle, const tVector& pos)
 	ball->SetAngularVelocity(tVector::Zero());
 }
 
-void cScenarioExpSoccer::ResetBallTimer()
+void cScenarioExpSoccerGeneral::ResetBallTimer()
 {
 	mRandBallPosTimer = mRand.RandDouble(mRandBallPosTimeMin, mRandBallPosTimeMax);
 }
 
-int cScenarioExpSoccer::GetTargetBallHandle() const
+int cScenarioExpSoccerGeneral::GetTargetBallHandle() const
 {
 	int handle = gInvalidIdx;
 	int num_balls = GetNumBalls();
@@ -446,7 +446,7 @@ int cScenarioExpSoccer::GetTargetBallHandle() const
 	return handle;
 }
 
-void cScenarioExpSoccer::UpdateTargetBall()
+void cScenarioExpSoccerGeneral::UpdateTargetBall()
 {
 	tVector char_pos = mChar->GetRootPos();
 	int num_balls = GetNumBalls();
@@ -467,16 +467,13 @@ void cScenarioExpSoccer::UpdateTargetBall()
 			auto ball = GetBall();
 			soccer_ctrl->SetBall(ball);
 		}
-
-#if defined(HACK_SOCCER_LLC)
-		// hack hack
+		// This is for a Soccer LLC type controller
 		auto tar_soccer_ctrl = std::dynamic_pointer_cast<cCtTargetSoccerController>(mChar->GetController());
 		if (tar_soccer_ctrl != nullptr)
 		{
 			auto ball = GetBall();
 			tar_soccer_ctrl->SetBall(ball);
 		}
-#endif
 	}
 	else
 	{
@@ -486,18 +483,15 @@ void cScenarioExpSoccer::UpdateTargetBall()
 			soccer_ctrl->SetBall(nullptr);
 		}
 
-#if defined(HACK_SOCCER_LLC)
-		// hack hack
 		auto tar_soccer_ctrl = std::dynamic_pointer_cast<cCtTargetSoccerController>(mChar->GetController());
 		if (tar_soccer_ctrl != nullptr)
 		{
 			tar_soccer_ctrl->SetBall(nullptr);
 		}
-#endif
 	}
 }
 
-int cScenarioExpSoccer::FindNearestBall(const tVector& pos) const
+int cScenarioExpSoccerGeneral::FindNearestBall(const tVector& pos) const
 {
 	int nearest_idx = gInvalidIdx;
 	double min_dist = std::numeric_limits<double>::infinity();

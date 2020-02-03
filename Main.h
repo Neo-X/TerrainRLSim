@@ -24,6 +24,7 @@
 #include "scenarios/DrawScenarioImitateTargetEval.h"
 #include "scenarios/DrawScenarioHikeEval.h"
 #include "scenarios/DrawScenarioSoccerEval.h"
+#include "scenarios/DrawScenarioSoccerGeneralEval.h"
 #include "scenarios/DrawScenarioImitateStepEval.h"
 #include "scenarios/DrawScenarioTrainDMACE.h"
 #include "scenarios/DrawScenarioImitate.h"
@@ -287,6 +288,10 @@ void SetupScenario()
 	else if (scenario_name == "soccer_eval")
 	{
 		gScenario = std::shared_ptr<cDrawScenarioSoccerEval>(new cDrawScenarioSoccerEval(gCamera));
+	}
+	else if (scenario_name == "soccer_eval_general")
+	{
+		gScenario = std::shared_ptr<cDrawScenarioSoccerGeneralEval>(new cDrawScenarioSoccerGeneralEval(gCamera));
 	}
 	else if (scenario_name == "terrain_viewer")
 	{
