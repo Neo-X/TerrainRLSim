@@ -72,7 +72,7 @@ class TerrainRLSimWrapper(gym.Env):
     """
         Wrapper for the TerrainRLSim env to make function calls more simple
     """
-    def __init__(self, sim=None, render=False, config=None):
+    def __init__(self, sim=None, render=False, config=None, GPU_device=None):
         
         if sim is None:
             import os, sys
@@ -83,11 +83,22 @@ class TerrainRLSimWrapper(gym.Env):
             from simAdapter import terrainRLAdapter
             more_args = []
             if ("TerrainRL_Parameters" in config):
-                more_args = paramsToKeyValues(env_data[env_name]["TerrainRL_Parameters"])
+                more_args = paramsToKeyValues(config["TerrainRL_Parameters"])
             args_ = ['train', '-arg_file=', terrainRL_PATH+'/'+config["config_file"], 
                                                 '-relative_file_path=', terrainRL_PATH+'/'] + more_args
             print ("TerrainRL args: ", args_)
             sim = terrainRLAdapter.cSimAdapter(args_)
+            if (render == True or (render == "yes")):
+                sim.setRender(True)
+            else:
+                sim.setRender(False)
+            if ("headless_render" in config 
+                and (config["headless_render"] == True)):
+                print("Enable headless rendering")
+                sim.setHeadlessRender(True)
+                
+            if (GPU_device is not None):
+                sim.setRenderingGPUDevicveIndex(GPU_device)
             sim.init()
         self._sim = sim
         self._render = render
@@ -139,6 +150,8 @@ class TerrainRLSimWrapper(gym.Env):
                 ob_low = [-1] * self.getEnv().getObservationSpaceSize()
                 ob_high = [1] * self.getEnv().getObservationSpaceSize() 
             self.observation_space = gym.spaces.Box(low=np.array(ob_low), high=np.array(ob_high))
+            
+        self.init()
         
     def render(self, headless_step=False):
         if (self._render):
@@ -908,14 +921,23 @@ from gym.envs.registration import register as gym_register
 # Use the gym_register because it allows us to set the max_episode_steps.
 env_data = getEnvsList()
 # print (env_data)
-config__ = env_data["PD-Biped3D-HLC-Soccer-v1"]
-print ("config__", config__)
+# config__ = env_data["PD-Biped3D-HLC-Soccer-v1"]
+# print ("config__", config__)
 gym_register(
     id='PD-Biped3D-HLC-Soccer-v1',
     entry_point='terrainRLSim:TerrainRLSimWrapper',
     reward_threshold=0.95,
     max_episode_steps=512,
-    kwargs={'config': config__}
+    kwargs={'config': env_data["PD-Biped3D-HLC-Soccer-v1"]}
+)
+
+gym_register(
+    id='PD-Biped3D-HLC-Soccer-Render-v1',
+    entry_point='terrainRLSim:TerrainRLSimWrapper',
+    reward_threshold=0.95,
+    max_episode_steps=512,
+    kwargs={'config': env_data["PD-Biped3D-HLC-Soccer-v1"],
+            "render": True}
 )
    
 if __name__ == '__main__':
