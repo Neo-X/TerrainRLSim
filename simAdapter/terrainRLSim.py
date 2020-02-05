@@ -431,7 +431,7 @@ class TerrainRLSimWrapper(gym.Env):
         
         # ob[0,0] = np.nan
         
-        return self.checkState(ob), self.checkState(reward), self._done, self._config
+        return self.checkState(ob), self.checkState(reward), self._done, {}
         
     def checkState(self, state):
         if (not checkDataIsValid(state)):
