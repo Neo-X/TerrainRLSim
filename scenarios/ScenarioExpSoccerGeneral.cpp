@@ -119,6 +119,8 @@ cScenarioExpSoccerGeneral::cScenarioExpSoccerGeneral()
 	mTargetResetDist = 0.5; // desired distance between ball and target
 	mNumBallSpawns = 1;
 	mRemoveBallAtGoal = false;
+	EnableTargetPos(true);
+	EnableRandTargetPos(true);
 }
 
 cScenarioExpSoccerGeneral::~cScenarioExpSoccerGeneral()

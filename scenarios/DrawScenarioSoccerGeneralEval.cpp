@@ -43,8 +43,22 @@ void cDrawScenarioSoccerGeneralEval::HandleRayTestBall(const cWorld::tRayTestRes
 	}
 }
 
+void cDrawScenarioSoccerGeneralEval::DrawMisc() const
+{
+	cDrawScenarioImitateTargetEval::DrawMisc();
+	DrawTargetPos();
+}
+
 void cDrawScenarioSoccerGeneralEval::SetBallPos(const tVector& pos)
 {
 	auto scene = std::dynamic_pointer_cast<cScenarioSoccerGeneralEval>(mScene);
 	scene->SetBallPos(pos);
+}
+
+void cDrawScenarioSoccerGeneralEval::ResetCallback()
+{
+	cDrawScenarioImitateTargetEval::ResetCallback();
+
+	auto scene = std::dynamic_pointer_cast<cScenarioImitateStepEval>(mScene);
+	scene->EnableRandTargetPos(true);
 }

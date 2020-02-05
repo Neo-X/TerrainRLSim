@@ -15,4 +15,6 @@ protected:
 	virtual void HandleRayTest(const cWorld::tRayTestResult& result);
 	virtual void HandleRayTestBall(const cWorld::tRayTestResult& result);
 	virtual void SetBallPos(const tVector& pos);
+	virtual void ResetCallback();
+	virtual void DrawMisc() const;
 };
