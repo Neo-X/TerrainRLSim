@@ -22,6 +22,3 @@ apt-get install -y libglew-dev
 apt-get install -y swig3.0 premake4
 ### For openGL ES support
 apt-get install -y libglfw3-dev libgles2-mesa-dev
-
-### Some python libraries are needed
-pip3 install --user scikit-image
