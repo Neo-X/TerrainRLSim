@@ -7,7 +7,7 @@ import gym
 
 if __name__ == '__main__':
 
-    env = gym.make("PD-Biped3D-HLC-Soccer-Render-v1")
+    env = gym.make("PD_Biped2D_Gaps_Terrain-v0")
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))

@@ -67,16 +67,19 @@ def checkDataIsValid(data, verbose=False, scale=1.0, identifier="Data"):
     return True
 
 import gym
+from simAdapter import Box
 
 class TerrainRLSimWrapper(gym.Env):
     """
         Wrapper for the TerrainRLSim env to make function calls more simple
     """
-    def __init__(self, sim=None, render=False, config=None, GPU_device=None):
+    def __init__(self, sim=None, render=False, config=None, GPU_device=None, **_kwargs):
         
         if sim is None:
             import os, sys
             ## place holder  
+            for key in _kwargs.keys():
+                config[key] = _kwargs[key]
             terrainRL_PATH = os.environ['TERRAINRL_PATH']
             print ("terrainRL_PATH: ", terrainRL_PATH)
             sys.path.append(terrainRL_PATH+'/lib')
@@ -140,16 +143,16 @@ class TerrainRLSimWrapper(gym.Env):
             act_high = [1] * self.getEnv().getActionSpaceSize() 
             action_space = [act_low, act_high]
             action_space = self.getEnv().getActionSpaceBounds()
-            self.action_space = gym.spaces.Box(low=np.array(act_low), high=np.array(act_high))
+            self.action_space = Box(low=np.array(act_low), high=np.array(act_high))
             if ("process_visual_data" in self._config
                 and (self._config["process_visual_data"] == True)):
                 ob_low = (np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [0]
                 ob_high = (np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [1]
-                self.observation_space = gym.spaces.Box(low=ob_low, high=ob_high)
+                self.observation_space = Box(low=ob_low, high=ob_high)
             else:
                 ob_low = [-1] * self.getEnv().getObservationSpaceSize()
                 ob_high = [1] * self.getEnv().getObservationSpaceSize() 
-            self.observation_space = gym.spaces.Box(low=np.array(ob_low), high=np.array(ob_high))
+            self.observation_space = Box(low=np.array(ob_low), high=np.array(ob_high))
             
         self.init()
         
@@ -234,12 +237,20 @@ class TerrainRLSimWrapper(gym.Env):
                 if ( self._sim.endOfEpochForAgent(a) ):
                     fall_s = fall_s + 1
             if ( fall_s > ((self._sim.getNumAgents()/2.0) + 0.002)):
+                if ("fall_check" in self._config
+                    and (self._config["fall_check"] is False)):
+                    return 
                 self._done = True
                 return
             else:
                 self._done = False
         else:
-            self._done = self._done or self.endOfEpochForAgent(0)
+            pdb.set_break()
+            if ("fall_check" in self._config
+            and (self._config["fall_check"] is False)):
+                self._done = False
+            else:
+                self._done = self._done or self.endOfEpochForAgent(0)
         # self.render()
         # print("Trying to render...")
         
@@ -489,7 +500,7 @@ class TerrainRLSimWrapper(gym.Env):
             
         return reward
         
-    def reset(self):
+    def reset(self, reset_args=None):
         self._sim.initEpoch()
         self._done = False
         self._done_multiAgent = [False for i in range(self._sim.getNumAgents())]
