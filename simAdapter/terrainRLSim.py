@@ -934,22 +934,6 @@ env_data = getEnvsList()
 # print (env_data)
 # config__ = env_data["PD-Biped3D-HLC-Soccer-v1"]
 # print ("config__", config__)
-gym_register(
-    id='PD-Biped3D-HLC-Soccer-v1',
-    entry_point='terrainRLSim:TerrainRLSimWrapper',
-    reward_threshold=0.95,
-    max_episode_steps=512,
-    kwargs={'config': env_data["PD-Biped3D-HLC-Soccer-v1"]}
-)
-
-gym_register(
-    id='PD-Biped3D-HLC-Soccer-Render-v1',
-    entry_point='terrainRLSim:TerrainRLSimWrapper',
-    reward_threshold=0.95,
-    max_episode_steps=512,
-    kwargs={'config': env_data["PD-Biped3D-HLC-Soccer-v1"],
-            "render": True}
-)
    
 if __name__ == '__main__':
 

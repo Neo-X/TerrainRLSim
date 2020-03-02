@@ -7,7 +7,7 @@ import gym
 
 if __name__ == '__main__':
 
-    env = gym.make("PD_Biped2D_Gaps_Terrain-v0")
+    env = gym.make("PD_Biped2D_Walk-v0")
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     env.seed(1234)
     
     actions = []
-    for i in range(11):
+    for i in range(1):
         action = actionSpace.sample()
         actions.append(action)
     # actions = np.array(actions) * 100            
@@ -34,7 +34,8 @@ if __name__ == '__main__':
     for e in range(100):
         env.reset()
         for t in range(256):
-            observation, reward,  done, info = env.step(actions)
+            action = env.action_space.sample()
+            observation, reward,  done, info = env.step(action)
             # env.getImitationState()
             print ("Done: ", done)
             print("Reward: ", reward)

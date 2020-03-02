@@ -549,7 +549,7 @@ void cSimAdapter::init()
 			}
 			gScenario = std::shared_ptr<cDrawScenario>(scenario__);
 			this->_gScenario = gScenario;
-		}if (scenario_name == "imitate_eval_multitask")
+		}else if (scenario_name == "imitate_eval_multitask")
 		{
 			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioImitateEvalMultiTask>(new cDrawScenarioImitateEvalMultiTask(gCamera));
 			// std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioSimChar>(new cDrawScenarioSimChar(gCamera));
@@ -788,7 +788,7 @@ void cSimAdapter::init()
 		}
 		else
 		{
-			std::cerr << "scenario not recognized: " << scenario_name << std::endl;
+			std::cerr << "scenario not recognized: |" << scenario_name << "|" << std::endl;
 			exit(-1);
 		}
 	}

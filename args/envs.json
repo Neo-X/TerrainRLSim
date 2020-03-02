@@ -183,8 +183,15 @@
 },
 "PD_Biped2D_Flat-v0": 
 {
-	"config_file": "./args/genBiped2D/opt_args_imitate_biped_full_phase.txt",
-	"time_limit": 256
+ 	"config_file": "./args/genBiped2D/opt_args_imitate_biped_full_phase.txt",
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"render_mode": "3d",
+    		"comment__": "The type of scenario class to use.",
+    	"scenario": "imitate_eval"
+    }
 },
 "PD_Biped2D_Flat-v2": 
 {

@@ -109,3 +109,31 @@ gym_register(
             "flatten_observation": True,
             "fall_check": False}
 )
+
+gym_register(
+    id='PD_Biped2D_Walk-v0',
+    entry_point='simAdapter.terrainRLSim:TerrainRLSimWrapper',
+    reward_threshold=0.95,
+    max_episode_steps=512,
+    kwargs={'config': env_data["PD_Biped2D_Flat-v0"],
+            "render": True, 
+            "flatten_observation": True,
+            "fall_check": False}
+)
+
+gym_register(
+    id='PD-Biped3D-HLC-Soccer-v1',
+    entry_point='terrainRLSim:TerrainRLSimWrapper',
+    reward_threshold=0.95,
+    max_episode_steps=512,
+    kwargs={'config': env_data["PD-Biped3D-HLC-Soccer-v1"]}
+)
+
+gym_register(
+    id='PD-Biped3D-HLC-Soccer-Render-v1',
+    entry_point='terrainRLSim:TerrainRLSimWrapper',
+    reward_threshold=0.95,
+    max_episode_steps=512,
+    kwargs={'config': env_data["PD-Biped3D-HLC-Soccer-v1"],
+            "render": True}
+)
