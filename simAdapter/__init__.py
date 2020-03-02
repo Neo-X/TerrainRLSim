@@ -116,7 +116,7 @@ gym_register(
     reward_threshold=0.95,
     max_episode_steps=512,
     kwargs={'config': env_data["PD_Biped2D_Flat-v0"],
-            "render": True, 
+            "render": False, 
             "flatten_observation": True,
             "fall_check": False}
 )
