@@ -493,7 +493,7 @@ class TerrainRLSimWrapper(gym.Env):
             if ("use_forward_vel_reward" in self._config
                     and (self._config["use_forward_vel_reward"] == True)):
                 dist = self._sim.calcVelocity()-1
-                reward__ = np.exp((dist*dist)*-1.5)
+                reward__ = np.exp((dist*dist)*-2.5)
                 reward = reward__
             else:
                 reward = self._sim.calcReward()
