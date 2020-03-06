@@ -486,7 +486,7 @@ class TerrainRLSimWrapper(gym.Env):
                 # reward.append([self._sim.calcRewardForAgent(i) * int(not self._done_multiAgent[i])])
                 if ("use_forward_vel_reward" in self._config
                     and (self._config["use_forward_vel_reward"] == True)):
-                    print ("target_vel: ", target_vel)
+                    # print ("target_vel: ", target_vel)
                     dist = self._sim.calcVelocity(i)-target_vel
                     reward__ = np.exp((dist*dist)*-2.5)
                     reward.append([reward__])
@@ -504,6 +504,7 @@ class TerrainRLSimWrapper(gym.Env):
         return reward
         
     def reset(self, reset_args=None):
+        print("reset_args:", reset_args)
         self._sim.initEpoch()
         self._done = False
         self._done_multiAgent = [False for i in range(self._sim.getNumAgents())]
