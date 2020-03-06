@@ -833,6 +833,7 @@ class TerrainRLSimWrapper(gym.Env):
         if "multitask_config" in self._config:
             if (self._config["multitask_config"]["type"] == "vel"):
                 self._target_vel = self._config["multitask_config"]["task_goal"][id]
+                print("self._target_vel: ", self._target_vel)
         else:
             self.getEnv().setTaskID(int(id))
         
