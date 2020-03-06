@@ -505,6 +505,8 @@ class TerrainRLSimWrapper(gym.Env):
         
     def reset(self, reset_args=None):
         print("reset_args:", reset_args)
+        if reset_args is not None:
+            self.set_task(reset_args)
         self._sim.initEpoch()
         self._done = False
         self._done_multiAgent = [False for i in range(self._sim.getNumAgents())]
