@@ -210,6 +210,29 @@
     	"comment__": "Use a forward velocity reward computed in the python code",
     "use_forward_vel_reward": true
 },
+"PD_Biped2D_Flat_Walk_MultiTask-v0": 
+{
+ 	"config_file": "./args/genBiped2D/opt_args_imitate_biped_full_phase.txt",
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"render_mode": "3d",
+    		"comment__": "The type of scenario class to use.",
+    	"scenario": "sim_char",
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "false"
+    },
+    	"comment__": "Use a forward velocity reward computed in the python code",
+    "use_forward_vel_reward": true,
+    	"comment__": "MultiTask config",
+    "multitask_config": 
+    {
+    	"type": "vel",
+    		"comment__": "A mapping from task id to target velocity.",
+    	"task_goal": [-2, -1.8, -1.6, -1.4, -1.2, -1.0, -0.8, -0.6, -0.4, -0.2, -0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0]
+    }
+},
 "PD_Biped2D_Flat-v2": 
 {
 	"comments__": "This has a larger simulation timestep",

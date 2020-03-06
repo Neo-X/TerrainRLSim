@@ -149,3 +149,14 @@ gym_register(
             "render": True}
 )
 
+gym_register(
+    id='PD_Biped2D_Flat_Walk_MultiTask-v0',
+    entry_point='simAdapter.terrainRLSim:TerrainRLSimWrapper',
+    reward_threshold=0.95,
+    max_episode_steps=512,
+    kwargs={'config': env_data["PD_Biped2D_Flat_Walk_MultiTask-v0"],
+            "render": False, 
+            "flatten_observation": True,
+            "fall_check": False}
+)
+

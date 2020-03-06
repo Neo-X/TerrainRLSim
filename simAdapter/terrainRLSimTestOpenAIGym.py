@@ -7,7 +7,7 @@ import gym
 
 if __name__ == '__main__':
 
-    env = gym.make("PD_Biped2D_Flat_Stand-v0")
+    env = gym.make("PD_Biped2D_Flat_Walk_MultiTask-v0")
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -31,7 +31,11 @@ if __name__ == '__main__':
     print("Actions space min: ", env.action_space.low)
     print("Actions space max: ", env.action_space.high)
     
+    
     for e in range(100):
+        numTasks = env.getNumTasks()
+        task_id = np.random.randint(0,numTasks)
+        env.set_task(task_id)
         env.reset()
         for t in range(256):
             action = env.action_space.sample()

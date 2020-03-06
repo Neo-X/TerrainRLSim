@@ -108,6 +108,7 @@ class TerrainRLSimWrapper(gym.Env):
         self._done = None
         self._done_multiAgent = None
         self._steps = 0
+        self._target_vel = 1.0
         
         self._config = config
         if ("process_visual_data" in self._config
@@ -476,6 +477,7 @@ class TerrainRLSimWrapper(gym.Env):
     
     def calcRewards(self):
         reward = []
+        target_vel = self._target_vel
         if (self._sim.getNumAgents() > 0): ### Multi Character simulation
             for i in range(self._sim.getNumAgents()):
                 ### get all states and check that they are different
@@ -484,15 +486,16 @@ class TerrainRLSimWrapper(gym.Env):
                 # reward.append([self._sim.calcRewardForAgent(i) * int(not self._done_multiAgent[i])])
                 if ("use_forward_vel_reward" in self._config
                     and (self._config["use_forward_vel_reward"] == True)):
-                    dist = self._sim.calcVelocity(i)-1
-                    reward__ = np.exp((dist*dist)*-1.5)
+                    print ("target_vel: ", target_vel)
+                    dist = self._sim.calcVelocity(i)-target_vel
+                    reward__ = np.exp((dist*dist)*-2.5)
                     reward.append([reward__])
                 else:
                     reward.append([self._sim.calcRewardForAgent(i)])
         else:
             if ("use_forward_vel_reward" in self._config
                     and (self._config["use_forward_vel_reward"] == True)):
-                dist = self._sim.calcVelocity()-1
+                dist = self._sim.calcVelocity()-target_vel
                 reward__ = np.exp((dist*dist)*-2.5)
                 reward = reward__
             else:
@@ -824,10 +827,18 @@ class TerrainRLSimWrapper(gym.Env):
     
     def set_task(self, id):
         # print ("task id: ", id, type(id))
-        self.getEnv().setTaskID(int(id))
+        if "multitask_config" in self._config:
+            if (self._config["multitask_config"]["type"] == "vel"):
+                self._target_vel = self._config["multitask_config"]["task_goal"][id]
+        else:
+            self.getEnv().setTaskID(int(id))
         
     def getNumTasks(self):
-        return self.getEnv().GetNumTasks()
+        if "multitask_config" in self._config:
+            if (self._config["multitask_config"]["type"] == "vel"):
+                return len(self._config["multitask_config"]["task_goal"])
+        else:
+            return self.getEnv().GetNumTasks()
         
     def sample_tasks(self, tasks):
         import random
