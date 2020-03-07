@@ -504,7 +504,7 @@ class TerrainRLSimWrapper(gym.Env):
         return reward
         
     def reset(self, reset_args=None):
-        print("reset_args:", reset_args)
+        # print("reset_args:", reset_args)
         if reset_args is not None:
             self.set_task(reset_args)
         self._sim.initEpoch()
@@ -833,7 +833,7 @@ class TerrainRLSimWrapper(gym.Env):
         if "multitask_config" in self._config:
             if (self._config["multitask_config"]["type"] == "vel"):
                 self._target_vel = self._config["multitask_config"]["task_goal"][id]
-                print("self._target_vel: ", self._target_vel)
+                # print("self._target_vel: ", self._target_vel)
         else:
             self.getEnv().setTaskID(int(id))
         
