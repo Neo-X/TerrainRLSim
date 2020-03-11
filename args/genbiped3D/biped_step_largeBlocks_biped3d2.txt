@@ -1,4 +1,4 @@
--scenario= hike_eval
+-scenario= hike_eval_general
 -output_path= output/biped3d_step_model.h5
 
 -character_file= data/characters/biped3d_mocap.txt
@@ -9,10 +9,10 @@
 
 -sim_mode= 3d
 -char_type= general
--char_ctrl= biped3d_step
+-char_ctrl= waypoint_general
 -char_ctrl_ct_query_rate= 0
 -char_ctrl_cycle_dur= 1
--terrain_file= data/terrain/trail3d2.txt
+-terrain_file= data/terrain/obstacles3d.txt
 
 -num_update_steps= 20
 -num_sim_substeps= 5

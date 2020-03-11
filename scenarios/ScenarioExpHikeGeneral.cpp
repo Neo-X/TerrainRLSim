@@ -1,5 +1,5 @@
 #include "scenarios/ScenarioExpHikeGeneral.h"
-#include "sim/CtPDPhaseTargetController.h"
+#include "sim/WaypointControllerGeneral.h"
 #include "learning/CaclaTrainer.h"
 
 const int gNumLLCWarmupCycles = 0;

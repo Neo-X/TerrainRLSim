@@ -62,6 +62,7 @@ public:
 		// eCharCtrlBiped3D,
 		eCharCtrlBiped3DCacla,
 		eCharCtrlWaypoint,
+		eCharCtrlWaypointGeneral,
 		eCharCtrlMultiCharWaypoint,
 		eCharCtrlMultiCharWaypointVel,
 		eCharCtrlCrowd,
@@ -200,6 +201,7 @@ protected:
 	static bool BuildeCtPDGRFController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
 
 	static bool BuildWaypointController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
+	static bool BuildWaypointControllerGeneral(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
 	static bool BuildMultiCharWaypointController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
 	static bool BuildMultiCharWaypointVelController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);
 	static bool BuildCrowdCharController(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl);

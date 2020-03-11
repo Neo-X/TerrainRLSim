@@ -46,6 +46,7 @@
 #include "sim/CtPDPhaseTargetController.h"
 #include "sim/WaypointController.h"
 #include "sim/WaypointVelController.h"
+#include "sim/WaypointControllerGeneral.h"
 #include "sim/SoccerController.h"
 #include "sim/BipedStepController3D.h"
 #include "sim/BipedSymStepController3D.h"
@@ -110,6 +111,7 @@ const std::string gCharCtrlName[cTerrainRLCtrlFactory::eCharCtrlMax] =
 	// "biped3D",
 	"biped3D_cacla",
 	"waypoint",
+	"waypoint_general",
 	"multi_char_waypoint",
 	"multi_char_waypoint_vel",
 	"multi_char_crowd",
@@ -330,6 +332,9 @@ bool cTerrainRLCtrlFactory::BuildController(const tCtrlParams& params, std::shar
 		break;
 	case eCharCtrlWaypoint:
 		succ = BuildWaypointController(params, out_ctrl);
+		break;
+	case eCharCtrlWaypointGeneral:
+		succ = BuildWaypointControllerGeneral(params, out_ctrl);
 		break;
 	case eCharCtrlMultiCharWaypoint:
 	 	succ = BuildMultiCharWaypointController(params, out_ctrl);
@@ -2076,6 +2081,45 @@ bool cTerrainRLCtrlFactory::BuildWaypointController(const tCtrlParams& params, s
 	ctrl->SetInitStepLen(params.mWaypointInitStepLen);
 	ctrl->Init(params.mChar.get());
 	ctrl->SetLLC(step_ctrl);
+
+	const std::string& poli_net_file = params.mNetFiles[eNetFileActor1];
+	const std::string& poli_model_file = params.mNetFiles[eNetFileActor1Model];
+	const std::string& critic_net_file = params.mNetFiles[eNetFileCritic1];
+	const std::string& critic_model_file = params.mNetFiles[eNetFileCritic1Model];
+
+	if (poli_net_file != "")
+	{
+		succ &= ctrl->LoadNet(poli_net_file);
+		if (succ && poli_model_file != "")
+		{
+			ctrl->LoadModel(poli_model_file);
+		}
+	}
+
+	if (critic_net_file != "")
+	{
+		bool critic_succ = ctrl->LoadCriticNet(critic_net_file);
+		succ &= critic_succ;
+		if (critic_succ && critic_model_file != "")
+		{
+			ctrl->LoadCriticModel(critic_model_file);
+		}
+	}
+
+	out_ctrl = ctrl;
+
+	return succ;
+}
+
+bool cTerrainRLCtrlFactory::BuildWaypointControllerGeneral(const tCtrlParams& params, std::shared_ptr<cCharController>& out_ctrl)
+{
+	bool succ = true;
+
+	auto ctrl = std::shared_ptr<cWaypointControllerGeneral>(new cWaypointControllerGeneral());
+
+	ctrl->SetGround(params.mGround);
+	ctrl->SetInitStepLen(params.mWaypointInitStepLen);
+	ctrl->Init(params.mChar.get());
 
 	const std::string& poli_net_file = params.mNetFiles[eNetFileActor1];
 	const std::string& poli_model_file = params.mNetFiles[eNetFileActor1Model];
