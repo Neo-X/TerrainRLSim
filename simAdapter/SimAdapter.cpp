@@ -19,6 +19,7 @@
 #include "scenarios/ScenarioImitateStepEval.h"
 #include "scenarios/ScenarioExp.h"
 #include "scenarios/ScenarioHikeEval.h"
+#include "scenarios/DrawScenarioHikeGeneralEval.h"
 #include "scenarios/ScenarioSpaceMultChar.h"
 #include "scenarios/ScenarioTestCaseMultChar.h"
 #include "scenarios/DrawScenarioTestCaseMultChar.h"
@@ -746,6 +747,24 @@ void cSimAdapter::init()
 			gScenario = std::shared_ptr<cDrawScenario>(scenario__);
 			this->_gScenario = gScenario;
 		}
+		else if (scenario_name == "hike_eval_general")
+		{
+			gCameraPosition = tVector(0, 100, 100, 0);
+			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioHikeGeneralEval>(new cDrawScenarioHikeGeneralEval(gCamera));
+			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__->GetScene());
+			this->_gScenario = scenario__;
+			if (this->_gScenario != NULL)
+			{
+				auto sim_char_scene = std::dynamic_pointer_cast<cDrawScenarioTerrainRL>(scenario__);
+				if (sim_char_scene != nullptr)
+				{
+					sim_char_scene->SetOutputTex(gIntermediateFrameBuffer);
+				}
+
+			}
+			gScenario = std::shared_ptr<cDrawScenario>(scenario__);
+			this->_gScenario = gScenario;
+		}
 		else if (scenario_name == "imitate_viz_eval")
 		{
 			gCameraPosition = tVector(0, 40, 40, 0);
@@ -880,6 +899,13 @@ void cSimAdapter::init()
 		{
 			gCameraPosition = tVector(0, 30, 30, 0);
 			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioSoccerGeneralEval>(new cScenarioSoccerGeneralEval());
+			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__);
+			this->_gScenario = scenario__ ;
+		}
+		else if (scenario_name == "hike_eval_general")
+		{
+			gCameraPosition = tVector(0, 30, 30, 0);
+			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioHikeGeneralEval>(new cScenarioHikeGeneralEval());
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__);
 			this->_gScenario = scenario__ ;
 		}

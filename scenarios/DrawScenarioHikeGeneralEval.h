@@ -1,5 +1,6 @@
 #pragma once
 #include "scenarios/DrawScenarioImitateStepEval.h"
+#include "scenarios/ScenarioHikeGeneralEval.h"
 
 class cDrawScenarioHikeGeneralEval : public cDrawScenarioImitateStepEval
 {
@@ -13,8 +14,6 @@ protected:
 
 	virtual void BuildScene(std::shared_ptr<cScenarioSimChar>& out_scene) const;
 	virtual void HandleRayTest(const cWorld::tRayTestResult& result);
-	virtual void HandleRayTestBall(const cWorld::tRayTestResult& result);
-	virtual void SetBallPos(const tVector& pos);
 	virtual void ResetCallback();
 	virtual void DrawMisc() const;
 };
