@@ -1,7 +1,7 @@
 #include "scenarios/ScenarioHikeGeneralEval.h"
 
 cScenarioHikeGeneralEval::cScenarioHikeGeneralEval() :
-					cScenarioExpSoccerGeneral(),
+					cScenarioExpHikeGeneral(),
 					cScenarioImitateStepEval()
 {
 	EnableTargetPos(true);
@@ -14,5 +14,5 @@ cScenarioHikeGeneralEval::~cScenarioHikeGeneralEval()
 
 std::string cScenarioHikeGeneralEval::GetName() const
 {
-	return "Soccer General Evaluation";
+	return "Hike General Evaluation";
 }

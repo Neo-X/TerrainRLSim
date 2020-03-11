@@ -176,7 +176,7 @@ gym_register(
     reward_threshold=0.95,
     max_episode_steps=512,
     kwargs={'config': env_data["PD-Biped3D-HLC-Obstacles-v2"],
-            "render": True,
+            "render": False,
             "flatten_observation": True}
 )
 

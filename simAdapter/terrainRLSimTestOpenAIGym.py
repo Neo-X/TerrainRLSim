@@ -32,12 +32,12 @@ if __name__ == '__main__':
     print("Actions space max: ", env.action_space.high)
     
     
-    for e in range(2):
+    for e in range(20):
         numTasks = env.getNumTasks()
         task_id = np.random.randint(0,numTasks)
         env.set_task(task_id)
         env.reset()
-        for t in range(32):
+        for t in range(256):
             action = env.action_space.sample()
             observation, reward,  done, info = env.step(action)
             # env.getImitationState()

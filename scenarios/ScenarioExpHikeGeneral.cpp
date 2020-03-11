@@ -28,26 +28,27 @@ double cScenarioExpHikeGeneral::CalcReward() const
 	const double step_scale = 5;
 
 	double reward = 0;
-
-	if (time_elapsed > 0)
+	// std::cout << "Computing reward" << std::endl;
+	// if (time_elapsed > 0)
 	{
 		bool fallen = HasFallen();
 		if (!fallen)
 		{
-			tVector curr_com = mChar->CalcCOM();
-			tVector com_delta = curr_com - prev_com;
-			tVector target_delta = mTargetPos - prev_com;
+			tVector com_delta = mChar->CalcCOMVel().normalized();
+			tVector target_delta = mTargetPos - mChar->CalcCOM();
 			com_delta[1] = 0;
 			target_delta[1] = 0;
 			tVector target_dir = target_delta.normalized();
 
 			double avg_vel = target_dir.dot(com_delta);
-			avg_vel /= time_elapsed;
-			double vel_err = std::min(0.0, avg_vel - target_speed);
+			double vel_err = avg_vel-1;
 			double target_dist_threshold = GetTargetResetDist();
 			if (target_delta.squaredNorm() < target_dist_threshold * target_dist_threshold)
 			{
 				vel_err = 0;
+				reward = reward + mReachTargetBonus;
+//				std::cout << "Reached Target:" << reward << std::endl;
+
 			}
 			vel_err *= vel_err;
 
@@ -64,14 +65,14 @@ double cScenarioExpHikeGeneral::CalcReward() const
 			heading_err = std::min(2 * M_PI - heading_err, heading_err);
 
 
-			double vel_reward = std::exp(-vel_scale * vel_err);
+			double vel_reward = std::exp(-(vel_err));
 			//vel_reward = (avg_vel > 0) ? vel_reward : 0;
 			double step_reward = exp(-step_scale * step_err);
 			double heading_reward = 0.5 * (std::cos(heading_err) + 1);
-			heading_reward = std::pow(heading_reward, 4);
-
-			reward = vel_w * vel_reward + step_w * step_reward + heading_w * heading_reward
-					+ fixed_w;
+			reward = reward + (vel_reward) ;
+//			std::cout << "vel_reward: " << vel_reward <<
+//								" com_delta: " << com_delta.transpose() <<
+//								" reward: " << reward << std::endl;
 		}
 	}
 	return reward;
@@ -81,6 +82,7 @@ cScenarioExpHikeGeneral::cScenarioExpHikeGeneral()
 {
 	mTargetSpeed = 1;
 	mTargetResetDist = 1;
+	mReachTargetBonus = 100;
 
 	mCharParams.mEnableSoftContact = true;
 	EnableTargetPos(true);

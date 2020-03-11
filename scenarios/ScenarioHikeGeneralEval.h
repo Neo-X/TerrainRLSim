@@ -1,9 +1,9 @@
 #pragma once
 
 #include "scenarios/ScenarioImitateStepEval.h"
-#include "scenarios/ScenarioExpSoccerGeneral.h"
+#include "scenarios/ScenarioExpHikeGeneral.h"
 
-class cScenarioHikeGeneralEval : virtual public cScenarioImitateStepEval, virtual public cScenarioExpSoccerGeneral
+class cScenarioHikeGeneralEval : virtual public cScenarioImitateStepEval, virtual public cScenarioExpHikeGeneral
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -14,4 +14,5 @@ public:
 	virtual std::string GetName() const;
 
 	protected:
+
 };

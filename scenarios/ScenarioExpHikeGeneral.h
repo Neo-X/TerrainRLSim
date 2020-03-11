@@ -30,6 +30,7 @@ public:
 protected:
 
 	double mTargetSpeed;
+	double mReachTargetBonus;
 
 	virtual void ResetParams();
 	virtual void ResetKinChar();
