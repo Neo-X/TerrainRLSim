@@ -79,6 +79,7 @@ project "terrainRLAdapter"
 			"/usr/lib/nvidia-390",
 			"/usr/lib/nvidia-384",
 			"/usr/lib/nvidia-396",
+			"/usr/lib/nvidialib",
 		}
 		
 		includedirs { 
