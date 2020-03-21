@@ -182,6 +182,7 @@ project "TerrainRL"
 			 "/usr/lib/nvidia-390",
 			"/usr/lib/nvidia-384",
 			"/usr/lib/nvidia-396",
+            "/usr/lib/nvidia",
 		}
 		
 		includedirs { 
@@ -2315,6 +2316,7 @@ project "TerrainRL_Optimizer"
 			 "/usr/lib/nvidia-390",
 			"/usr/lib/nvidia-384",
 			"/usr/lib/nvidia-396",
+            "/usr/lib/nvidia",
 		}
 		
 		includedirs { 
