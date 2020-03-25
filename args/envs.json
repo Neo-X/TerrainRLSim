@@ -7285,6 +7285,43 @@
     "append_camera_velocity_state": false,
     	"comment__": "Flatten the output observation",
     "flatten_observation": true
+},
+"PD_Humanoid_2D_GRF_Viz3D_16x16_1Sub_Imitate_30FPS_DualState_v1": 
+{
+	"config_file": "./args/humanoid2D/humanoid2d_viz3D_controller_30fps.txt",
+	"time_limit": 256,
+	"control_return": false,
+	"process_visual_data": true,
+		"comment__": "Number of times the action is updated per second, fps",
+	"action_fps": 30,
+		"comment__": "Number of subsampled pose images taken between action updates",
+	"timestep_subsampling": 1,
+		"comment__": "Area that will be clipped from the rendering using glReadPixels [x, y, width, height]",
+	"image_clipping_area": [393, 214, 16, 16],
+		"comment__": "Amount of downsampling that will be done to the image",
+	"downsample_image": [1, 1, 1],
+		"comment__": "Whether or not to convert the image to grayscale",
+	"convert_to_greyscale": true,
+		"comment__" : "Whether or not to collect imitation visual data as well (skip for efficiency)",
+	"also_imitation_visual_data": true,
+		"comment__": "Enable headless rendering",
+	"headless_render": true,
+	    "comment__": "Mix different state discription types, used for debugging visual imitation learning",
+    "use_dual_state_representations": true,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Type of controller to use, controls the environment state",
+    	"char_ctrl": "ct_pd_grf",
+    		"comment__": "Amount to change the caracter zoom focus.",
+    	"camera_zoom": "-10.25"
+    },
+    	"comment__": "Include the camera velocity on the end of the state",
+    "append_camera_velocity_state": false,
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["c", "k", "j"]
 }
 
 

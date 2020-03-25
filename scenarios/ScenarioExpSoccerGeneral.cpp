@@ -25,12 +25,12 @@ double cScenarioExpSoccerGeneral::CalcReward() const
 	double time_elapsed = mTime - mPrevTime;
 	//double ball_w = 0.25;
 	//double target_vel_w = 0.25;
-	double com_ball_vel_w = 0.2;
-	double com_ball_pos_w = 0.2;
+	double com_ball_vel_w = 0.0;
+	double com_ball_pos_w = 1.0;
 	//double target_vel_w = 0.8;
 	//double target_pos_w = 0;
-	double target_vel_w = 0.3;
-	double target_pos_w = 0.3;
+	double target_vel_w = 1.0;
+	double target_pos_w = 1.0;
 	
 	const double total_w = com_ball_vel_w + com_ball_pos_w + target_vel_w + target_pos_w;
 	com_ball_vel_w /= total_w;
