@@ -241,8 +241,6 @@
     {
     		"comment__": "Use simple DeepLoco HLC reward function",
     	"render_mode": "3d",
-		    "comment__": "The type of scenario class to use.",
-    	"scenario": "sim_char",
     		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
     	"enable_rand_state_reset": "false"
     },
@@ -250,7 +248,7 @@
     "rendering_key_presses": ["k", "j"],
     	"comment__": "Flatten the output observation",
     "flatten_observation": true,
-	    	"comment__": "Use a forward velocity reward computed in the python code",
+	"comment__": "Use a forward velocity reward computed in the python code",    
     "use_forward_vel_reward": true,
     	"comment__": "MultiTask config",
     "multitask_config":

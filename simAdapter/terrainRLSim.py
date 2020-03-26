@@ -836,7 +836,7 @@ class TerrainRLSimWrapper(gym.Env):
                 # print("self._target_vel: ", self._target_vel)
             elif (self._config["multitask_config"]["type"] == "terrainvel"):
                 i = self.getEnv().GetNumTasks() # number of terrains
-                t, v = id // i, id % i
+                t, v = id % i, id // i
                 self._target_vel = self._config["multitask_config"]["task_goal"][v]
                 self.getEnv().setTaskID(int(t))
         else:
