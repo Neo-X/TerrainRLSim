@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_2_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Humanoid_3D_Viz3D_FixedStart_64x64_1Sub_MultiModal_Imitate_30FPS_DualState_v0", render=True)
+    env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_GRF_Viz3D_16x16_1Sub_Imitate_30FPS_DualState_v1", render=True)
     
     # env.reset()
     actionSpace = env.getActionSpace()
@@ -15,7 +15,7 @@ if __name__ == '__main__':
     
     actions = []
     for i in range(1):
-        action = ((actionSpace.getMaximum() - actionSpace.getMinimum()) * np.random.uniform(size=actionSpace.getMinimum().shape[0])  ) + actionSpace.getMinimum()
+        action = ((env.observation_space.high - env.observation_space.low) * np.random.uniform(size=env.observation_space.high.shape[0])  ) + env.observation_space.low
         actions.append(action)            
     
     for e in range(5):
@@ -32,8 +32,8 @@ if __name__ == '__main__':
                     import matplotlib
                     matplotlib.use('Agg')
                     import matplotlib.pyplot as plt
-                    # img_ = np.reshape(viewData, (150,158,3))
-                    img_ = viewData
+                    # img_ = viewData
+                    img_ = np.reshape(viewData, (16,16))
                     noise = np.random.normal(loc=0, scale=0.02, size=img_.shape)
                     img_ = img_ + noise
                     print("img_ shape", img_.shape, " sum: ", np.sum(viewData))
@@ -42,9 +42,10 @@ if __name__ == '__main__':
                     plt.title("visual Data: " +  str(vd))
                     fig1.savefig("char_viz_state_"+str(e)+"_"+str(t)+".svg")
 
-                    if (False):                    
+                    if (True):                    
                         img_ = viewImitateData
-                        plt.figure(2)
+                        img_ = np.reshape(viewImitateData, (16, 16))
+                        fig2 = plt.figure(2)
                         plt.imshow(img_, origin='lower')
                         plt.title("visual Data: " +  str(vd))
                         fig2.savefig("char_viz_imitation_state_"+str(e)+"_"+str(t)+".svg")
