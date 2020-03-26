@@ -1314,7 +1314,14 @@
 	"config_file": "./args/genbiped3D/biped_step_largeBlocks_biped3d2.txt",
 	"time_limit": 4098,
     	"comment__": "Key Presses that change some of the rendered parts of the simulation",
-    "rendering_key_presses": ["k", "j"]
+    "rendering_key_presses": ["k", "j"],
+    "process_visual_data": true,
+    	"comment__": "Area that will be clipped from the rendering using glReadPixels [x, y, width, height]",
+	"image_clipping_area": [245, 75, 256, 256],
+		"comment__": "Amount of downsampling that will be done to the image",
+	"downsample_image": [1, 1, 1],
+		"comment__": "Whether or not to convert the image to grayscale",
+	"convert_to_greyscale": false
 },        
 "PD_Biped3D_HLC_Forest-v0": 
 {
