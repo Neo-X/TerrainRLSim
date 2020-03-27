@@ -179,6 +179,15 @@ gym_register(
             "render": False,
             "flatten_observation": True}
 )
+gym_register(
+    id='PD-Biped3D-HLC-Obstacles-render-v2',
+    entry_point='terrainRLSim:TerrainRLSimWrapper',
+    reward_threshold=0.95,
+    max_episode_steps=512,
+    kwargs={'config': env_data["PD-Biped3D-HLC-Obstacles-v2"],
+            "render": True,
+            "flatten_observation": True}
+)
 
 gym_register(
     id="PD_Biped2D_MultiTask_TerrainVel-v0",

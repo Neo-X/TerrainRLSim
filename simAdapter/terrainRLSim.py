@@ -171,6 +171,8 @@ class TerrainRLSimWrapper(gym.Env):
                 # ax_img = self._bellman_error_ax.set_data(img_)
                 # self._bellman_error_ax.canvas.draw()
                 self._fig.canvas.draw()                      # View in default viewer
+                
+        return self.getFullViewData()
         
     def updateAction(self, action):
         # print ("step action: ", action)

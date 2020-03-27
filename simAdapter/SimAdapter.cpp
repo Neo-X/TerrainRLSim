@@ -749,7 +749,7 @@ void cSimAdapter::init()
 		}
 		else if (scenario_name == "hike_eval_general")
 		{
-			gCameraPosition = tVector(0, 100, 100, 0);
+			gCameraPosition = tVector(0, 30, 30, 0);
 			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioHikeGeneralEval>(new cDrawScenarioHikeGeneralEval(gCamera));
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__->GetScene());
 			this->_gScenario = scenario__;
