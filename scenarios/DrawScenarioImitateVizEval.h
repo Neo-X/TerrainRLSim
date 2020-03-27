@@ -24,6 +24,7 @@ protected:
 	bool mDrawKinChar;
 	bool mTrackKinChar;
 	double zoom;
+	double cam_height;
 
 	virtual void BuildScene(std::shared_ptr<cScenarioSimChar>& out_scene) const;
 	virtual void DrawCharacters() const;

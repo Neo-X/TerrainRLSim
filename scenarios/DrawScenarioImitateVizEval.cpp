@@ -16,6 +16,7 @@ cDrawScenarioImitateVizEval::cDrawScenarioImitateVizEval(cCamera& cam)
 	mDrawKinChar = true;
 	mTrackKinChar = false;
 	zoom = 0.0;
+	cam_height = 0.0;
 }
 
 cDrawScenarioImitateVizEval::~cDrawScenarioImitateVizEval()
@@ -26,6 +27,7 @@ void cDrawScenarioImitateVizEval::ParseArgs(const std::shared_ptr<cArgParser>& p
 {
 	cDrawScenarioPoliEval::ParseArgs(parser);
 	parser->ParseDouble("camera_zoom", this->zoom);
+	parser->ParseDouble("camera_height", this->cam_height);
 }
 
 void cDrawScenarioImitateVizEval::Init()
@@ -40,7 +42,7 @@ void cDrawScenarioImitateVizEval::Init()
 
 	double delta_scale = 1 - zoom;
 	tVector delta = cam_offset * delta_scale;
-	tVector camPosition = focus + delta;
+	tVector camPosition = focus + delta + tVector(0, this->cam_height, 0, 0);
 	w *= delta_scale;
 	h *= delta_scale;
 	mCam.Resize(w, h);

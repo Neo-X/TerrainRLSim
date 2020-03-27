@@ -7,7 +7,7 @@ import gym
 
 if __name__ == '__main__':
 
-    env = gym.make("PD-Biped3D-HLC-Obstacles-v2")
+    env = gym.make("PD-Biped3D-HLC-Obstacles-render-v2")
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -41,6 +41,20 @@ if __name__ == '__main__':
             action = env.action_space.sample()
             observation, reward,  done, info = env.step(action)
             # env.getImitationState()
+            if (True):
+                    img_ = env.render()
+                    print ("img_: ", np.array(img_).shape)
+                    import matplotlib
+                    matplotlib.use('Agg')
+                    import matplotlib.pyplot as plt
+                    # img_ = viewData
+#                     img_ = np.reshape(img_, (16,16))
+#                     img_ = img_ + noise
+#                     print("img_ shape", img_.shape, " sum: ", np.sum(viewData))
+                    fig1 = plt.figure(1)
+                    plt.imshow(img_, origin='lower')
+                    plt.title("visual Data: ")
+                    fig1.savefig("render_view_"+str(e)+"_"+str(t)+".png")
             print ("Done: ", done)
             print("Reward: ", reward)
             states = np.array(observation)
