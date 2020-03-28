@@ -27,10 +27,12 @@ public:
 
 	virtual double CalcReward() const;
 
+
 protected:
 
 	double mTargetSpeed;
 	double mReachTargetBonus;
+	double mInitRandTargetBound;
 
 	virtual void ResetParams();
 	virtual void ResetKinChar();
@@ -39,7 +41,9 @@ protected:
 	virtual void PostSubstepUpdate(double time_step);
 	virtual void HandleNewActionUpdate();
 	virtual void HandleFallUpdate();
+	virtual bool CheckResetTarget() const;
 
 	virtual tVector CalcTargetPosDefault();
 	virtual int GetTargetPosTrail3dForwardSegs() const;
+	virtual tVector CalcTargetPosObstacle3D();
 };

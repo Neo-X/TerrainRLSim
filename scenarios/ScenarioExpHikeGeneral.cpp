@@ -1,6 +1,7 @@
 #include "scenarios/ScenarioExpHikeGeneral.h"
 #include "sim/WaypointControllerGeneral.h"
 #include "learning/CaclaTrainer.h"
+#include "sim/GroundObstacles3D.h"
 
 const int gNumLLCWarmupCycles = 0;
 
@@ -83,10 +84,11 @@ cScenarioExpHikeGeneral::cScenarioExpHikeGeneral()
 	mTargetSpeed = 1;
 	mTargetResetDist = 1;
 	mReachTargetBonus = 100;
+	mInitRandTargetBound = 10;
 
 	mCharParams.mEnableSoftContact = true;
 	EnableTargetPos(true);
-	EnableRandTargetPos(true);
+	EnableRandTargetPos(false);
 }
 
 cScenarioExpHikeGeneral::~cScenarioExpHikeGeneral()
@@ -98,6 +100,7 @@ void cScenarioExpHikeGeneral::ParseArgs(const std::shared_ptr<cArgParser>& parse
 	cScenarioExpImitateStep::ParseArgs(parser);
 
 	parser->ParseDouble("target_speed", mTargetSpeed);
+	parser->ParseDouble("rand_target_bound", mInitRandTargetBound);
 
 }
 
@@ -142,7 +145,7 @@ void cScenarioExpHikeGeneral::EnableExplore(bool enable)
 
 std::string cScenarioExpHikeGeneral::GetName() const
 {
-	return "Hike Exploration";
+	return "Hike Exploration General";
 }
 
 void cScenarioExpHikeGeneral::ResetParams()
@@ -190,6 +193,45 @@ void cScenarioExpHikeGeneral::HandleFallUpdate()
 
 }
 
+bool cScenarioExpHikeGeneral::CheckResetTarget() const
+{
+	tVector root_pos = mChar->GetRootPos();
+	tVector tar_pos = mTargetPos;
+	root_pos[1] = 0;
+	tar_pos[1] = 0;
+	double dist = (tar_pos - root_pos).squaredNorm();
+	const double dist_threshold = GetTargetResetDist();
+
+	bool reset_target = (dist < dist_threshold * dist_threshold);
+	//|| root_pos[0] + dist_threshold > tar_pos[0]; // hack
+
+	return reset_target;
+}
+
+tVector cScenarioExpHikeGeneral::CalcTargetPosObstacle3D()
+{
+//	auto obstacles = std::dynamic_pointer_cast<cGroundObstacles3D>(mGround);
+//	tVector target_pos = obstacles->FindRandFlatPos();
+//	std::cout << "Getting target pos: " << std::endl;
+//	return target_pos;
+
+	tVector target_pos = tVector::Zero();
+	double rand_target_bound = mInitRandTargetBound;
+	double height = 0;
+	bool valid_sample;
+	tVector root_pos = mChar->GetRootPos();
+	double minX = root_pos[0] - rand_target_bound;
+	double maxX = root_pos[0] + rand_target_bound;
+	double minZ = root_pos[2] - rand_target_bound;
+	double maxZ = root_pos[2] + rand_target_bound;
+	do
+	{
+		target_pos = tVector(mRand.RandDouble(minX, maxX), 0, mRand.RandDouble(minZ, maxZ), 0);
+		height = mGround->SampleHeight(target_pos, valid_sample);
+	} while ( height > 0 );
+
+	return target_pos;
+}
 
 tVector cScenarioExpHikeGeneral::CalcTargetPosDefault()
 {
