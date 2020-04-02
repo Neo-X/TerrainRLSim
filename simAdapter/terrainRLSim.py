@@ -531,9 +531,7 @@ class TerrainRLSimWrapper(gym.Env):
             Unload simulation, free memory.
         """
         self._sim.finish()
-        
-    def terminate(self):
-        self.finish()
+    terminate = finish
         
     def getActionSpace(self):
         return self.action_space
