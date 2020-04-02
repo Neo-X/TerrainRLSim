@@ -532,6 +532,9 @@ class TerrainRLSimWrapper(gym.Env):
         """
         self._sim.finish()
         
+    def terminate(self):
+        self.finish()
+        
     def getActionSpace(self):
         return self.action_space
     
