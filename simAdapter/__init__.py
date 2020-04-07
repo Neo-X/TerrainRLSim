@@ -181,7 +181,7 @@ gym_register(
 )
 gym_register(
     id='PD-Biped3D-HLC-Obstacles-render-v2',
-    entry_point='terrainRLSim:TerrainRLSimWrapper',
+    entry_point='simAdapter.terrainRLSim:TerrainRLSimWrapper',
     reward_threshold=0.95,
     max_episode_steps=512,
     kwargs={'config': env_data["PD-Biped3D-HLC-Obstacles-v2"],
