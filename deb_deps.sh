@@ -2,6 +2,7 @@
 #
 # Install the system dependencies required to build TerrainRL
 #
+apt-get -y update
 ### For rendering the simulation using OpenGL
 apt-get -y install freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libgl1-mesa-glx libglu1-mesa libglu1-mesa-dev libglew1.6-dev mesa-utils 
 ### dependancies for caffe....
