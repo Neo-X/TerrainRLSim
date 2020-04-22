@@ -172,7 +172,7 @@ class TerrainRLSimWrapper(gym.Env):
                 # self._bellman_error_ax.canvas.draw()
                 self._fig.canvas.draw()                      # View in default viewer
                 
-        return self.getFullViewData()
+        #return self.getFullViewData()
         
     def updateAction(self, action):
         # print ("step action: ", action)
@@ -962,19 +962,21 @@ env_data = getEnvsList()
    
 if __name__ == '__main__':
 
-    env = getEnv(env_name="PD_Biped2D_Gaps_Terrain-v0", render=True)
-    
+    env = getEnv(env_name="PD_Biped2D_Gaps_Terrain-v0", render=False)
+    start = time.time()
     env.reset()
     actionSpace = env.getActionSpace()
     
     for i in range(100):
-        action = ((actionSpace.getMaximum() - actionSpace.getMinimum()) * np.random.uniform()) + actionSpace.getMinimum()  
-        observation, reward,  done, info = env.step(action)
+        action = ((actionSpace.high - actionSpace.low) * np.random.uniform()) + actionSpace.low 
+        observation, reward,  done, info = env.step([action])
         env.render()
         print ("Done: ", done)
         # if (done):
         #     env.reset()
         
     env.finish()
+    end = time.time()
+    print("total simulation time: ", end - start)
     print (env)
     
