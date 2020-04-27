@@ -1287,21 +1287,24 @@
 },        
 "PD_humanoid3D_LLC_GetUp_MultiAgent_Terrain_v2": 
 {
-	"config_file": "./args/humanoid3D/LLC_waypoint_symetric_step_controller.txt",
+	"config_file": "./args/genbiped3D/imitation/imitate_biped3d_phase.txt",
 	"time_limit": 512,
 		"comment__": "Parameters that are for the TerrainRL simulation directly",
     "TerrainRL_Parameters":
     {	
     		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
-    	"enable_rand_state_reset": "false",
+    	"enable_rand_state_reset": "true",
     		"comment__": "Use a different rotation representation for the policy learning state [quaternion|axisangle|euler]",
-    	"terrain_file": "data/terrain/dynamicCharacters3D_Flat.txt",
+     	"terrain_file": "data/terrain/dynamicCharacters3D_Obs_0.txt",
     		"comment__": "If true the initial faceing direction of the agent will be random",
     	"randomize_initial_rotation": "true",
     		"comment__": "Add a joint torque penalty to the reward",
     	"add_torque_penalty": "true",
     		"comment__": "Randomly add forces to the links of the agent",
-    	"enable_rand_perturbs": "true"
+    	"enable_rand_perturbs": "false",
+    	"character_file": "data/characters/humanoid3d_colourful_contacts2.txt",
+		"motion_file": "data/motions/humanoid3d_getup_facedown.txt",
+		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt"
     }
 },
 "PD_Biped3D_LLC_Symetric_Step-v1": 
