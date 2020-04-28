@@ -1220,7 +1220,16 @@
     	"character_file": "data/characters/humanoid3d_colourful_contacts2.txt",
 		"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
 		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt",
-		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt"
+		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt",
+    	"enable_rand_projectiles": "true",
+			"comment__": "Setting for how much to preterb the agent, these are added to random links",
+    	"perturb_time_min": "2.0",
+		"perturb_time_max": "3.0",
+		"min_perturb":  "50",
+		"max_perturb": "100",
+		"min_pertrub_duration": "0.2",
+		"max_perturb_duration": "0.3",
+		"projectile_frequency": "0.02"
     }
 },
 "PD_humanoid3D_LLC_Symetric_Step": 

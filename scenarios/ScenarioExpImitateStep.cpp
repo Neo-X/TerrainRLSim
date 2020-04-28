@@ -19,12 +19,12 @@
 
 double cScenarioExpImitateStep::CalcRewardStep(const cBipedStepController3D::tStepPlan& step_plan) const
 {
-	double pose_w = 0.5;
+	double pose_w = 0.4;
 	double vel_w = 0.05;
-	double end_eff_w = 0.2;
+	double end_eff_w = 0.25;
 	double root_w = 0.1;
 	double com_w = 0.1;
-	double heading_w = 0.1;
+	double heading_w = 0.15;
 
 	double total_w = pose_w + vel_w + end_eff_w + root_w + com_w + heading_w;
 	pose_w /= total_w;
@@ -529,6 +529,10 @@ void cScenarioExpImitateStep::ResetStepPlan()
 	int stance_foot = GetStanceFootJoint(stance);
 	tVector stance_pos = mChar->CalcJointPos(stance_foot);
 	tVector root_pos = mChar->GetRootPos();
+	tVector out_axis;
+	double out_theta;
+	/// This should be 0...
+	mChar->GetRootRotation(out_axis, out_theta);
 
 	double heading = 0;
 	if (mRandomizeInititalRotation)
@@ -544,6 +548,8 @@ void cScenarioExpImitateStep::ResetStepPlan()
 
 		// Sets rotation and position
 		mChar->SetRootTransform(root_pos, new_rotation);
+		out_theta = heading;
+		// mChar->GetRootRotation(out_axis, out_theta);
 	}
 	tVector curr_center = root_pos;
 	if (EnableTargetPos())
@@ -551,7 +557,7 @@ void cScenarioExpImitateStep::ResetStepPlan()
 		tVector delta = mTargetPos - curr_center;
 		if (delta.squaredNorm() > 0.01)
 		{
-			heading = std::atan2(-delta[2], delta[0]);
+			heading = std::atan2(-delta[2], delta[0]) + out_theta;
 		}
 	}
 	else
