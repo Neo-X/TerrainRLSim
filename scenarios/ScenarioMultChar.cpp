@@ -227,6 +227,7 @@ double cScenarioMultChar::CalcReward()
 	const double step_scale = 5;
 
 	double reward = 0;
+	double worst_reward = 0;
 
 	if (time_elapsed > 0)
 	{
@@ -285,21 +286,21 @@ double cScenarioMultChar::CalcReward()
 				tVector groundTargetNormal = (mChar->GetCurrentGroundTarget() - groundPosition).normalized();
 				double targetRewardExponent = groundTargetNormal.transpose() * groundVelocity - 1.0;
 
-				reward = mTargetRewardWeight * std::exp( -std::pow( std::min(0.0, targetRewardExponent), 2.0 ) );
+				reward = reward + mTargetRewardWeight * std::exp( -std::pow( std::min(0.0, targetRewardExponent), 2.0 ) );
 				if (agentDatas[0].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;
 					agentDatas[0].reachedTarget = false;
 				}
 			}
-			else if (mUseSimpleDistanceReward)
+			if (mUseSimpleDistanceReward)
 			{
 				tVector groundPosition = mChar->GetRootPos();
 				groundPosition[1] = 0.0;
 				double groundTargetNormal = (mChar->GetCurrentGroundTarget() - groundPosition).norm();
 				// double targetRewardExponent = groundTargetNormal.transpose() * groundVelocity - 1.0;
 
-				reward = mTargetRewardWeight * std::exp( std::pow( groundTargetNormal, 2.0 ) * -0.8 );
+				reward = reward + mTargetRewardWeight * std::exp( std::pow( groundTargetNormal, 2.0 ) * -0.5 );
 				// std::cout << "ball dist reward " << reward << std::endl;
 				if (agentDatas[0].reachedTarget)
 				{
@@ -323,6 +324,7 @@ double cScenarioMultChar::CalcReward()
 						reward = reward - (0.5 + ((3.0 - dist__2)*relativeAngle));
 						// std::cout << "close collision: " << dist__2 << " at angle: " << relativeAngle << " penalty: " << reward << std::endl;
 					}
+					worst_reward =- 1;
 
 				}
 				/// check collisions with obstacles
@@ -364,8 +366,8 @@ double cScenarioMultChar::CalcReward()
 			previousPosition = mChar->GetRootPos();
 		}
 		else
-		{
-			reward = -1;
+		{ /// If fallen get bad reward
+			reward = worst_reward - 2;
 		}
 	}
 	return reward;
@@ -483,7 +485,7 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 				tVector groundTargetNormal = (char_->GetCurrentGroundTarget() - groundPosition).normalized();
 				double targetRewardExponent = groundTargetNormal.transpose() * groundVelocity - 1;
 
-				reward = mTargetRewardWeight * std::exp( -std::pow( std::min(0.0, targetRewardExponent), 2.0 ) );
+				reward = reward + mTargetRewardWeight * std::exp( -std::pow( std::min(0.0, targetRewardExponent), 2.0 ) );
 				if (agentDatas[agent+1].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;
@@ -497,7 +499,7 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 				double groundTargetNormal = (char_->GetCurrentGroundTarget() - groundPosition).norm();
 				// double targetRewardExponent = groundTargetNormal.transpose() * groundVelocity - 1.0;
 
-				reward = mTargetRewardWeight * std::exp( std::pow( groundTargetNormal, 2.0 ) * -0.8 );
+				reward = reward + mTargetRewardWeight * std::exp( std::pow( groundTargetNormal, 2.0 ) * -0.8 );
 				if (agentDatas[agent+1].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;

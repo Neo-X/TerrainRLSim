@@ -19,12 +19,12 @@
 
 double cScenarioExpImitateStep::CalcRewardStep(const cBipedStepController3D::tStepPlan& step_plan) const
 {
-	double pose_w = 0.4;
+	double pose_w = 0.5;
 	double vel_w = 0.05;
-	double end_eff_w = 0.25;
+	double end_eff_w = 0.2;
 	double root_w = 0.1;
 	double com_w = 0.1;
-	double heading_w = 0.15;
+	double heading_w = 0.1;
 
 	double total_w = pose_w + vel_w + end_eff_w + root_w + com_w + heading_w;
 	pose_w /= total_w;
