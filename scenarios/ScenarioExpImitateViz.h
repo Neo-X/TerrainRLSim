@@ -24,6 +24,7 @@ public:
 
 	virtual double CalcReward() const;
 	virtual void SetTimeWarping(double time_warping);
+	virtual double GetTimeWarping() const;
 
 protected:
 

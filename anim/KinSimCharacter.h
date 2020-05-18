@@ -71,9 +71,10 @@ public:
 	virtual double GetPhase() const;
 
 	virtual void setTimeWarping(double warp);
-	virtual double getTimeWarping();
+	virtual double getTimeWarping() const;
 
 	virtual void CalcVel(double time, Eigen::VectorXd& out_vel) const;
+	virtual const Eigen::VectorXd& GetVel() const;
 
 protected:
 	std::shared_ptr<cWorld> mWorld;

@@ -26,6 +26,8 @@ double cScenarioExpImitateViz::CalcReward() const
 	root_w /= total_w;
 	com_w /= total_w;
 
+	double time_warping = GetTimeWarping();
+
 #if defined(ENABLE_MAX_POSE_ERR)
 	const double pose_scale = 20;
 	const double vel_scale = 0.2;
@@ -63,7 +65,7 @@ double cScenarioExpImitateViz::CalcReward() const
 		tVector root_pos0 = cKinTree::GetRootPos(joint_mat, pose0);
 		tVector root_pos1 = cKinTree::GetRootPos(joint_mat, pose1);
 		tVector root_vel0 = cKinTree::GetRootVel(joint_mat, vel0);
-		tVector root_vel1 = cKinTree::GetRootVel(joint_mat, vel1);
+		tVector root_vel1 = cKinTree::GetRootVel(joint_mat, vel1) * time_warping;
 
 		tVector com0;
 		tVector com_vel0;
@@ -104,7 +106,7 @@ double cScenarioExpImitateViz::CalcReward() const
 			double curr_vel_err = (curr_vel1 - curr_vel0).squaredNorm();
 #else
 			double curr_pose_err = cKinTree::CalcPoseErr(joint_mat, j, pose0, pose1);
-			double curr_vel_err = cKinTree::CalcVelErr(joint_mat, j, vel0, vel1);
+			double curr_vel_err = cKinTree::CalcVelErr(joint_mat, j, vel0, vel1) * time_warping;
 #endif
 			pose_err += w * curr_pose_err;
 			vel_err += w * curr_vel_err;
@@ -428,5 +430,17 @@ void cScenarioExpImitateViz::SetTimeWarping(double time_warping)
 	{
 		kin_char_tmp->setTimeWarping(time_warping);
 	}
+}
+
+double cScenarioExpImitateViz::GetTimeWarping() const
+{
+//	std::cout << "time warp: " << time_warping << std::endl;
+	const std::shared_ptr<cKinSimCharacter> kin_char_tmp = std::dynamic_pointer_cast<cKinSimCharacter >(mKinChar);
+	double time_warping = 1.0;
+	if (kin_char_tmp != nullptr)
+	{
+		time_warping = kin_char_tmp->getTimeWarping();
+	}
+	return time_warping;
 }
 
