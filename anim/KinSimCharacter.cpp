@@ -689,3 +689,9 @@ double cKinSimCharacter::getTimeWarping()
 {
 	return timeWarping;
 }
+
+void cKinSimCharacter::CalcVel(double time, Eigen::VectorXd& out_vel) const
+{
+	cKinCharacter::CalcVel(time, out_vel);
+	out_vel = out_vel * this->timeWarping;
+}

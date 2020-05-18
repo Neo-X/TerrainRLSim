@@ -265,7 +265,7 @@
     		"comment__": "The type of scenario class to use.",
     	"scenario": "imitate_viz_eval",
     		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
-    	"enable_rand_state_reset": "true",
+    	"enable_rand_state_reset": "false",
     	"time_warp_min": "-0.3",
     	"time_warp_max": "0.2"
     },
@@ -274,7 +274,7 @@
     	"comment__": "MultiTask config",
     "multitask_config":
     {
-    	"type": "vel",
+    	"type": "vel_c++",
     		"comment__": "A mapping from task id to target velocity.",
     	"task_goal": [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
     }

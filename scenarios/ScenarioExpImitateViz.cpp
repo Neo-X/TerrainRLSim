@@ -420,9 +420,9 @@ double cScenarioExpImitateViz::CalcRandTimeWarping()
 	return rand_time;
 }
 
-double cScenarioExpImitateViz::SetTimeWarping(double time_warping)
+void cScenarioExpImitateViz::SetTimeWarping(double time_warping)
 {
-	// std::cout << "Min time warp: " << _time_warp_min << " max time warp: " << _time_warp_max << std::endl;
+//	std::cout << "time warp: " << time_warping << std::endl;
 	const std::shared_ptr<cKinSimCharacter> kin_char_tmp = std::dynamic_pointer_cast<cKinSimCharacter >(mKinChar);
 	if (kin_char_tmp != nullptr)
 	{

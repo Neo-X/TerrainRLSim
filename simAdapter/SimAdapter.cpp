@@ -1968,12 +1968,12 @@ size_t cSimAdapter::getTaskID() const
 	return 0;
 }
 
-void setDesiredVel(double vel)
+void cSimAdapter::setDesiredVel(double vel)
 {
-	auto sc = std::dynamic_pointer_cast<ScenarioImitateVizEval>(this->_scene);
+	auto sc = std::dynamic_pointer_cast<cScenarioImitateVizEval>(this->_scene);
 	if ( sc != nullptr )
 	{
-		return sc->SetTimeWarping(vel);
+		sc->SetTimeWarping(vel);
 	}
 	else
 	{

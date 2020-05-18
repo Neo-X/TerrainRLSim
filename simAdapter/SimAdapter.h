@@ -297,6 +297,7 @@ public:
 	virtual std::vector<double> getSimState() const;
 	std::vector<double> getJointWeights() const;
 
+	virtual void setDesiredVel(double vel);
 	virtual size_t getTaskID() const;
 	virtual void setTaskID(size_t task);
 	virtual size_t GetNumTasks() const;

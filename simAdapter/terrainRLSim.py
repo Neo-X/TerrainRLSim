@@ -837,6 +837,10 @@ class TerrainRLSimWrapper(gym.Env):
             if (self._config["multitask_config"]["type"] == "vel"):
                 self._target_vel = self._config["multitask_config"]["task_goal"][id]
                 # print("self._target_vel: ", self._target_vel)
+            elif (self._config["multitask_config"]["type"] == "vel_c++"):
+                self._target_vel = self._config["multitask_config"]["task_goal"][id]
+                self.getEnv().setDesiredVel(self._target_vel)
+                self.reset()
             elif (self._config["multitask_config"]["type"] == "terrainvel"):
                 self.setRandomSeed(id)
                 i = self.getEnv().GetNumTasks() # number of terrains
@@ -848,7 +852,8 @@ class TerrainRLSimWrapper(gym.Env):
         
     def getNumTasks(self):
         if "multitask_config" in self._config:
-            if (self._config["multitask_config"]["type"] == "vel"):
+            if (self._config["multitask_config"]["type"] == "vel"
+                or self._config["multitask_config"]["type"] == "vel_c++"):
                 return len(self._config["multitask_config"]["task_goal"])
             elif (self._config["multitask_config"]["type"] == "terrainvel"):
                 return len(self._config["multitask_config"]["task_goal"]) * self.getEnv().GetNumTasks()

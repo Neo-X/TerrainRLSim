@@ -73,6 +73,8 @@ public:
 	virtual void setTimeWarping(double warp);
 	virtual double getTimeWarping();
 
+	virtual void CalcVel(double time, Eigen::VectorXd& out_vel) const;
+
 protected:
 	std::shared_ptr<cWorld> mWorld;
 	std::vector<std::shared_ptr<cSimObj>> mBodyParts;
