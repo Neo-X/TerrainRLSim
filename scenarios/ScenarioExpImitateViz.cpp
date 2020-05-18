@@ -355,11 +355,7 @@ void cScenarioExpImitateViz::ResetKinChar()
 			mKinChar->Pose(rand_time);
 			double new_timing = CalcRandTimeWarping();
 			// std::cout << "New time warping: " << new_timing << std::endl;
-			const std::shared_ptr<cKinSimCharacter> kin_char_tmp = std::dynamic_pointer_cast<cKinSimCharacter >(mKinChar);
-			if (kin_char_tmp != nullptr)
-			{
-				kin_char_tmp->setTimeWarping(new_timing);
-			}
+			SetTimeWarping(new_timing);
 		}
 	}
 }
@@ -423,3 +419,14 @@ double cScenarioExpImitateViz::CalcRandTimeWarping()
 	double rand_time = mRand.RandDouble(_time_warp_min, _time_warp_max);
 	return rand_time;
 }
+
+double cScenarioExpImitateViz::SetTimeWarping(double time_warping)
+{
+	// std::cout << "Min time warp: " << _time_warp_min << " max time warp: " << _time_warp_max << std::endl;
+	const std::shared_ptr<cKinSimCharacter> kin_char_tmp = std::dynamic_pointer_cast<cKinSimCharacter >(mKinChar);
+	if (kin_char_tmp != nullptr)
+	{
+		kin_char_tmp->setTimeWarping(time_warping);
+	}
+}
+

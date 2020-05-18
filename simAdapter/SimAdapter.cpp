@@ -1968,6 +1968,19 @@ size_t cSimAdapter::getTaskID() const
 	return 0;
 }
 
+void setDesiredVel(double vel)
+{
+	auto sc = std::dynamic_pointer_cast<ScenarioImitateVizEval>(this->_scene);
+	if ( sc != nullptr )
+	{
+		return sc->SetTimeWarping(vel);
+	}
+	else
+	{
+		std::cout << "Setting the desired velocity is not supported by this scenario" << std::endl;
+	}
+}
+
 void cSimAdapter::setTaskID(size_t task)
 {
 	auto sc = std::dynamic_pointer_cast<cScenarioMultiTaskImitateVizEval>(this->_scene);

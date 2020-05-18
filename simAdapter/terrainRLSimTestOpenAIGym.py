@@ -4,10 +4,11 @@ import terrainRLSim
 import numpy as np
 import json
 import gym
+import time
 
 if __name__ == '__main__':
 
-    env = gym.make("PD-Biped3D-HLC-Obstacles-render-v2")
+    env = gym.make("PD_Biped2D_Flat_Walk_MultiTask_Render-v1")
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -36,12 +37,14 @@ if __name__ == '__main__':
         numTasks = env.getNumTasks()
         task_id = np.random.randint(0,numTasks)
         env.set_task(task_id)
+        print ("task_id: ", task_id)
         env.reset()
-        for t in range(256):
+        for t in range(32):
             action = env.action_space.sample()
             observation, reward,  done, info = env.step(action)
             # env.getImitationState()
-            if (True):
+#             time.sleep(1)
+            if (False):
                     img_ = env.render()
                     print ("img_: ", np.array(img_).shape)
                     import matplotlib

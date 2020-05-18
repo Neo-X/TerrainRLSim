@@ -23,6 +23,7 @@ public:
 	virtual std::string GetName() const;
 
 	virtual double CalcReward() const;
+	virtual void SetTimeWarping(double time_warping)
 
 protected:
 

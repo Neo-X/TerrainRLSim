@@ -233,6 +233,52 @@
     	"task_goal": [-2, -1.8, -1.6, -1.4, -1.2, -1.0, -0.8, -0.6, -0.4, -0.2, -0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0]
     }
 },
+"PD_Biped2D_Flat_Walk_MultiTask-v1": 
+{
+ 	"config_file": "./args/genBiped2D/opt_args_imitate_biped_full_phase.txt",
+	"time_limit": 256,
+	"control_return": false,
+	"process_visual_data": false,
+		"comment__": "Number of times the action is updated per second, fps",
+	"action_fps": 30,
+		"comment__": "Number of subsampled pose images taken between action updates",
+	"timestep_subsampling": 1,
+		"comment__": "Area that will be clipped from the rendering using glReadPixels [x, y, width, height]",
+	"image_clipping_area": [245, 75, 256, 256],
+		"comment__": "Amount of downsampling that will be done to the image",
+	"downsample_image": [4, 4, 1],
+		"comment__": "Whether or not to convert the image to grayscale",
+	"convert_to_greyscale": true,
+		"comment__" : "Whether or not to collect imitation visual data as well (skip for efficiency)",
+	"also_imitation_visual_data": false,
+		"comment__": "Enable headless rendering",
+	"headless_render": false,
+	    "comment__": "Mix different state discription types, used for debugging visual imitation learning",
+    "use_dual_state_representations": false,
+    	"comment__": "Include both visual state and pose state for learning",
+    "use_multimodal_state_representations": false,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+	"TerrainRL_Parameters":
+    {	
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"render_mode": "3d",
+    		"comment__": "The type of scenario class to use.",
+    	"scenario": "imitate_viz_eval",
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    	"time_warp_min": "-0.3",
+    	"time_warp_max": "0.2"
+    },
+    	"comment__": "Use a forward velocity reward computed in the python code",
+    "use_forward_vel_reward": false,
+    	"comment__": "MultiTask config",
+    "multitask_config":
+    {
+    	"type": "vel",
+    		"comment__": "A mapping from task id to target velocity.",
+    	"task_goal": [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
+    }
+},
 "PD_Biped2D_MultiTask_TerrainVel-v0":
 {
 	"config_file": "./args/genBiped2D/biped2d_full_twotask.txt",
