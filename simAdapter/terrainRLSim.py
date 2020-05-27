@@ -646,11 +646,11 @@ class TerrainRLSimWrapper(gym.Env):
         self.onKeyEvent(ord('v'), 0, 0)
         self.render()
         img = self.getViewData()
-        self.onKeyEvent(ord('k'), 0, 0)
-        self.onKeyEvent(ord('j'), 0, 0)
-        self.onKeyEvent(ord('0'), 0, 0)
-        self.onKeyEvent(ord('7'), 0, 0)
         self.onKeyEvent(ord('v'), 0, 0)
+        self.onKeyEvent(ord('7'), 0, 0)
+        self.onKeyEvent(ord('0'), 0, 0)
+        self.onKeyEvent(ord('j'), 0, 0)
+        self.onKeyEvent(ord('k'), 0, 0)
         
         if ("append_camera_velocity_state" in self._config
             and (self._config["append_camera_velocity_state"] == True)):

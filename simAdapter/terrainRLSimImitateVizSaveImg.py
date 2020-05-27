@@ -33,9 +33,9 @@ if __name__ == '__main__':
                     matplotlib.use('Agg')
                     import matplotlib.pyplot as plt
                     # img_ = viewData
-                    img_ = np.reshape(viewData, (16,16))
-                    noise = np.random.normal(loc=0, scale=0.02, size=img_.shape)
-                    img_ = img_ + noise
+                    img_ = np.reshape(viewData, (16,16,3))
+#                     noise = np.random.normal(loc=0, scale=0.02, size=img_.shape)
+#                     img_ = img_ + noise
                     print("img_ shape", img_.shape, " sum: ", np.sum(viewData))
                     fig1 = plt.figure(1)
                     plt.imshow(img_, origin='lower')
@@ -43,10 +43,11 @@ if __name__ == '__main__':
                     fig1.savefig("char_viz_state_"+str(e)+"_"+str(t)+".svg")
 
                     if (True):                    
-                        img_ = viewImitateData
-                        img_ = np.reshape(viewImitateData, (16, 16))
+                        img__ = viewImitateData
+                        img__ = np.reshape(viewImitateData, (16, 16, 3))
                         fig2 = plt.figure(2)
-                        plt.imshow(img_, origin='lower')
+                        img__ = np.concatenate((img_, img__), axis=1)
+                        plt.imshow(img__, origin='lower')
                         plt.title("visual Data: " +  str(vd))
                         fig2.savefig("char_viz_imitation_state_"+str(e)+"_"+str(t)+".svg")
                     plt.show()

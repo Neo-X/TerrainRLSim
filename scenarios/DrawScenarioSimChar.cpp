@@ -764,16 +764,16 @@ std::string cDrawScenarioSimChar::BuildTextInfoStr() const
 void cDrawScenarioSimChar::EnableCharDrawShapes(bool enable)
 {
 	mEnableCharDrawShapes = enable;
-	/*
-	if (mEnableCharDrawShapes)
-	{
-		printf("Char Draw Shapes Enabled\n");
-	}
-	else
-	{
-		printf("Char Draw Shapes Disabled\n");
-	}
-	*/
+
+//	if (mEnableCharDrawShapes)
+//	{
+//		printf("Char Draw Shapes Enabled\n");
+//	}
+//	else
+//	{
+//		printf("Char Draw Shapes Disabled\n");
+//	}
+
 }
 
 void cDrawScenarioSimChar::Shutdown()
