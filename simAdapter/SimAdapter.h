@@ -255,6 +255,7 @@ public:
 	/// Stuff for interacting with simulation
 	virtual void setRender(bool shouldRender);
 	virtual void display();
+	virtual void reshapeScreen(int w, int h);
 	/// Interactive functions to doing things in the simulation, like reseting and throwing objects at the character
 	virtual void onKeyEvent(int key, int mouseX, int mouseY);
 	/// specify the relative path to TerrainRL

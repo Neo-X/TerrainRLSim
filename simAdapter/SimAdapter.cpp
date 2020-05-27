@@ -1205,6 +1205,11 @@ void cSimAdapter::display()
 	}
 }
 
+void cSimAdapter::reshapeScreen(int w, int h)
+{
+	Reshape(w,h);
+}
+
 // std::vector<std::vector<std::vector<unsigned char> > > EGLRender::getPixels(size_t x_start, size_t y_start, size_t width, size_t height)
 std::vector<unsigned char> cSimAdapter::getPixels(size_t x_start, size_t y_start, size_t width, size_t height)
 {
