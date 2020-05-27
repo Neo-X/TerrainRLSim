@@ -33,7 +33,7 @@ if __name__ == '__main__':
                     matplotlib.use('Agg')
                     import matplotlib.pyplot as plt
                     # img_ = viewData
-                    img_ = np.reshape(viewData, (32,32,3))
+                    img_ = np.reshape(viewData, (32,32))
 #                     noise = np.random.normal(loc=0, scale=0.02, size=img_.shape)
 #                     img_ = img_ + noise
                     print("img_ shape", img_.shape, " sum: ", np.sum(viewData))
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
                     if (True):                    
                         img__ = viewImitateData
-                        img__ = np.reshape(viewImitateData, (32, 32, 3))
+                        img__ = np.reshape(viewImitateData, (32, 32))
                         fig2 = plt.figure(2)
                         img__ = np.concatenate((img_, img__), axis=1)
                         plt.imshow(img__, origin='lower')

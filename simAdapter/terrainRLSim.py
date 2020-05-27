@@ -940,6 +940,9 @@ def getEnv(env_name, render=False, GPU_device=None):
     if ("action_fps" in env_data[env_name]):
         sim.changeAnimTimestep(1.0/env_data[env_name]["action_fps"])
         simTimeStep = sim.getAnimTimestep()
+        
+    if ("resize_window" in env_data[env_name]):
+        sim.reshapeScreen(env_data[env_name]["resize_window"][0], env_data[env_name]["resize_window"][1])
     
     if ("process_visual_data" in env_data[env_name]
         and (env_data[env_name]["process_visual_data"] == True)):
