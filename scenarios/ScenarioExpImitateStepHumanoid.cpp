@@ -47,6 +47,11 @@ void cScenarioExpImitateStepHumanoid::SetupKinController()
 		step_ctrl->setRelativeFilePath(this->getRelativeFilePath());
 		step_ctrl->SetFootJoints(mEndEffectors[cBipedStepController3D::eStanceRight],
 								mEndEffectors[cBipedStepController3D::eStanceLeft]);
+		if (mMirrorArms)
+		{
+			step_ctrl->SetHandJoints(8,	14);
+
+		}
 		step_ctrl->SetCyclePeriod(mCtrlParams.mCycleDur);
 		step_ctrl->Init(mKinChar.get(), mKinCtrlFile);
 	}
