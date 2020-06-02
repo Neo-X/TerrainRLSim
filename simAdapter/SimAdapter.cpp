@@ -965,7 +965,7 @@ void cSimAdapter::init()
 	}
 	// return EXIT_SUCCESS;
 	// Zoom out a little for viz environments
-	double zoom = -0.2;
+	double zoom = -1.2;
 	tVector focus = gCamera.GetFocus();
 	tVector cam_offset = -(gCamera.GetFocus() - gCamera.GetPosition());
 	double w = gCamera.GetWidth();

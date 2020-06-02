@@ -396,7 +396,7 @@ void cDrawSimCharacter::DrawSimBody(const cSimCharacter& character, const tVecto
 {
 	const tVector gContactCol = tVector(0.5, 0.75, 0.5, 1);
 
-	cDrawUtil::SetLineWidth(1);
+	cDrawUtil::SetLineWidth(1.0);
 	for (int i = 0; i < character.GetNumBodyParts(); ++i)
 	{
 		if (character.IsValidBodyPart(i))
@@ -421,11 +421,12 @@ void cDrawSimCharacter::DrawSimBody(const cSimCharacter& character, const tVecto
 			cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawSolid);
 			tVector wire_color = tVector(0.3, 0.3, 0.3, 1);
 
-			if (line_col[3] > 0)
-			{
-				cDrawUtil::SetColor(wire_color);
-				cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawWire);
-			}
+			// Draw character wire
+			// if (line_col[3] > 0)
+			// {
+			// 	cDrawUtil::SetColor(wire_color);
+			// 	cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawWire);
+			// }
 		}
 	}
 }
