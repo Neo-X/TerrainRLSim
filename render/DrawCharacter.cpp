@@ -149,7 +149,7 @@ void cDrawCharacter::DrawShapeSphere(const cCharacter& character, const cKinTree
 	if (line_col[3] > 0)
 	{
 		cDrawUtil::SetColor(line_col);
-		cDrawUtil::DrawSphere(r, cDrawUtil::eDrawSolid);
+//		cDrawUtil::DrawSphere(r, cDrawUtil::eDrawSolid);
 	}
 
 	cDrawUtil::PopMatrix();

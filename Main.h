@@ -66,16 +66,16 @@ int gWinWidth = 800;
 int gWinHeight = static_cast<int>(gWinWidth * 9.0 / 16.0);
 //int gWinWidth = 720;
 //int gWinHeight = 480;
-bool gReshaping = false;
+bool gReshaping = true;
 
-const tVector gBKGColor = tVector(0.97, 0.97, 1, 0);
+const tVector gBKGColor = tVector(1.0, 1.0, 1, 0);
 //const tVector gBKGColor = tVector(1, 1, 1, 0);
 
 // camera attributes
-double gViewWidth = 4.5;
+double gViewWidth = 10.5;
 // double gViewWidth = 10.5;
 double gViewHeight = (gViewWidth * gWinHeight) / gWinWidth;
-double gViewNearZ = 5;
+double gViewNearZ = 25;
 //double gViewNearZ = 25;
 double gViewFarZ = -40;
 

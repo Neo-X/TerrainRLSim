@@ -46,7 +46,7 @@ void cDrawUtil::InitDrawUtil()
 	glFrontFace(GL_CCW);
 	checkError();
 #endif
-	glClearColor(0.9, 0.9, 0.9, 0.0);
+	glClearColor(1.0, 1.0, 1.0, 0.0);
 
 
 	BuildShaders();

@@ -517,8 +517,17 @@ void cSimAdapter::init()
 		{
 
 			glutInit(&gArgc, gArgv);
+		    glEnable( GL_POINT_SPRITE ); // GL_POINT_SPRITE_ARB if you're
+                                 // using the functionality as an extension.
+
+		    glEnable( GL_POINT_SMOOTH );
+    		glEnable( GL_BLEND );
+			glEnable(GL_MULTISAMPLE);  
+
 			glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 			glutInitWindowSize(gWinWidth, gWinHeight);
+
+
 			glutCreateWindow("Terrain RL");
 			InitOpenGl();
 		}
@@ -965,7 +974,7 @@ void cSimAdapter::init()
 	}
 	// return EXIT_SUCCESS;
 	// Zoom out a little for viz environments
-	double zoom = -1.2;
+	double zoom = -0.2;
 	tVector focus = gCamera.GetFocus();
 	tVector cam_offset = -(gCamera.GetFocus() - gCamera.GetPosition());
 	double w = gCamera.GetWidth();

@@ -445,6 +445,9 @@ void cDrawSimCharacter::DrawShapes(const cSimCharacter& character, const tVector
 	}
 
 
+
+
+
 //	const tVector gContactCol = tVector(0.5, 0.75, 0.5, 1);
 
 
