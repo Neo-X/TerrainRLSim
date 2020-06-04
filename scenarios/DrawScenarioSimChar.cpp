@@ -645,7 +645,7 @@ void cDrawScenarioSimChar::DrawGroundDynamicObstacles3D(const std::shared_ptr<cG
 
 void cDrawScenarioSimChar::DrawGroundObstacles3D(const std::shared_ptr<cGround>& ground) const
 {
-	const tVector fill_col = tVector(0.35, 0.35, 0.35, 1.0);
+	const tVector fill_col = tVector(0.55, 0.55, 0.55, 1.0);
 	// cDrawUtil::PushMatrix();
 	// cDrawUtil::LoadIdentity();
 	/*
