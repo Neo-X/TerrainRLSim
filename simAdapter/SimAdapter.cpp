@@ -944,6 +944,9 @@ void cSimAdapter::init()
 		// gScenario = this->_gScenario;
 	}
 
+
+
+
 	this->_gScenario->ParseArgs(gArgParser);
 	this->_gScenario->Init();
 	printf("Loaded scenario: %s\n", this->_gScenario->GetName().c_str());
@@ -956,17 +959,25 @@ void cSimAdapter::init()
 #ifndef USE_OpenGLES
 			Reshape(gWinWidth, gWinHeight);
 			glutDisplayFunc(Display_);
+			glEnable(GL_BLEND);
+	        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_POINT_SMOOTH);
+			glEnable(GL_LINE_SMOOTH);
+
+//			glEnable(GL_POLYGON_SMOOTH);
+
+
 			glutReshapeFunc(Reshape);
 			glutKeyboardFunc(Keyboard);
 			glutMouseFunc(MouseClick);
 			glutMotionFunc(MouseMove);
-			// glutTimerFunc(gDisplayAnimTime, Animate, 0);
+			glutTimerFunc(gDisplayAnimTime, Animate, 0);
 #endif
 		}
 	}
 
 	InitTime();
-	// glutMainLoop();
+//	glutMainLoop();
 
 	for(size_t i = 0; i < _args.size(); ++i)
 	{
@@ -1203,7 +1214,7 @@ void cSimAdapter::display()
 			eglSwapBuffers(egl_dpy, egl_surf);
 			gReshaping = false;
 #else
-			Display_();
+//			Display_();
 #endif
 		}
 		else

@@ -47,6 +47,11 @@ void cDrawUtil::InitDrawUtil()
 	checkError();
 #endif
 	glClearColor(1.0, 1.0, 1.0, 0.0);
+	// glEnable(GL_BLEND);
+    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// glEnable(GL_POINT_SMOOTH);
+	// glEnable(GL_LINE_SMOOTH);
 
 
 	BuildShaders();
@@ -1220,7 +1225,9 @@ void cDrawUtil::BuildShaders()
 #ifdef USE_OpenGLES
 		gCopyProg.BuildShader("render/shaders/GLES/FullScreenQuad_VS.gles", "render/shaders/GLES/DownSample_PS.gles");
 #else
+//		gCopyProg.BuildShader("render/shaders/FullScreenQuad_VS.glsl", "render/shaders/DownSample_PS.glsl");
 		gCopyProg.BuildShader("render/shaders/FullScreenQuad_VS.glsl", "render/shaders/DownSample_PS.glsl");
+
 #endif
 	}
 }
