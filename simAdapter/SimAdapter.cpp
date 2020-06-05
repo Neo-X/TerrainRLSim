@@ -517,12 +517,12 @@ void cSimAdapter::init()
 		{
 
 			glutInit(&gArgc, gArgv);
-		    glEnable( GL_POINT_SPRITE ); // GL_POINT_SPRITE_ARB if you're
-                                 // using the functionality as an extension.
+		    // glEnable( GL_POINT_SPRITE ); // GL_POINT_SPRITE_ARB if you're
+            //                      // using the functionality as an extension.
 
-		    glEnable( GL_POINT_SMOOTH );
-    		glEnable( GL_BLEND );
-			glEnable(GL_MULTISAMPLE);  
+		    // glEnable( GL_POINT_SMOOTH );
+    		// glEnable( GL_BLEND );
+			// glEnable(GL_MULTISAMPLE);  
 
 			glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 			glutInitWindowSize(gWinWidth, gWinHeight);
