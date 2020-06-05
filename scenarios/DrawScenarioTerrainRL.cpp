@@ -670,16 +670,16 @@ void cDrawScenarioTerrainRL::InitRenderResources()
 	mShadowMap = std::unique_ptr<cShadowMap>(new cShadowMap());
 	mShadowMap->Init(shadow_res, shadow_res);
 
-	//mDepthTex = std::unique_ptr<cShadowMap>(new cShadowMap());
-	//mDepthTex->Init(w, h);
+	// mDepthTex = std::unique_ptr<cShadowMap>(new cShadowMap());
+	// mDepthTex->Init(w, h);
 
-	//mGBuffer = std::unique_ptr<cGBuffer>(new cGBuffer());
-	//mGBuffer->Init(w, h);
+	// mGBuffer = std::unique_ptr<cGBuffer>(new cGBuffer());
+	// mGBuffer->Init(w, h);
 
-	//mReflectionTex = std::unique_ptr<cTextureDesc>(new cTextureDesc(w, h, GL_RGB16F, GL_RGB, GL_FLOAT, false));
-	//mReflectionTex1 = std::unique_ptr<cTextureDesc>(new cTextureDesc(w, h, GL_RGB16F, GL_RGB, GL_FLOAT, false));
+	// mReflectionTex = std::unique_ptr<cTextureDesc>(new cTextureDesc(w, h, GL_RGB16F, GL_RGB, GL_FLOAT, false));
+	// mReflectionTex1 = std::unique_ptr<cTextureDesc>(new cTextureDesc(w, h, GL_RGB16F, GL_RGB, GL_FLOAT, false));
 
-	//mAOTex = std::unique_ptr<cTextureDesc>(new cTextureDesc(w, h, GL_R8, GL_RED, GL_UNSIGNED_BYTE, false));
+	// mAOTex = std::unique_ptr<cTextureDesc>(new cTextureDesc(w, h, GL_R8, GL_RED, GL_UNSIGNED_BYTE, false));
 	
 	succ &= LoadTextures();
 	

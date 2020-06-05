@@ -231,7 +231,8 @@ void cDrawUtil::DrawBoxSolid(const tVector& pos, const tVector& size, const tVec
 void cDrawUtil::DrawBoxWire(const tVector& pos, const tVector& size)
 {
 	GLenum gl_mode = GL_LINES;
-
+	glLineWidth(2.3);
+	
 	const int num_edges = 12;
 	const int pos_len = num_edges * 2 * cMeshUtil::gPosDim;
 
@@ -1226,7 +1227,7 @@ void cDrawUtil::BuildShaders()
 		gCopyProg.BuildShader("render/shaders/GLES/FullScreenQuad_VS.gles", "render/shaders/GLES/DownSample_PS.gles");
 #else
 //		gCopyProg.BuildShader("render/shaders/FullScreenQuad_VS.glsl", "render/shaders/DownSample_PS.glsl");
-		gCopyProg.BuildShader("render/shaders/FullScreenQuad_VS.glsl", "render/shaders/DownSample_PS.glsl");
+		gCopyProg.BuildShader("render/shaders/FullScreenQuad_VS.glsl", "render/shaders/FXAA_PS.glsl");
 
 #endif
 	}
