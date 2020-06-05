@@ -26,7 +26,7 @@ double cScenarioExpSoccerGeneral::CalcReward() const
 	//double ball_w = 0.25;
 	//double target_vel_w = 0.25;
 	double com_ball_vel_w = 0.0;
-	double com_ball_pos_w = 1.0;
+	double com_ball_pos_w = 0.0;
 	//double target_vel_w = 0.8;
 	//double target_pos_w = 0;
 	double target_vel_w = 1.0;
