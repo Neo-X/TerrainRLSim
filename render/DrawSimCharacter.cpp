@@ -423,8 +423,8 @@ void cDrawSimCharacter::DrawSimBody(const cSimCharacter& character, const tVecto
 
 			if (line_col[3] > 0)
 			{
-				cDrawUtil::SetColor(wire_color);
-				cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawWire);
+//				cDrawUtil::SetColor(wire_color);
+//				cDrawObj::Draw(curr_part.get(), cDrawUtil::eDrawWire);
 			}
 		}
 	}

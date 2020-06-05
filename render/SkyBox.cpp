@@ -9,8 +9,10 @@ const double gMinDirY = 0.01;
 cSkyBox::cSkyBox() : mTurbidity( 3.f ), mAlbedo( 0.1f )
 {
 	// the sun is very bright
-	mSunColour = tVector(1000, 900, 700, 1);
-	mSunDirection = tVector(0.577, 0.277, 0.577, 0).normalized();
+	mSunColour = tVector(1000, 1000, 1000, 1);
+//	mSunDirection = tVector(0.577, 0.277, 0.577, 0).normalized();
+	mSunDirection = tVector(0.0, 3.277, 0.0, 0).normalized();
+
 	mSunSize = 0.035;
 	mRelativePath = "";
 	mSkyBoxProgram = std::unique_ptr<cShader>(new cShader());
@@ -22,7 +24,7 @@ void cSkyBox::Init()
 #ifdef USE_OpenGLES
 	mSkyBoxProgram->BuildShader("render/shaders/GLES/SkyBox_VS.gles", "render/shaders/GLES/SkyBox_PS.gles");
 #else
-	mSkyBoxProgram->BuildShader("render/shaders/SkyBox_VS.glsl", "render/shaders/SkyBox_PS.glsl");
+	mSkyBoxProgram->BuildShader("render/shaders/SkyBox_VS.glsl", "render/shaders/FXAA_PS.glsl");
 #endif
 
 	// get the constant handles
