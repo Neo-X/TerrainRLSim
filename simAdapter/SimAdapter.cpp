@@ -517,12 +517,13 @@ void cSimAdapter::init()
 		{
 
 			glutInit(&gArgc, gArgv);
+			glEnable( GL_POINT_SPRITE );
 		    // glEnable( GL_POINT_SPRITE ); // GL_POINT_SPRITE_ARB if you're
             //                      // using the functionality as an extension.
 
-		    // glEnable( GL_POINT_SMOOTH );
-    		// glEnable( GL_BLEND );
-			// glEnable(GL_MULTISAMPLE);  
+		    glEnable( GL_POINT_SMOOTH );
+    		glEnable( GL_BLEND );
+			glEnable(GL_MULTISAMPLE);  
 
 			glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 			glutInitWindowSize(gWinWidth, gWinHeight);
@@ -985,19 +986,19 @@ void cSimAdapter::init()
 	}
 	// return EXIT_SUCCESS;
 	// // Zoom out a little for viz environments
-	// double zoom = -5.2;
-	// tVector focus = gCamera.GetFocus();
-	// tVector cam_offset = -(gCamera.GetFocus() - gCamera.GetPosition());
-	// double w = gCamera.GetWidth();
-	// double h = gCamera.GetHeight();
+	double zoom = -0.2;
+	tVector focus = gCamera.GetFocus();
+	tVector cam_offset = -(gCamera.GetFocus() - gCamera.GetPosition());
+	double w = gCamera.GetWidth();
+	double h = gCamera.GetHeight();
 
-	// double delta_scale = 1 - zoom;
-	// tVector delta = cam_offset * delta_scale;
-	// gCamera.SetPosition(focus + delta);
-	// w *= delta_scale;
-	// h *= delta_scale;
-	// gCamera.Resize(w, h);
-	// gCamera.SetFocus(focus);
+	double delta_scale = 1 - zoom;
+	tVector delta = cam_offset * delta_scale;
+	gCamera.SetPosition(focus + delta);
+	w *= delta_scale;
+	h *= delta_scale;
+	gCamera.Resize(w, h);
+	gCamera.SetFocus(focus);
 //	this->reshapeScreen(100, 100);
 }
 

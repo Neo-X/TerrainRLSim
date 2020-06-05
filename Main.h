@@ -62,10 +62,10 @@
 
 
 // Dimensions of the window we are drawing into.
-//int gWinWidth = 800;
-//int gWinHeight = static_cast<int>(gWinWidth * 9.0 / 16.0);
-int gWinWidth = 1200;
-int gWinHeight = 850;
+int gWinWidth = 800;
+int gWinHeight = static_cast<int>(gWinWidth * 9.0 / 16.0);
+//int gWinWidth = 1200;
+//int gWinHeight = 850;
 bool gReshaping = true;
 
 const tVector gBKGColor = tVector(1.0, 1.0, 1, 0);

@@ -579,12 +579,12 @@ class TerrainRLSimWrapper(gym.Env):
         ### Get pixel data from view
         img = self.getEnv().getPixels(0,
                            0, 
-                           1200, 
-                           850)
+                           800, 
+                           450)
         # assert(np.sum(img) > 0.0)
         ### reshape into image, colour last
-        img = np.reshape(img, (850, 
-                           1200, 3))
+        img = np.reshape(img, (450, 
+                           800, 3))
         ### downsample image
         ### convert to greyscale
         # assert(np.sum(img) > 0.0)
