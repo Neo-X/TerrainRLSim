@@ -191,6 +191,13 @@ bool cKinTree::ParseBodyDef(const Json::Value& root, cKinTree::tBodyDef& out_def
 		{
 			Json::Value json_val = root[curr_key];
 			double val = json_val.asDouble();
+
+			if(curr_key=="ColorR")
+				val = 0.2706;
+			if(curr_key=="ColorG")
+				val = 0.349;
+			if(curr_key=="ColorB")
+				val = 1.0863;
 			out_def(i) = val;
 		}
 	}

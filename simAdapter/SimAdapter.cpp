@@ -947,6 +947,11 @@ void cSimAdapter::init()
 #ifndef USE_OpenGLES
 			Reshape(gWinWidth, gWinHeight);
 			glutDisplayFunc(Display_);
+
+			glEnable(GL_BLEND);
+	        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_POINT_SMOOTH);
+			glEnable(GL_LINE_SMOOTH);
 			glutReshapeFunc(Reshape);
 			glutKeyboardFunc(Keyboard);
 			glutMouseFunc(MouseClick);
