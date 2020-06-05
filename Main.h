@@ -66,7 +66,7 @@ int gWinWidth = 800;
 int gWinHeight = static_cast<int>(gWinWidth * 9.0 / 16.0);
 //int gWinWidth = 1200;
 //int gWinHeight = 850;
-bool gReshaping = true;
+bool gReshaping = false;
 
 const tVector gBKGColor = tVector(1.0, 1.0, 1, 0);
 //const tVector gBKGColor = tVector(1, 1, 1, 0);
