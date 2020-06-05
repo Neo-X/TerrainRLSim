@@ -689,8 +689,8 @@ void cDrawScenarioSimChar::DrawGroundObstacles3D(const std::shared_ptr<cGround>&
 
 		if (line_col[3] > 0)
 		{
-			cDrawUtil::SetColor(line_col);
-			cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
+//			cDrawUtil::SetColor(line_col);
+//			cDrawObj::Draw(&obj, cDrawUtil::eDrawWire);
 		}
 		//cDrawUtil::DrawBoxWire(pos, size);
 
