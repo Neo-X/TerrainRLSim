@@ -72,12 +72,21 @@ const tVector gBKGColor = tVector(1.0, 1.0, 1, 0);
 //const tVector gBKGColor = tVector(1, 1, 1, 0);
 
 // camera attributes
-double gViewWidth = 35.5;
+// double gViewWidth = 35.5;
+// // double gViewWidth = 10.5;
+// double gViewHeight = (gViewWidth * gWinHeight) / gWinWidth;
+// double gViewNearZ = 3;
+// //double gViewNearZ = 25;
+// double gViewFarZ = -245;
+
+double gViewWidth = 4.5;
 // double gViewWidth = 10.5;
 double gViewHeight = (gViewWidth * gWinHeight) / gWinWidth;
-double gViewNearZ = 3;
+double gViewNearZ = 5;
 //double gViewNearZ = 25;
-double gViewFarZ = -245;
+double gViewFarZ = -40;
+
+
 
 // intermediate frame buffers
 std::unique_ptr<cTextureDesc> gDefaultFrameBuffer;

@@ -999,7 +999,7 @@ void cSimAdapter::init()
 	h *= delta_scale;
 	gCamera.Resize(w, h);
 	gCamera.SetFocus(focus);
-//	this->reshapeScreen(100, 100);
+	//	this->reshapeScreen(100, 100);
 }
 
 void cSimAdapter::initEpoch()
