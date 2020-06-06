@@ -1220,7 +1220,7 @@ void cDrawUtil::BuildShaders()
 #ifdef USE_OpenGLES
 		gCopyProg.BuildShader("render/shaders/GLES/FullScreenQuad_VS.gles", "render/shaders/GLES/DownSample_PS.gles");
 #else
-		gCopyProg.BuildShader("render/shaders/FullScreenQuad_VS.glsl", "render/shaders/DownSample_PS.glsl");
+		gCopyProg.BuildShader("render/shaders/FullScreenQuad_VS.glsl", "render/shaders/FXAA_PS.glsl");
 #endif
 	}
 }
