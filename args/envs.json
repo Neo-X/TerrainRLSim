@@ -944,6 +944,44 @@
 		"include_arms_in_mirror": "true"
     }
 },
+"PD_Humanoid3D_MutliChar_ConcentricCircle_5_OnlyVel_SimpleReward_v3": 
+{
+	"config_file": "./args/genbiped3D/concentricCircleCrowdOnlyVel.txt",
+	"time_limit": 256,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Use a different rotation representation for the policy learning state [quaternion|axisangle|euler]",
+    	"terrain_file": "data/terrain/dynamicCharacters3D_Obs_0.txt",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"use_simple_reward": "true",
+    		"comment__": "Number of characters in the simulation in addition to the default character",
+    	"num_characters": "4",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
+    		"comment__": "Randomly add forces to the links of the agent",
+    	"enable_rand_perturbs": "false",
+    	"character_file": "data/characters/humanoid3d_colourful2.txt",
+		"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
+		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt",
+		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt",
+    	"enable_rand_projectiles": "false",
+			"comment__": "Setting for how much to preterb the agent, these are added to random links",
+    	"perturb_time_min": "2.0",
+		"perturb_time_max": "3.0",
+		"min_perturb":  "20",
+		"max_perturb": "50",
+		"min_pertrub_duration": "0.1",
+		"max_perturb_duration": "0.2",
+		"projectile_frequency": "0.01",
+		"include_arms_in_mirror": "true"
+    		
+    }
+},
 "PD_Humanoid3D_MutliChar_ConcentricCircle_WithObs_OnlyVel_SimpleReward_v1": 
 {
 	"config_file": "./args/genbiped3D/concentricCircleCrowdWithObsOnlyVel.txt",
@@ -958,7 +996,7 @@
     		"comment__": "Use simple DeepLoco HLC reward function",
     	"use_simple_reward": "true",
     		"comment__": "Number of characters in the simulation in addition to the default character",
-    	"num_characters": "2",
+    	"num_characters": "4",
     		"comment__": "Change the location of the target position if the agent reaches the target",
     	"create_new_goals": "true",
     		"comment__": "Use a repulsive reward penalty when agents get close together.",
@@ -966,7 +1004,93 @@
     	"character_file": "data/characters/humanoid3d_colourful2.txt",
 		"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
 		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt",
-		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt"
+		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt",
+		"enable_rand_projectiles": "false",
+			"comment__": "Setting for how much to preterb the agent, these are added to random links",
+    	"perturb_time_min": "2.0",
+		"perturb_time_max": "3.0",
+		"min_perturb":  "20",
+		"max_perturb": "50",
+		"min_pertrub_duration": "0.1",
+		"max_perturb_duration": "0.2",
+		"projectile_frequency": "0.01",
+		"include_arms_in_mirror": "true"
+    }
+},
+"PD_Humanoid3D_MutliChar_BottleNeck_WithObstacles_OnlyVel_SimpleReward_v0": 
+{
+	"config_file": "./args/genbiped3D/bottleneckWithObsOnlyVel.txt",
+	"time_limit": 256,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Use a different terrain generation file",
+    	"terrain_file": "data/terrain/dynamicCharacters3D_Obs_bottleneck.txt",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"use_simple_reward": "true",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Number of characters in the simulation in addition to the default character",
+    	"num_characters": "4",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
+    	"character_file": "data/characters/humanoid3d_colourful2.txt",
+		"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
+		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt",
+		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt",
+		"enable_rand_projectiles": "false",
+			"comment__": "Setting for how much to preterb the agent, these are added to random links",
+    	"perturb_time_min": "2.0",
+		"perturb_time_max": "3.0",
+		"min_perturb":  "20",
+		"max_perturb": "50",
+		"min_pertrub_duration": "0.1",
+		"max_perturb_duration": "0.2",
+		"projectile_frequency": "0.01",
+		"include_arms_in_mirror": "true"
+    }
+},
+"PD_Humanoid3D_MutliChar_BottleNeck_WithObstacles_OnlyVel_SimpleReward_v0": 
+{
+	"config_file": "./args/genbiped3D/bottleneckWithObsOnlyVel.txt",
+	"time_limit": 256,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Use a different terrain generation file",
+    	"terrain_file": "data/terrain/dynamicCharacters3D_Obs_bottleneck.txt",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"use_simple_reward": "true",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
+    		"comment__": "Number of characters in the simulation in addition to the default character",
+    	"num_characters": "4",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
+    	"character_file": "data/characters/humanoid3d_colourful2.txt",
+		"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
+		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt",
+		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt",
+		"enable_rand_projectiles": "false",
+			"comment__": "Setting for how much to preterb the agent, these are added to random links",
+    	"perturb_time_min": "2.0",
+		"perturb_time_max": "3.0",
+		"min_perturb":  "20",
+		"max_perturb": "50",
+		"min_pertrub_duration": "0.1",
+		"max_perturb_duration": "0.2",
+		"projectile_frequency": "0.01",
+		"include_arms_in_mirror": "true"
     }
 },
 "PD_Biped3D_MutliChar_ConcentricCircle_5_OnlyVel_v0": 
