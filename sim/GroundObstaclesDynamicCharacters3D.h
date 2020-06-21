@@ -27,6 +27,7 @@ public:
 
 	virtual void SetChars(const std::vector<std::shared_ptr<cSimCharacter>>& characters);
 	virtual void SetChar(const std::shared_ptr<cSimCharacter>& character);
+	virtual const std::vector<std::shared_ptr<cSimCharacter>> GetChars() const;
 	virtual eClass GetGroundClass() const;
 
 	virtual void AddObstacle(std::shared_ptr<cSimObj>& obj);

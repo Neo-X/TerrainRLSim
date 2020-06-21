@@ -332,3 +332,9 @@ const cSimObj& cGround::GetObj(int i) const
 	const cSimObj& obc = dynamic_cast<const cSimObj&>(*this);
 	return obc;
 }
+
+const std::vector<std::shared_ptr<cSimCharacter>> cGround::GetChars() const
+{
+	std::vector<std::shared_ptr<cSimCharacter>> out;
+	return out;
+}

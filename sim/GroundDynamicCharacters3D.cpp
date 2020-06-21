@@ -37,6 +37,18 @@ void cGroundDynamicCharacters3D::SetChar(const std::shared_ptr<cSimCharacter>& c
 	mChar = character;
 }
 
+const std::vector<std::shared_ptr<cSimCharacter>> cGroundDynamicCharacters3D::GetChars() const
+{
+	std::vector<std::shared_ptr<cSimCharacter>> out;
+
+	out.push_back(mChar);
+	for (size_t a=0; a < mChars.size(); a++)
+	{
+		out.push_back(mChars[a]);
+	}
+	return out;
+}
+
 void cGroundDynamicCharacters3D::SampleHeightVel(const tVector& pos, double& out_h, tVector& out_vel,
 													bool& out_valid_sample) const
 {

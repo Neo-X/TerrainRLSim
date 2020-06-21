@@ -123,6 +123,9 @@ public:
 
 	virtual void SetParams(const tParams& params);
 
+	virtual const std::vector<std::shared_ptr<cSimCharacter>> GetChars() const;
+
+
 protected:
 
 	cRand mRand;
