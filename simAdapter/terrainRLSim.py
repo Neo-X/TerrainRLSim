@@ -509,6 +509,11 @@ class TerrainRLSimWrapper(gym.Env):
         # print("reset_args:", reset_args)
         if reset_args is not None:
             self.set_task(reset_args)
+        if "camera_zoom_noise" in self._config:
+            range_ = self._config["camera_zoom_noise"][1] - self._config["camera_zoom_noise"][0] 
+            zoom_ = (np.random.random(1)[0] * range_) + self._config["camera_zoom_noise"][0] 
+#             print ("zoom: ", zoom_)
+            self._sim.setZoom(zoom_)
         self._sim.initEpoch()
         self._done = False
         self._done_multiAgent = [False for i in range(self._sim.getNumAgents())]
@@ -592,6 +597,7 @@ class TerrainRLSimWrapper(gym.Env):
         
     def getViewData(self):
         from skimage.measure import block_reduce
+        from skimage.transform import rescale, resize, downscale_local_mean
         ### Get pixel data from view
         img = np.array(self.getEnv().getPixels(self._config["image_clipping_area"][0],
                            self._config["image_clipping_area"][1], 
@@ -606,10 +612,16 @@ class TerrainRLSimWrapper(gym.Env):
             # print ("img shape:", img.shape)
             img = np.reshape(img, (self._config["image_clipping_area"][3], 
                                self._config["image_clipping_area"][2], 3)) / 255.0
+            if 'resize_image' in self._config:
+                img = resize(img, (
+                                   self._config["resize_image"][1], 
+                                    self._config["resize_image"][2]),
+                           anti_aliasing=True)
+            else:
             ### downsample image
-            img = block_reduce(img, block_size=(self._config["downsample_image"][0], 
-                                                self._config["downsample_image"][1], 
-                                                self._config["downsample_image"][2]), func=np.mean)
+                img = block_reduce(img, block_size=(self._config["downsample_image"][0], 
+                                                    self._config["downsample_image"][1], 
+                                                    self._config["downsample_image"][2]), func=np.mean)
         ### convert to greyscale
         if (self._config["convert_to_greyscale"]):
             img = np.mean(img, axis=2)

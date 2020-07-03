@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_2_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_GRF_Viz3D_32x32_1Sub_Imitate_30FPS_DualState_v1", render=True)
+    env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=True)
     
     # env.reset()
     actionSpace = env.getActionSpace()
@@ -33,7 +33,8 @@ if __name__ == '__main__':
                     matplotlib.use('Agg')
                     import matplotlib.pyplot as plt
                     # img_ = viewData
-                    img_ = np.reshape(viewData, (32,32))
+                    viewData = viewData - viewImitateData
+                    img_ = np.reshape(viewData, (48,48))
 #                     noise = np.random.normal(loc=0, scale=0.02, size=img_.shape)
 #                     img_ = img_ + noise
                     print("img_ shape", img_.shape, " sum: ", np.sum(viewData))
@@ -44,7 +45,7 @@ if __name__ == '__main__':
 
                     if (True):                    
                         img__ = viewImitateData
-                        img__ = np.reshape(viewImitateData, (32, 32))
+                        img__ = np.reshape(viewImitateData, (48, 48))
                         fig2 = plt.figure(2)
                         img__ = np.concatenate((img_, img__), axis=1)
                         plt.imshow(img__, origin='lower')

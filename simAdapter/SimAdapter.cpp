@@ -965,19 +965,24 @@ void cSimAdapter::init()
 	}
 	// return EXIT_SUCCESS;
 	// Zoom out a little for viz environments
-	double zoom = -0.2;
-	tVector focus = gCamera.GetFocus();
-	tVector cam_offset = -(gCamera.GetFocus() - gCamera.GetPosition());
-	double w = gCamera.GetWidth();
-	double h = gCamera.GetHeight();
+	this->_init_cam_pos = gCamera.GetPosition();
+	this->_init_cam_focus = gCamera.GetFocus();
+	this->_w = gCamera.GetWidth();
+	this->_h = gCamera.GetHeight();
+//	double zoom = -0.2;
+//	tVector focus = gCamera.GetFocus();
+//	tVector cam_offset = -(gCamera.GetFocus() - gCamera.GetPosition());
+//	double w = gCamera.GetWidth();
+//	double h = gCamera.GetHeight();
+//
+//	double delta_scale = 1 - zoom;
+//	tVector delta = cam_offset * delta_scale;
+//	gCamera.SetPosition(focus + delta);
+//	w *= delta_scale;
+//	h *= delta_scale;
+//	gCamera.Resize(w, h);
+//	gCamera.SetFocus(focus);
 
-	double delta_scale = 1 - zoom;
-	tVector delta = cam_offset * delta_scale;
-	gCamera.SetPosition(focus + delta);
-	w *= delta_scale;
-	h *= delta_scale;
-	gCamera.Resize(w, h);
-	gCamera.SetFocus(focus);
 //	this->reshapeScreen(100, 100);
 }
 
@@ -2019,4 +2024,21 @@ size_t cSimAdapter::GetNumTasks() const
 
 	return 1;
 
+}
+
+void cSimAdapter::setZoom(double zoom)
+{
+	tVector focus = this->_init_cam_focus;
+	tVector cam_offset = -(focus - this->_init_cam_pos);
+	double w = 2.5;
+	double h = 2.5;
+//	std::cout << "this->_init_cam_pos" << this->_init_cam_pos << " " << this->_h << " " << this->_w << std::endl;
+
+	double delta_scale = 1 - zoom;
+	tVector delta = cam_offset * delta_scale;
+	gCamera.SetPosition(focus + delta);
+	w *= delta_scale;
+	h *= delta_scale;
+	gCamera.Resize(w, h);
+	gCamera.SetFocus(focus);
 }

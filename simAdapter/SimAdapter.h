@@ -303,6 +303,8 @@ public:
 	virtual void setTaskID(size_t task);
 	virtual size_t GetNumTasks() const;
 
+	virtual void setZoom(double zoom);
+
 	void handleUpdatedAction();
 
 	/// New rendering stuff
@@ -359,6 +361,10 @@ protected:
 	std::shared_ptr<cScenarioSimChar> _scene;
 	std::vector<std::string> _args;
 	std::string _relativePath;
+
+	tVector _init_cam_pos;
+	tVector _init_cam_focus;
+	double _h, _w;
 
 	/// New rendering stuff
 	/*
