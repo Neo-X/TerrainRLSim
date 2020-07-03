@@ -157,7 +157,7 @@ class TerrainRLSimWrapper(gym.Env):
             
         self.init()
         
-    def render(self, headless_step=False):
+    def render(self, headless_step=False, mode=None):
         if (self._render):
             self._sim.display()
             if ("headless_render" in self._config 
@@ -171,8 +171,9 @@ class TerrainRLSimWrapper(gym.Env):
                 # ax_img = self._bellman_error_ax.set_data(img_)
                 # self._bellman_error_ax.canvas.draw()
                 self._fig.canvas.draw()                      # View in default viewer
-                
-        #return self.getFullViewData()
+        
+        if (mode == "rgb_array"):
+            return self.getFullViewData()
         
     def updateAction(self, action):
         # print ("step action: ", action)
@@ -582,17 +583,28 @@ class TerrainRLSimWrapper(gym.Env):
     def getFullViewData(self):
         from skimage.measure import block_reduce
         ### Get pixel data from view
-        img = self.getEnv().getPixels(0,
-                           0, 
-                           800, 
-                           450)
-        # assert(np.sum(img) > 0.0)
-        ### reshape into image, colour last
-        img = np.reshape(img, (450, 
-                           800, 3))
-        ### downsample image
-        ### convert to greyscale
-        # assert(np.sum(img) > 0.0)
+        if "resize_window" in self._config:
+            
+            img = self.getEnv().getPixels(0,
+                               0, 
+                               self._config["resize_window"][0], 
+                               self._config["resize_window"][1])
+            # assert(np.sum(img) > 0.0)
+            ### reshape into image, colour last
+            img = np.reshape(img, (self._config["resize_window"][1], 
+                               self._config["resize_window"][0], 3))
+        else:
+            img = self.getEnv().getPixels(0,
+                               0, 
+                               800, 
+                               450)
+            # assert(np.sum(img) > 0.0)
+            ### reshape into image, colour last
+            img = np.reshape(img, (450, 
+                               800, 3))
+            ### downsample image
+            ### convert to greyscale
+            # assert(np.sum(img) > 0.0)
         return img
         
     def getViewData(self):
