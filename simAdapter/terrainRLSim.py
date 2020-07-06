@@ -634,6 +634,9 @@ class TerrainRLSimWrapper(gym.Env):
                 img = block_reduce(img, block_size=(self._config["downsample_image"][0], 
                                                     self._config["downsample_image"][1], 
                                                     self._config["downsample_image"][2]), func=np.mean)
+        if ("add_img_noise" in self._config):
+            noise_ = np.random.randn(*(img.shape)) * self._config['add_img_noise']
+            img = img + noise_
         ### convert to greyscale
         if (self._config["convert_to_greyscale"]):
             img = np.mean(img, axis=2)
