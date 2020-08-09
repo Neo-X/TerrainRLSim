@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_2_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=True)
+    env = terrainRLSim.getEnv(env_name="PD_Dog_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=True)
     
     # env.reset()
     actionSpace = env.getActionSpace()

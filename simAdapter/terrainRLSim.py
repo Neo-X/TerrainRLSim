@@ -140,13 +140,15 @@ class TerrainRLSimWrapper(gym.Env):
             # time.sleep(2)
             self.reset()
         
-            act_low = [-1] * self.getEnv().getActionSpaceSize()
-            act_high = [1] * self.getEnv().getActionSpaceSize() 
+            act_low = self.getEnv().getActionSpaceBounds()[0]
+            act_high = self.getEnv().getActionSpaceBounds()[1] 
             action_space = [act_low, act_high]
             action_space = self.getEnv().getActionSpaceBounds()
             self.action_space = Box(low=np.array(act_low), high=np.array(act_high))
             if ("process_visual_data" in self._config
-                and (self._config["process_visual_data"] == True)):
+                and (self._config["process_visual_data"] == True) and not 
+                ("use_dual_state_representations" in self._config and
+                 (self._config["use_dual_state_representations"] == True))):
                 ob_low = np.array((np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [0])
                 ob_high = np.array((np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [1])
                 self.observation_space = Box(low=ob_low, high=ob_high)
