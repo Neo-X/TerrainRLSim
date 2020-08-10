@@ -10,16 +10,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
         build-essential \
         premake4 \
         git \
+        cmake \
         curl \
         vim \
-	swig \
-	software-properties-common \
-	xpra \
-	net-tools \
-	wget \
-	cmake \
-	xserver-xorg-dev \
-    	zlib1g-dev \
         libav-tools \
 	    libgl1-mesa-dev \
 	    libgl1-mesa-glx \
@@ -30,13 +23,18 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
         unzip \
         patchelf \
         ffmpeg \
-        graphviz \
         libxrandr2 \
         libxinerama1 \
         libxcursor1 \
+        net-tools \
+        software-properties-common \
+        swig \
+        wget \
+        xpra \
+        xserver-xorg-dev \
+        zlib1g-dev \
         python3-dev python3-pip graphviz \
         freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libgl1-mesa-glx libglu1-mesa libglu1-mesa-dev libglew1.6-dev mesa-utils
-
 
 # Not sure why this is needed
 ENV LANG C.UTF-8
@@ -45,11 +43,27 @@ ENV LANG C.UTF-8
 # COPY ./files/Xdummy /usr/local/bin/Xdummy
 # RUN chmod +x /usr/local/bin/Xdummy
 
-# Workaround for https://bugs.launchpad.net/ubuntu/+source/nvidia-graphics-drivers-375/+bug/1674677
-# COPY ./files/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
+##########################################################
+### MuJoCo
+##########################################################
+# Note: ~ is an alias for /root
+RUN mkdir -p /root/.mujoco \
+    && wget https://www.roboti.us/download/mjpro131_linux.zip -O mujoco.zip \
+    && unzip mujoco.zip -d /root/.mujoco \
+    && rm mujoco.zip
+RUN mkdir -p /root/.mujoco \
+    && wget https://www.roboti.us/download/mjpro150_linux.zip -O mujoco.zip \
+    && unzip mujoco.zip -d /root/.mujoco \
+    && rm mujoco.zip
+### Lets not put the key in the image for now.
+# COPY ./files/mjkey.txt /root/.mujoco/mjkey.txt
+# COPY .mujoco /root/.mujoco
+## Don't copy this to public docker file?
+COPY mjkey.txt /root/.mujoco/
+RUN ln -s /root/.mujoco/mujoco200_linux /root/.mujoco/mujoco200
+ENV LD_LIBRARY_PATH /root/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH /root/.mujoco/mujoco130/bin:${LD_LIBRARY_PATH}
 
-# Not sure why this is needed
-ENV LD_LIBRARY_PATH /usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
 
 ENV PATH /opt/conda/bin:$PATH
 RUN wget --quiet https://repo.anaconda.com/archive/Anaconda2-2019.10-Linux-x86_64.sh -O /tmp/miniconda.sh && \
@@ -60,104 +74,17 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda2-2019.10-Linux-x86_6
 
 RUN conda update -y --name base conda && conda clean --all -y
 
-RUN conda create --name rlframe python=3.6.9 pip
-RUN echo "source activate rlframe" >> ~/.bashrc
+RUN conda create --name gmps python=3.6.9 pip
+RUN echo "source activate gmps" >> ~/.bashrc
 
-ENV PATH /opt/conda/envs/rlframe/bin:$PATH
+# RUN pip3 install scikit-image
+
+ENV PATH /opt/conda/envs/gmps/bin:$PATH
+
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
 # RUN python -c 'import mujoco_py'
-
-RUN mkdir /root/playground
-WORKDIR /root/playground
-
-COPY id_rsa_remote_client /root/.ssh/id_rsa
-RUN chmod 600 ~/.ssh/id_rsa
-# make sure your domain is accepted
-RUN touch /root/.ssh/known_hosts
-RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
-
-# RUN ls
-# RUN git clone https://github.com/rll/rllab.git /root/playground/rllab
-# RUN git clone git@github.com:FracturedPlane/RLSimulationEnvironments.git /root/playground/RLSimulationEnvironments
-# RUN pip install -r /root/playground/RLSimulationEnvironments/requirements.txt
-# ENV RLSIMENV_PATH /root/playground/RLSimulationEnvironments
-
-# RUN ls
-# RUN git clone git@github.com:Neo-X/RL-Framework.git /root/playground/RL-Framework
-# RUN pip install -r /root/playground/RL-Framework/requirements.txt
-# RUN popd
-
-### Add OpenGL libraries to LD path.
-# COPY libOpenGL.so /usr/lib/nvidia/libOpenGL.so
-ENV LD_LIBRARY_PATH /usr/lib/nvidia:${LD_LIBRARY_PATH}
-ENV LD_LIBRARY_PATH /usr/lib:${LD_LIBRARY_PATH}
-
-WORKDIR /root/playground
-RUN git clone git@github.com:Neo-X/TerrainRLSim.git
-ENV TERRAINRL_PATH /root/playground/TerrainRLSim
-WORKDIR /root/playground/TerrainRLSim
-RUN wget https://github.com/UBCMOCCA/TerrainRLSim/releases/download/0.8/TerrainRLSim_external_June_21_2019.tar.xz
-RUN tar -xvf TerrainRLSim_external_June_21_2019.tar.xz
-RUN chmod +x ./deb_deps.sh
-RUN ./deb_deps.sh
-RUN cd external/caffe && make clean && make -j 8
-RUN cp -r external/caffe/build/lib . && cp external/caffe/build/lib/libcaffe.* lib/ && cp external/Bullet/bin/*.so lib/ && cp external/jsoncpp/build/debug/src/lib_json/*.so* lib/
-WORKDIR /root/playground/TerrainRLSim/simAdapter
-RUN chmod +x ./gen_swig.sh
-RUN ./gen_swig.sh
-WORKDIR /root/playground/TerrainRLSim/
-RUN ls -la
-# RUN chmod +x ./premake4_linux && ./premake4_linux --file=premake4_openglES.lua gmake
-RUN chmod +x ./premake4_linux
-RUN ./premake4_linux --file=premake4_openglES.lua gmake
-### RUN cd gmake
-WORKDIR /root/playground/TerrainRLSim/gmake
-RUN make config=release64 -j 3
-WORKDIR /root/playground/TerrainRLSim
-RUN pip install -v -e $TERRAINRL_PATH
-RUN pip install -r requirements.txt
-WORKDIR /root/playground
-RUN echo $LD_LIBRARY_PATH
-
-RUN ls
-
-##########################################################
-### MuJoCo
-##########################################################
-# Note: ~ is an alias for /root
-RUN mkdir -p /root/.mujoco \
-    && wget https://www.roboti.us/download/mujoco200_linux.zip -O mujoco.zip \
-    && unzip mujoco.zip -d /root/.mujoco \
-    && rm mujoco.zip
-RUN mkdir -p /root/.mujoco \
-    && wget https://www.roboti.us/download/mjpro150_linux.zip -O mujoco.zip \
-    && unzip mujoco.zip -d /root/.mujoco \
-    && rm mujoco.zip
-COPY ./files/mjkey.txt /root/.mujoco/mjkey.txt
-RUN ln -s /root/.mujoco/mujoco200_linux /root/.mujoco/mujoco200
-ENV LD_LIBRARY_PATH /root/.mujoco/mjpro150/bin:${LD_LIBRARY_PATH}
-ENV LD_LIBRARY_PATH /root/.mujoco/mujoco200/bin:${LD_LIBRARY_PATH}
-ENV LD_LIBRARY_PATH /root/.mujoco/mujoco200_linux/bin:${LD_LIBRARY_PATH}
-
-
-
-##########################################################
-### Python
-##########################################################
-ENV PATH /opt/conda/bin:$PATH
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
-    /bin/bash /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> /etc/bash.bashrc
-
-# RUN conda update -y --name base conda && conda clean --all -y
-
-# RUN conda create --name railrl python=3.6.5 pip
-# RUN echo "source activate railrl" >> ~/.bashrc
-# Use the railrl pip
-ENV OLDPATH $PATH
-ENV PATH /opt/conda/envs/rlframe/bin:$PATH
 
 RUN pip install imagehash>=3.4
 RUN pip install ipdb
@@ -195,3 +122,33 @@ RUN pip install torchvision
 RUN curl -o /usr/local/bin/patchelf https://s3-us-west-2.amazonaws.com/openai-sci-artifacts/manual-builds/patchelf_0.9_amd64.elf \
     && chmod +x /usr/local/bin/patchelf
 RUN pip install gym[all]==0.17.1
+
+RUN mkdir /root/playground
+RUN cd /root/playground
+
+# COPY id_rsa_remote_client /root/.ssh/id_rsa
+# RUN chmod 600 ~/.ssh/id_rsa
+# make sure your domain is accepted
+RUN mkdir /root/.ssh/
+RUN echo "" >> /root/.ssh/known_hosts
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+
+WORKDIR /root/playground
+RUN ls -la
+RUN git clone https://github.com/Neo-X/TerrainRLSim.git
+ENV TERRAINRL_PATH /root/playground/TerrainRLSim
+WORKDIR /root/playground/TerrainRLSim
+RUN wget https://github.com/UBCMOCCA/TerrainRLSim/releases/download/0.8/TerrainRLSim_external_June_21_2019.tar.xz
+RUN tar -xvf TerrainRLSim_external_June_21_2019.tar.xz
+RUN apt-get update
+RUN chmod +x ./deb_deps.sh && ./deb_deps.sh
+RUN cd external/caffe && make clean && make
+RUN cp -r external/caffe/build/lib . && cp external/caffe/build/lib/libcaffe.* lib/ && cp external/Bullet/bin/*.so lib/ && cp external/jsoncpp/build/debug/src/lib_json/*.so* lib/
+RUN cd simAdapter/ && apt-get install swig3.0 python3-dev python3-pip -y && chmod +x ./gen_swig.sh && ./gen_swig.sh
+RUN ls -la
+RUN chmod +x ./premake4_linux && ./premake4_linux gmake
+RUN cd gmake && make config=release64 -j 2
+RUN pip install -v -e $TERRAINRL_PATH
+RUN pip install -r requirements.txt
+WORKDIR /root/playground
