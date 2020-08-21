@@ -25,8 +25,8 @@ if __name__ == '__main__':
             vizImitateData = env.getImitationVisualState()
             for vd in range(len(vizData)):
                 # print("viewData: ", viewData)
-                viewData = vizData[vd]
-                viewImitateData = vizImitateData[vd]
+                viewData = vizData[vd][:2304]
+                viewImitateData = vizImitateData[vd][:2304]
                 ## Get and vis terrain data
                 if (True):
                     import matplotlib
@@ -35,6 +35,7 @@ if __name__ == '__main__':
                     # img_ = viewData
                     viewData = viewData - viewImitateData
                     img_ = np.reshape(viewData, (48,48))
+                    img_ = env.render(mode="rgb_array")
 #                     noise = np.random.normal(loc=0, scale=0.02, size=img_.shape)
 #                     img_ = img_ + noise
                     print("img_ shape", img_.shape, " sum: ", np.sum(viewData))
