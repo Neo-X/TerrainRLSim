@@ -460,8 +460,11 @@ class TerrainRLSimWrapper(gym.Env):
             reward = reward[0][0]
         
         # ob[0,0] = np.nan
+        info = {}
+        if (self._render):
+            info['rendering'] = np.array(self.getViewData() * 255, dtype='uint8')
         
-        return self.checkState(ob), self.checkState(reward), self._done, {}
+        return self.checkState(ob), self.checkState(reward), self._done, info
         
     def checkState(self, state):
         if (not checkDataIsValid(state)):
@@ -607,7 +610,10 @@ class TerrainRLSimWrapper(gym.Env):
             ### downsample image
             ### convert to greyscale
             # assert(np.sum(img) > 0.0)
-        return img
+        image_ = np.zeros((img.shape))
+        for row in range(len(img)):
+            image_[row] = img[len(img)-row - 1]
+        return image_
         
     def getViewData(self):
         from skimage.measure import block_reduce
