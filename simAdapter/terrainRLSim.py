@@ -649,7 +649,11 @@ class TerrainRLSimWrapper(gym.Env):
         if (self._config["convert_to_greyscale"]):
             img = np.mean(img, axis=2)
         # assert(np.sum(img) > 0.0)
-        return img
+        ### Still not sure why this is upside down.
+        image_ = np.zeros((img.shape))
+        for row in range(len(img)):
+            image_[row] = img[len(img)-row - 1]
+        return image_
     
     def getAgentVelocity(self):
         # add velocity
