@@ -264,6 +264,7 @@ public:
 	virtual void setRandomSeed(int seed);
 
 	virtual std::vector<double> getState() const;
+	virtual std::vector<double> getPoseState() const;
 	virtual std::vector<double> getLLCState();
 	virtual std::vector<double> getImitationState() const;
 	virtual std::vector<double> getImitationStateAtTime(double animTime);

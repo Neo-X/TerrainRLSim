@@ -153,8 +153,13 @@ class TerrainRLSimWrapper(gym.Env):
                 ob_high = np.array((np.prod(self._visual_state[0].shape) * len(self._visual_state)) * [1])
                 self.observation_space = Box(low=ob_low, high=ob_high)
             else:
-                ob_low = np.array([-1] * self.getEnv().getObservationSpaceSize())
-                ob_high = np.array([1] * self.getEnv().getObservationSpaceSize())
+                if ("pose_only_state" in self._config
+                        and (self._config["pose_only_state"] == True)):
+                    ob_low = np.array([-1] * len(self.getEnv().getPoseState()))
+                    ob_high = np.array([1] * len(self.getEnv().getPoseState()))
+                else:
+                    ob_low = np.array([-1] * self.getEnv().getObservationSpaceSize())
+                    ob_high = np.array([1] * self.getEnv().getObservationSpaceSize())
             self.observation_space = Box(low=np.array(ob_low), high=np.array(ob_high))
             
         self.init()
@@ -352,7 +357,11 @@ class TerrainRLSimWrapper(gym.Env):
                 and ("use_dual_state_representations" in self._config
                      and (self._config["use_dual_state_representations"] == True))):
                     ob_ = []
-                    ob = self._sim.getState()
+                    if ("pose_only_state" in self._config
+                        and (self._config["pose_only_state"] == True)):
+                        ob = self._sim.getPoseState()
+                    else:
+                        ob = self._sim.getState()
                     # ob = np.reshape(np.array(ob), (-1, len(ob)))
                     ob_.append(ob)
                     ob = np.array(self.getVisualState())

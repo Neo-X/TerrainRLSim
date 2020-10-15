@@ -948,6 +948,44 @@
 		"include_arms_in_mirror": "true"
     }
 },
+"PD_Humanoid3D_MutliChar_ScenarioSpace_10_OnlyVel_SimpleReward_v1": 
+{
+	"config_file": "./args/genbiped3D/scenarioSpaceCrowdWithObsOnlyVel.txt",
+	"time_limit": 256,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Use a different rotation representation for the policy learning state [quaternion|axisangle|euler]",
+    	"terrain_file": "data/terrain/dynamicCharacters3D_ScenarioSpace.txt",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"use_simple_reward": "true",
+    	"use_simple_distance_reward": "true",
+    		"comment__": "Number of characters in the simulation in addition to the default character",
+    	"num_characters": "9",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
+    		"comment__": "Randomly add forces to the links of the agent",
+    	"enable_rand_perturbs": "false",
+    	"character_file": "data/characters/humanoid3d_colourful2.txt",
+		"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
+		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt",
+		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt",
+    	"enable_rand_projectiles": "false",
+			"comment__": "Setting for how much to preterb the agent, these are added to random links",
+    	"perturb_time_min": "2.0",
+		"perturb_time_max": "3.0",
+		"min_perturb":  "20",
+		"max_perturb": "50",
+		"min_pertrub_duration": "0.1",
+		"max_perturb_duration": "0.2",
+		"projectile_frequency": "0.01",
+		"include_arms_in_mirror": "true"
+    }
+},
 "PD_Humanoid3D_MutliChar_ConcentricCircle_5_OnlyVel_SimpleReward_v3": 
 {
 	"config_file": "./args/genbiped3D/concentricCircleCrowdOnlyVel.txt",
@@ -963,6 +1001,44 @@
     	"use_simple_reward": "true",
     		"comment__": "Number of characters in the simulation in addition to the default character",
     	"num_characters": "4",
+    		"comment__": "Change the location of the target position if the agent reaches the target",
+    	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
+    		"comment__": "Randomly add forces to the links of the agent",
+    	"enable_rand_perturbs": "false",
+    	"character_file": "data/characters/humanoid3d_colourful2.txt",
+		"motion_file": "data/motions/humanoid3d_walk_wrap.txt",
+		"state_file": "data/states/humanoid3d_sim_walk_state_wrist.txt",
+		"kin_ctrl_file": "data/controllers/humanoid3d/mocap_step_ctrl0.txt",
+    	"enable_rand_projectiles": "false",
+			"comment__": "Setting for how much to preterb the agent, these are added to random links",
+    	"perturb_time_min": "2.0",
+		"perturb_time_max": "3.0",
+		"min_perturb":  "20",
+		"max_perturb": "50",
+		"min_pertrub_duration": "0.1",
+		"max_perturb_duration": "0.2",
+		"projectile_frequency": "0.01",
+		"include_arms_in_mirror": "true"
+    		
+    }
+},
+"PD_Humanoid3D_MutliChar_ConcentricCircle_10_OnlyVel_SimpleReward_v3": 
+{
+	"config_file": "./args/genbiped3D/concentricCircleCrowdOnlyVel.txt",
+	"time_limit": 256,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Use a different rotation representation for the policy learning state [quaternion|axisangle|euler]",
+    	"terrain_file": "data/terrain/dynamicCharacters3D_Obs_0.txt",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"use_simple_reward": "true",
+    		"comment__": "Number of characters in the simulation in addition to the default character",
+    	"num_characters": "9",
     		"comment__": "Change the location of the target position if the agent reaches the target",
     	"create_new_goals": "true",
     		"comment__": "Use a repulsive reward penalty when agents get close together.",
@@ -1036,6 +1112,8 @@
     	"use_simple_reward": "true",
     		"comment__": "Change the location of the target position if the agent reaches the target",
     	"create_new_goals": "true",
+    		"comment__": "Use a repulsive reward penalty when agents get close together.",
+    	"use_repulsive_reward": "true",
     		"comment__": "Number of characters in the simulation in addition to the default character",
     	"num_characters": "4",
     		"comment__": "Change the location of the target position if the agent reaches the target",
@@ -1058,7 +1136,7 @@
 		"include_arms_in_mirror": "true"
     }
 },
-"PD_Humanoid3D_MutliChar_BottleNeck_WithObstacles_OnlyVel_SimpleReward_v0": 
+"PD_Humanoid3D_MutliChar_BottleNeck_WithObstacles_10_OnlyVel_SimpleReward_v0": 
 {
 	"config_file": "./args/genbiped3D/bottleneckWithObsOnlyVel.txt",
 	"time_limit": 256,
@@ -1076,7 +1154,7 @@
     		"comment__": "Use a repulsive reward penalty when agents get close together.",
     	"use_repulsive_reward": "true",
     		"comment__": "Number of characters in the simulation in addition to the default character",
-    	"num_characters": "4",
+    	"num_characters": "9",
     		"comment__": "Change the location of the target position if the agent reaches the target",
     	"create_new_goals": "true",
     		"comment__": "Use a repulsive reward penalty when agents get close together.",
@@ -7989,6 +8067,52 @@
     "resize_image": [1, 48, 48],
     "camera_zoom_noise": [-0.50, -0.2],
     "add_img_noise": false
+},
+"PD_Dog_2D_GRF_Viz3D_48x48_Imitate_30FPS_DualState_PoseOnly_v1": 
+{
+	"config_file": "./args/imitation/pd/dog2d_imitate_eval_flat.txt",
+	"time_limit": 256,
+	"control_return": false,
+	"process_visual_data": true,
+		"comment__": "Number of times the action is updated per second, fps",
+	"action_fps": 30,
+		"comment__": "Number of subsampled pose images taken between action updates",
+	"timestep_subsampling": 1,
+		"comment__": "Area that will be clipped from the rendering using glReadPixels [x, y, width, height]",
+	"image_clipping_area": [32, 29, 64, 64],
+		"comment__": "Amount of downsampling that will be done to the image",
+	"downsample_image": [1, 1, 1],
+		"comment__": "Whether or not to convert the image to grayscale",
+	"convert_to_greyscale": true,
+		"comment__" : "Whether or not to collect imitation visual data as well (skip for efficiency)",
+	"also_imitation_visual_data": true,
+		"comment__": "Enable headless rendering",
+	"headless_render": true,
+	    "comment__": "Mix different state discription types, used for debugging visual imitation learning",
+    "use_dual_state_representations": true,
+		"comment__": "Parameters that are for the TerrainRL simulation directly",
+    "TerrainRL_Parameters":
+    {	
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "true",
+    		"comment__": "Type of controller to use, controls the environment state",
+    	"char_ctrl": "ct_pd_grf",
+    		"comment__": "Amount to change the caracter zoom focus.",
+    	"camera_zoom": "0.30",
+    		"comment__": "Use viz eval scenario",
+    	"scenario": "imitate_viz_eval",
+    	    "comment__": "Use simple DeepLoco HLC reward function",
+        "render_mode": "3d"
+    },
+    	"comment__": "Include the camera velocity on the end of the state",
+    "append_camera_velocity_state": true,
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["c", "k", "j"],
+    "resize_window": [128,128],
+    "resize_image": [1, 48, 48],
+    "camera_zoom_noise": [-0.50, -0.2],
+    "add_img_noise": false,
+    "pose_only_state": true
 },
 "PD_Raptor_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1": 
 {

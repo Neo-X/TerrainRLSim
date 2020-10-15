@@ -1447,6 +1447,17 @@ std::vector<double> cSimAdapter::getState() const
 
 }
 
+std::vector<double> cSimAdapter::getPoseState() const
+{
+	Eigen::VectorXd state;
+	const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();
+	std::shared_ptr<cTerrainRLCharController> controller =  std::static_pointer_cast< cTerrainRLCharController >(char_->GetController());
+	controller->BuildPoliStatePose(state);
+	std::vector<double> out(state.data(), state.data() + state.rows() * state.cols());
+	return out;
+}
+
+
 std::vector<double> cSimAdapter::getLLCState()
 {
 
