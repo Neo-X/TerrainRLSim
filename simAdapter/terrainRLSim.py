@@ -431,6 +431,12 @@ class TerrainRLSimWrapper(gym.Env):
         """
             Adding multi character support
         """
+        if ("process_visual_data" in self._config
+            and (self._config["process_visual_data"] == True)):
+            info_ = {}
+            info_["agent_obs_before"] = self.getVisualState()[0]
+            if (self._config["also_imitation_visual_data"]):
+                info_["expert_obs_before"] = self.getImitationVisualState()[0]
         # action = action[0]
         action = np.array(action, dtype="float64")
         # print ("step action: ", action)
@@ -472,6 +478,15 @@ class TerrainRLSimWrapper(gym.Env):
         info = {}
         if (self._render):
             info['rendering'] = np.array(self.getViewData() * 255, dtype='uint8')
+            
+        if ("process_visual_data" in self._config
+            and (self._config["process_visual_data"] == True)):
+            info["agent_pos"] = self._sim.getState()
+            info["agent_obs"] = self.getVisualState()[0]
+            if (self._config["also_imitation_visual_data"]):
+                info["expert_pos"] = self.getImitationState()
+                info["expert_obs"] = self.getImitationVisualState()[0]
+            info.update(info_)
         
         return self.checkState(ob), self.checkState(reward), self._done, info
         
