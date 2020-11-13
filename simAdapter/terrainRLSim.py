@@ -628,16 +628,22 @@ class TerrainRLSimWrapper(gym.Env):
         from skimage.measure import block_reduce
         from skimage.transform import rescale, resize, downscale_local_mean
         ### Get pixel data from view
-        img = np.array(self.getEnv().getPixels(self._config["image_clipping_area"][0],
+        if ("image_clipping_area" in self._config):
+            img = np.array(self.getEnv().getPixels(self._config["image_clipping_area"][0],
                            self._config["image_clipping_area"][1], 
                            self._config["image_clipping_area"][2], 
                            self._config["image_clipping_area"][3]))
+        else:
+            img = np.array(self.getEnv().getPixels(0,
+                               0, 
+                               800, 
+                               450))
         # assert(np.sum(img) > 0.0)
         ### reshape into image, colour last
         if ("skip_reshape" in self._config and
             (self._config["skip_reshape"] == True)):
             pass
-        else:
+        elif ("image_clipping_area" in self._config):
             # print ("img shape:", img.shape)
             img = np.reshape(img, (self._config["image_clipping_area"][3], 
                                self._config["image_clipping_area"][2], 3)) / 255.0
@@ -655,7 +661,8 @@ class TerrainRLSimWrapper(gym.Env):
             noise_ = np.random.randn(*(img.shape)) * self._config['add_img_noise']
             img = img + noise_
         ### convert to greyscale
-        if (self._config["convert_to_greyscale"]):
+        if ("convert_to_greyscale" in self._config and 
+            self._config["convert_to_greyscale"]):
             img = np.mean(img, axis=2)
         # assert(np.sum(img) > 0.0)
         ### Still not sure why this is upside down.
