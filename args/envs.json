@@ -8191,6 +8191,45 @@
     "resize_image": [1, 48, 48],
     "camera_zoom_noise": [-0.50, -0.2],
     "add_img_noise": false
+},
+"PD_Biped3D_Cliff_v0": 
+{
+	"config_file": "./args/humanoid3D/LLC_waypoint_symetric_step_controller.txt",
+	"time_limit": 512,
+	"TerrainRL_Parameters":
+    {	
+    	"scenario": "imitate_viz_eval",
+    		"comment__": "Specific controller type to use",
+    	"char_ctrl": "ct_pd",
+    	"InitialPaddingWidth": "0.7",
+    	"terrain_file": "data/terrain/cliff_humanoid.txt"
+    },
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["c", "k", "j"],
+    		"comment__": "Area that will be clipped from the rendering using glReadPixels [x, y, width, height]",
+	"image_clipping_area": [365, 190, 64, 64],
+		"comment__": "Amount of downsampling that will be done to the image",
+	"downsample_image": [1, 1, 1]
+	
+},
+"PD_Biped3D_Treadmill_v0": 
+{
+	"config_file": "./args/humanoid3D/LLC_waypoint_symetric_step_controller.txt",
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    	"scenario": "imitate_viz_eval",
+    		"comment__": "Specific controller type to use",
+    	"char_ctrl": "ct_pd",
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"terrain_file": "data/terrain/threadmill.txt"
+    },
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["c", "k", "j"],
+    		"comment__": "Area that will be clipped from the rendering using glReadPixels [x, y, width, height]",
+	"image_clipping_area": [365, 190, 64, 64],
+		"comment__": "Amount of downsampling that will be done to the image",
+	"downsample_image": [1, 1, 1]
 }
 
 }
