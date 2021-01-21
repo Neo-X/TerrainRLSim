@@ -44,7 +44,7 @@ export PATH=[PREMAKE_DIR]:$PATH
 
 ### Build Instructions
 
-1. Download the most recent compressed external file from the [newest release](https://github.com/xbpeng/DeepLoco/releases/tag/0.81). 
+1. Download the most recent compressed external file from the [newest release](https://github.com/UBCMOCCA/TerrainRLSim/releases/). 
 1. Extract it and move into the TerrainRL directory. The top directory of the TerrainRL repository should now contain a directory called `external`, in addition to all the other directories that were there before.
 1. *If you are using an OS other and Ubuntu 16.04 64-bit* build the source code for caffe that came in the `external` directory.
 	```
