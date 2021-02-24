@@ -182,6 +182,9 @@ class TerrainRLSimWrapper(gym.Env):
         if (mode == "rgb_array"):
             return self.getFullViewData()
         
+    def set_render(self, mode):
+        print ("terrainrl sim set render mode: ", mode)
+        
     def updateAction(self, action):
         # print ("step action: ", action)
         if (self._sim.getNumAgents() > 1): ### Multi Character simulation

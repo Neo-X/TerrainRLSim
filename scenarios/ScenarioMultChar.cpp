@@ -318,9 +318,11 @@ double cScenarioMultChar::CalcReward()
 					double dist__2 = (mChar->GetRootPos() - other_agent->GetRootPos()).squaredNorm();
 					if ( dist__2 < 3.0)
 					{
-						tVector groundVelocity = mChar->CalcCOMVel().normalized();
-						tVector groundVelocity2 = other_agent->CalcCOMVel().normalized();
-						double relativeAngle = groundVelocity.dot(groundVelocity2) - 1.0;
+						tVector groundVelocity = mChar->CalcCOMVel();
+						groundVelocity[0] = groundVelocity[0] + 0.0001;
+						tVector groundVelocity2 = other_agent->CalcCOMVel();
+						groundVelocity2[0] = groundVelocity2[0] - 0.0001;
+						double relativeAngle = groundVelocity.normalized().dot(groundVelocity2.normalized()) - 1.0;
 						reward = reward - (0.5 + ((3.0 - dist__2)*relativeAngle));
 						// std::cout << "close collision: " << dist__2 << " at angle: " << relativeAngle << " penalty: " << reward << std::endl;
 					}
@@ -428,16 +430,17 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 			tVector curr_com = char_->CalcCOM();
 			// std::cout << "curr_com: " << curr_com.transpose() << std::endl;
 			tVector com_delta = curr_com - prev_com;
-			// std::cout << "com_delta: " << com_delta.transpose() << std::endl;
+//			std::cout << "com_delta: " << com_delta.transpose() << std::endl;
+			com_delta[0] = com_delta[0] + 0.0001; // TO avoid numerical erros when agents don't move yet.
 			tVector target_delta = _TargetPos - prev_com;
 			// std::cout << "target_delta: " << target_delta.transpose() << std::endl;
 			com_delta[1] = 0;
 			target_delta[1] = 0;
 			tVector target_dir = target_delta.normalized();
-			// std::cout << "target_dir: " << target_dir.transpose() << std::endl;
+//			 std::cout << "target_dir: " << target_dir.transpose() << std::endl;
 
 			double avg_vel = target_dir.dot(com_delta);
-			// std::cout << "avg_vel: " << avg_vel << std::endl;
+//			 std::cout << "avg_vel: " << avg_vel << std::endl;
 			avg_vel /= time_elapsed;
 			double vel_err = std::min(0.0, avg_vel - target_speed);
 			double target_dist_threshold = GetTargetResetDist();
@@ -446,7 +449,7 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 				vel_err = 0;
 			}
 			vel_err *= vel_err;
-			// std::cout << "vel_err: " << vel_err << std::endl;
+//			 std::cout << "vel_err: " << vel_err << std::endl;
 
 			eStance stance = GetStance();
 			int stance_foot_id = GetStanceFootJoint(stance);
@@ -454,13 +457,13 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 			const tVector& step_pos = _StepPlan.mStepPos0;
 			tVector step_delta = step_pos - stance_foot_pos;
 			double step_err = step_delta.squaredNorm();
-			// std::cout << "step_err: " << step_err << std::endl;
+//			 std::cout << "step_err: " << step_err << std::endl;
 
 			double heading = char_->CalcHeading();
 			double tar_heading = _StepPlan.mRootHeading;
 			double heading_err = std::abs(tar_heading - heading);
 			heading_err = std::min(2 * M_PI - heading_err, heading_err);
-			// std::cout << "heading_err: " << heading_err << std::endl;
+//			 std::cout << "heading_err: " << heading_err << std::endl;
 
 			double vel_reward = std::exp(-vel_scale * vel_err);
 			//vel_reward = (avg_vel > 0) ? vel_reward : 0;
@@ -468,13 +471,13 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 			double heading_reward = 0.5 * (std::cos(heading_err) + 1);
 			heading_reward = std::pow(heading_reward, 4);
 
-			// std::cout << "vel_reward: " << vel_reward <<
-			// 		" step_reward: " << step_reward <<
-			// 		" heading_reward: " << heading_reward << std::endl;
+//			std::cout << "vel_reward: " << vel_reward <<
+//			 		" step_reward: " << step_reward <<
+//			 		" heading_reward: " << heading_reward << std::endl;
 
 			reward = vel_w * vel_reward + step_w * step_reward + heading_w * heading_reward
 					+ fixed_w;
-			// std::cout << "agent: " << agent << " reward: " << reward << std::endl;
+//			 std::cout << "agent: " << agent << " reward: " << reward << std::endl;
 			// Path following metric
 			if (mUseSimpleReward)
 			{
@@ -489,7 +492,7 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 				if (agentDatas[agent+1].reachedTarget)
 				{
 					reward = reward + mReachTargetBonus;
-					// std::cout << "Agent reached target: " << reward  << std::endl;
+//					 std::cout << "Agent reached target: " << reward  << std::endl;
 					agentDatas[agent+1].reachedTarget = false;
 				}
 			} else if (mUseSimpleDistanceReward)
@@ -517,20 +520,28 @@ double cScenarioMultChar::calcRewardForAgent(size_t agent)
 					if ( dist__s < 3.0
 							&& (agent  != ag ))
 					{
-						tVector groundVelocity = char_->CalcCOMVel().normalized();
-						tVector groundVelocity2 = other_agent->CalcCOMVel().normalized();
-						double relativeAngle = groundVelocity.dot(groundVelocity2) - 1.0;
-						reward = reward - (0.5 + ((3.0 - dist__s)*relativeAngle));
+						tVector groundVelocity = char_->CalcCOMVel();
+						groundVelocity[0] = groundVelocity[0] + 0.0001;
+						tVector groundVelocity2 = other_agent->CalcCOMVel();
+						groundVelocity2[0] = groundVelocity2[0] - 0.0001;
+						double relativeAngle = groundVelocity.normalized().dot(groundVelocity2.normalized()) - 1.0;
+						double repulse_cost = (0.5 + ((3.0 - dist__s)*relativeAngle));
+//						std::cout << "repulse_cost " << repulse_cost << std::endl;
+						reward = reward - repulse_cost;
 					}
 
 				}
 				double dist__2 = (char_->GetRootPos() - mChar->GetRootPos()).squaredNorm();
 				if ( dist__2 < 3.0)
 				{
-					tVector groundVelocity = mChar->CalcCOMVel().normalized();
-					tVector groundVelocity2 = char_->CalcCOMVel().normalized();
-					double relativeAngle = groundVelocity.dot(groundVelocity2) - 1.0;
-					reward = reward - (0.5 + ((3.0 - dist__2)*relativeAngle));
+					tVector groundVelocity = char_->CalcCOMVel();
+					groundVelocity[0] = groundVelocity[0] + 0.0001;
+					tVector groundVelocity2 = mChar->CalcCOMVel();
+					groundVelocity2[0] = groundVelocity2[0] - 0.0001;
+					double relativeAngle = groundVelocity.normalized().dot(groundVelocity2.normalized()) - 1.0;
+					double repulse_cost = (0.5 + ((3.0 - dist__2)*relativeAngle));
+//					std::cout << "repulse_cost2 " << repulse_cost << std::endl;
+					reward = reward - repulse_cost;
 				}
 				/// check collisions with obstacles
 				if (true)
