@@ -195,6 +195,8 @@ void cScenarioExpImitateTarget::ParseArgs(const std::shared_ptr<cArgParser>& par
 	parser->ParseDouble("rand_target_pos_time_min", mRandTargetPosTimeMin);
 	parser->ParseDouble("rand_target_pos_time_max", mRandTargetPosTimeMax);
 	parser->ParseDouble("target_reset_dist", mTargetResetDist);
+	parser->ParseBool("enable_rand_target_pos", mEnableRandTargetPos);
+
 }
 
 void cScenarioExpImitateTarget::Init()
@@ -263,6 +265,12 @@ bool cScenarioExpImitateTarget::CheckResetTarget() const
 	bool reset_target = (mRandTargetPosTimer <= 0)
 						|| (dist < dist_threshold * dist_threshold);
 	//|| root_pos[0] + dist_threshold > tar_pos[0]; // hack
+
+//	std::cout << "reset_target " << reset_target <<
+//			", dist_threshold " << dist_threshold <<
+//			", dist " << dist <<
+//			", mTargetPos " << mTargetPos <<
+//			", root_pos " << root_pos << std::endl;
 
 	return reset_target;
 }
@@ -371,6 +379,7 @@ void cScenarioExpImitateTarget::UpdateTargetController()
 void cScenarioExpImitateTarget::UpdateTargetPos(double time_elapsed)
 {
 	bool reset_target = false;
+//	std::cout << "reset_target " << reset_target <<  ", EnabledRandTargetPos " << EnabledRandTargetPos() << std::endl ;
 	if (EnabledRandTargetPos())
 	{
 		mRandTargetPosTimer -= time_elapsed;

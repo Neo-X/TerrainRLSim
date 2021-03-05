@@ -19,9 +19,9 @@
 
 double cScenarioExpImitateStep::CalcRewardStep(const cBipedStepController3D::tStepPlan& step_plan) const
 {
-	double pose_w = 0.5;
+	double pose_w = 0.45;
 	double vel_w = 0.05;
-	double end_eff_w = 0.2;
+	double end_eff_w = 0.25;
 	double root_w = 0.1;
 	double com_w = 0.1;
 	double heading_w = 0.1;
@@ -499,13 +499,30 @@ void cScenarioExpImitateStep::SwatchEndEffectorPose(const std::vector<int>& end_
 
 bool cScenarioExpImitateStep::HasFallen() const
 {
-	bool fallen = cScenarioExpImitateTarget::HasFallen();
+	bool fallen = false;
+	fallen |= cScenarioExpImitateTarget::HasFallen();
 
-#if defined(ENABLE_STEP_FAIL)
-	fallen |= mStepFail;
-#endif
+//#if defined(ENABLE_STEP_FAIL)
+//	fallen |= mStepFail;
+//#endif
+
+	const tVector& step_pos = mStepPlan.mStepPos0;
+	tVector root_pos = mChar->GetRootPos();
+	root_pos[1] = 0.0; // project onto the ground
+	double dist = (step_pos - root_pos).squaredNorm();
+	if ( dist >  mTargetResetDist)
+	{
+		fallen |= true;
+	}
+//	std::cout << " mTargetResetDist " << mTargetResetDist <<
+//			" fallen " << fallen << std::endl;
 
 	return fallen;
+}
+
+bool cScenarioExpImitateStep::endOfEpoch() const
+{
+	return this->HasFallen();
 }
 
 void cScenarioExpImitateStep::PostSubstepUpdate(double time_step)
