@@ -506,14 +506,14 @@ bool cScenarioExpImitateStep::HasFallen() const
 //	fallen |= mStepFail;
 //#endif
 
-	const tVector& step_pos = mStepPlan.mStepPos0;
-	tVector root_pos = mChar->GetRootPos();
-	root_pos[1] = 0.0; // project onto the ground
-	double dist = (step_pos - root_pos).squaredNorm();
-	if ( dist >  mTargetResetDist)
-	{
-		fallen |= true;
-	}
+//	const tVector& step_pos = mStepPlan.mStepPos0;
+//	tVector root_pos = mChar->GetRootPos();
+//	root_pos[1] = 0.0; // project onto the ground
+//	double dist = (step_pos - root_pos).squaredNorm();
+//	if ( dist >  mTargetResetDist)
+//	{
+//		fallen |= true;
+//	}
 //	std::cout << " mTargetResetDist " << mTargetResetDist <<
 //			" fallen " << fallen << std::endl;
 
@@ -609,6 +609,16 @@ void cScenarioExpImitateStep::UpdateStepPlan(double time_step, bool force_update
 #if !defined(ENABLE_MOTION_FIELD)
 		SyncKinChar();
 #endif
+
+		const tVector& step_pos = mStepPlan.mStepPos0;
+		tVector root_pos = mChar->GetRootPos();
+		root_pos[1] = 0.0; // project onto the ground
+		double dist = (step_pos - root_pos).squaredNorm();
+		if ( dist >  mTargetResetDist)
+		{
+			ResetStepPlan();
+			return;
+		}
 
 		tVector old_pos = mStepPlan.mStepPos0;
 		tVector next_pos = mStepPlan.mStepPos1;
