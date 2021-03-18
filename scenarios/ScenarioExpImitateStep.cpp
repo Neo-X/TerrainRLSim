@@ -506,14 +506,14 @@ bool cScenarioExpImitateStep::HasFallen() const
 //	fallen |= mStepFail;
 //#endif
 
-//	const tVector& step_pos = mStepPlan.mStepPos0;
-//	tVector root_pos = mChar->GetRootPos();
-//	root_pos[1] = 0.0; // project onto the ground
-//	double dist = (step_pos - root_pos).squaredNorm();
-//	if ( dist >  mTargetResetDist)
-//	{
-//		fallen |= true;
-//	}
+	const tVector& step_pos = mStepPlan.mStepPos0;
+	tVector root_pos = mChar->GetRootPos();
+	root_pos[1] = 0.0; // project onto the ground
+	double dist = (step_pos - root_pos).squaredNorm();
+	if ( dist >  mTargetResetDist)
+	{
+		fallen |= true;
+	}
 //	std::cout << " mTargetResetDist " << mTargetResetDist <<
 //			" fallen " << fallen << std::endl;
 
