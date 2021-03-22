@@ -490,6 +490,7 @@ class TerrainRLSimWrapper(gym.Env):
                 info["expert_pos"] = self.getImitationState()
                 info["expert_obs"] = self.getImitationVisualState()[0]
             info.update(info_)
+        info["success"] = self.checkSuccess()
         
         return self.checkState(ob), self.checkState(reward), self._done, info
         
@@ -500,6 +501,14 @@ class TerrainRLSimWrapper(gym.Env):
             self._sim.reload()
             print ("Found obs nan")
         return state
+    
+    def checkSuccess(self):
+        if "success_distance" in self._config:
+            a = self._sim.calcCOM()
+#             print ("a.CalcCOM(): ", a)
+            return a[0] > self._config["success_distance"]
+        else:
+            return False
         
     def calcRewardForAgent(self, a):
         return self._sim.calcRewardForAgent(a)

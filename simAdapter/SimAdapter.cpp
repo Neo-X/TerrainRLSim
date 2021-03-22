@@ -1291,6 +1291,14 @@ double cSimAdapter::calcVelocity() const
 	return char_->GetRootVel()(0);
 }
 
+std::vector<double> cSimAdapter::calcCOM() const
+{
+	const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();
+	tVector state = char_->CalcCOM();
+	std::vector<double> out(state.data(), state.data() + state.rows() * state.cols());
+	return out;
+}
+
 std::vector<double> cSimAdapter::calcVelocity3D() const
 {
 	const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();

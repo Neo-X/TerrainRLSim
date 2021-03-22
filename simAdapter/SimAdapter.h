@@ -244,6 +244,7 @@ public:
 	virtual double calcReward();
 	virtual double calcVelocity() const;
 	virtual std::vector<double> calcVelocity3D() const;
+	virtual std::vector<double> calcCOM() const;
 	virtual bool hasStumbled();
 	virtual double jointTorque();
 
