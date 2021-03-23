@@ -34,7 +34,10 @@ if __name__ == '__main__':
                     import matplotlib.pyplot as plt
                     # img_ = viewData
 #                     viewData = viewData - viewImitateData
-                    img_ = np.reshape(viewData, (48, 48, 3))
+                    if env._config["convert_to_greyscale"]:
+                        img_ = np.reshape(viewData, env._config["resize_image"][-2:])
+                    else:
+                        img_ = np.reshape(viewData, env._config["resize_image"][-2:] + (3,))
 #                     img_ = env.render(mode="rgb_array")
 #                     noise = np.random.normal(loc=0, scale=0.02, size=img_.shape)
 #                     img_ = img_ + noise
@@ -46,7 +49,10 @@ if __name__ == '__main__':
 
                     if (True):                    
                         img__ = viewImitateData
-                        img__ = np.reshape(viewImitateData, (48, 48, 3))
+                        if env._config["convert_to_greyscale"]:
+                            img__ = np.reshape(viewImitateData, env._config["resize_image"][-2:])
+                        else:
+                            img__ = np.reshape(viewImitateData, env._config["resize_image"][-2:] + (3,))
                         fig2 = plt.figure(2)
                         img__ = np.concatenate((img_, img__), axis=1)
                         plt.imshow(img__, origin='lower')
