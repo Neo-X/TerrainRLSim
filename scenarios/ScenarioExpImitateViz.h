@@ -32,6 +32,7 @@ protected:
 	std::shared_ptr<cKinCharacter> mKinChar;
 	Eigen::VectorXd mJointWeights;
 	bool mEnableRandStateReset;
+	bool mEnableRandMorphReset;
 
 	virtual void CalcJointWeights(const std::shared_ptr<cSimCharacter>& character, Eigen::VectorXd& out_weights) const;
 	virtual void SetupControllerParams(cTerrainRLCtrlFactory::tCtrlParams& out_params) const;

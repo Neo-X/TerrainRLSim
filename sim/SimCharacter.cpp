@@ -165,6 +165,11 @@ const Eigen::MatrixXd& cSimCharacter::GetDrawShapeDefs() const
 	return mDrawShapeDefs;
 }
 
+void cSimCharacter::SetDrawShapeDefs(size_t row, cKinTree::tDrawShapeDef curr_def)
+{
+	mDrawShapeDefs.row(row) = curr_def;
+}
+
 void cSimCharacter::SetRootPos(const tVector& pos)
 {
 	cCharacter::SetRootPos(pos);

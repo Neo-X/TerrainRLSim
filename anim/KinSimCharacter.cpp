@@ -373,6 +373,12 @@ const Eigen::MatrixXd& cKinSimCharacter::GetDrawShapeDefs() const
 {
 	return mDrawShapeDefs;
 }
+
+void cKinSimCharacter::SetDrawShapeDefs(size_t row, cKinTree::tDrawShapeDef curr_def)
+{
+	mDrawShapeDefs.row(row) = curr_def;
+}
+
 size_t cKinSimCharacter::GetNumBodyParts() const
 {
 	return mBodyParts.size();

@@ -5,6 +5,7 @@
 #include "sim/CtPhaseController.h"
 #include "sim/WaypointController.h"
 #include "anim/KinSimCharacter.h"
+#include "anim/KinTree.h"
 
 //#define ENABLE_MAX_POSE_ERR
 //#define ENABLE_HEADING_REWARD
@@ -170,6 +171,7 @@ cScenarioExpImitateViz::cScenarioExpImitateViz()
 {
 	mMotionFile = "";
 	mEnableRandStateReset = true;
+	mEnableRandMorphReset = false;
 	mCharParams.mEnableFallDist = false;
 	mCharParams.mEnableSoftContact = false;
 	/// default reward weights
@@ -199,6 +201,7 @@ void cScenarioExpImitateViz::ParseArgs(const std::shared_ptr<cArgParser>& parser
 		mMotionFile = fpath + mMotionFile;
 	}
 	parser->ParseBool("enable_rand_state_reset", mEnableRandStateReset);
+	parser->ParseBool("enable_rand_morph_reset", mEnableRandMorphReset);
 	succ = parser->ParseDouble("pose_weight", _pose_w);
 	succ = parser->ParseDouble("pose_velocity_weight", _vel_w);
 	succ = parser->ParseDouble("end_effector_weight", _end_eff_w);
@@ -359,6 +362,28 @@ void cScenarioExpImitateViz::ResetKinChar()
 			// std::cout << "New time warping: " << new_timing << std::endl;
 			SetTimeWarping(new_timing);
 		}
+	}
+	if (mEnableRandMorphReset)
+	{
+		// Change the colour of every link for the rendered agent
+		std::cout << "Changing link colours." << std::endl;
+
+		auto& shape_defs = mChar->GetDrawShapeDefs();
+		size_t num_shapes = shape_defs.rows();
+
+//		cDrawUtil::SetLineWidth(1);
+		for (int i = 0; i < num_shapes; ++i)
+		{
+			cKinTree::tDrawShapeDef curr_def = mChar->GetDrawShapeDefs().row(i);
+			curr_def[cKinTree::eDrawShapeColorR] = mRand.RandDouble(0, 1.0);
+			curr_def[cKinTree::eDrawShapeColorG] = mRand.RandDouble(0, 1.0);
+			curr_def[cKinTree::eDrawShapeColorB] = mRand.RandDouble(0, 1.0);
+			mChar->SetDrawShapeDefs(i, curr_def);
+//			shape_defs.row(i)[cKinTree::eDrawShapeColorG];
+			//tVector col = tVector(def(eBodyColorR), def(eBodyColorG), def(eBodyColorB), def(eBodyColorA));
+//			cDrawCharacter::DrawShape(character, curr_def, fill_tint, line_col);
+		}
+
 	}
 }
 
