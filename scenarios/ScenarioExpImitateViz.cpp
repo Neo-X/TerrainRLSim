@@ -366,7 +366,7 @@ void cScenarioExpImitateViz::ResetKinChar()
 	if (mEnableRandMorphReset)
 	{
 		// Change the colour of every link for the rendered agent
-		std::cout << "Changing link colours." << std::endl;
+//		std::cout << "Changing link colours." << std::endl;
 
 		auto& shape_defs = mChar->GetDrawShapeDefs();
 		size_t num_shapes = shape_defs.rows();
@@ -375,10 +375,12 @@ void cScenarioExpImitateViz::ResetKinChar()
 		for (int i = 0; i < num_shapes; ++i)
 		{
 			cKinTree::tDrawShapeDef curr_def = mChar->GetDrawShapeDefs().row(i);
+//			std::cout << "cKinTree::eDrawShapeColorR before: " << mChar->GetDrawShapeDefs().row(i)[cKinTree::eDrawShapeColorR] << std::endl;
 			curr_def[cKinTree::eDrawShapeColorR] = mRand.RandDouble(0, 1.0);
 			curr_def[cKinTree::eDrawShapeColorG] = mRand.RandDouble(0, 1.0);
 			curr_def[cKinTree::eDrawShapeColorB] = mRand.RandDouble(0, 1.0);
 			mChar->SetDrawShapeDefs(i, curr_def);
+//			std::cout << "cKinTree::eDrawShapeColorR after: " << mChar->GetDrawShapeDefs().row(i)[cKinTree::eDrawShapeColorR] << std::endl;
 //			shape_defs.row(i)[cKinTree::eDrawShapeColorG];
 			//tVector col = tVector(def(eBodyColorR), def(eBodyColorG), def(eBodyColorB), def(eBodyColorA));
 //			cDrawCharacter::DrawShape(character, curr_def, fill_tint, line_col);

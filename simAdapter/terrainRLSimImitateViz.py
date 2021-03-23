@@ -31,7 +31,7 @@ if __name__ == '__main__':
     
     for e in range(10):
         
-        for t in range(100):
+        for t in range(10):
             vizData = env.getVisualState()
             vizImitateData = env.getImitationVisualState()
             for vd in range(len(vizData)):

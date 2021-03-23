@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_2_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Dog_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=True)
+    env = terrainRLSim.getEnv(env_name="PD_Humanoid_Morph_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=True)
     
     # env.reset()
     actionSpace = env.getActionSpace()
@@ -20,33 +20,33 @@ if __name__ == '__main__':
     
     for e in range(5):
         
-        for t in range(10):
+        for t in range(5):
             vizData = env.getVisualState()
             vizImitateData = env.getImitationVisualState()
             for vd in range(len(vizData)):
                 # print("viewData: ", viewData)
-                viewData = vizData[vd][:2304]
-                viewImitateData = vizImitateData[vd][:2304]
+                viewData = vizData[vd][:-3] ## remove cam velocity
+                viewImitateData = vizImitateData[vd][:-3]
                 ## Get and vis terrain data
                 if (True):
                     import matplotlib
                     matplotlib.use('Agg')
                     import matplotlib.pyplot as plt
                     # img_ = viewData
-                    viewData = viewData - viewImitateData
-                    img_ = np.reshape(viewData, (48,48))
-                    img_ = env.render(mode="rgb_array")
+#                     viewData = viewData - viewImitateData
+                    img_ = np.reshape(viewData, (48, 48, 3))
+#                     img_ = env.render(mode="rgb_array")
 #                     noise = np.random.normal(loc=0, scale=0.02, size=img_.shape)
 #                     img_ = img_ + noise
                     print("img_ shape", img_.shape, " sum: ", np.sum(viewData))
-                    fig1 = plt.figure(1)
-                    plt.imshow(img_, origin='lower')
-                    plt.title("visual Data: " +  str(vd))
-                    fig1.savefig("char_viz_state_"+str(e)+"_"+str(t)+".svg")
+#                     fig1 = plt.figure(1)
+#                     plt.imshow(img_, origin='lower')
+#                     plt.title("visual Data: " +  str(vd))
+#                     fig1.savefig("char_viz_state_"+str(e)+"_"+str(t)+".svg")
 
                     if (True):                    
                         img__ = viewImitateData
-                        img__ = np.reshape(viewImitateData, (48, 48))
+                        img__ = np.reshape(viewImitateData, (48, 48, 3))
                         fig2 = plt.figure(2)
                         img__ = np.concatenate((img_, img__), axis=1)
                         plt.imshow(img__, origin='lower')
