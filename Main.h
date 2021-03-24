@@ -55,7 +55,9 @@
 
 #include "util/BVHReader.h"
 #include "util/MotionDB.h"
-#  include <GL/glut.h>
+#ifdef USE_OpenGLES
+#include <GL/glut.h>
+#endif
 #include <GL/freeglut_ext.h>
 
 //#define USE_OpenGLES
