@@ -329,13 +329,38 @@
     	"comment__": "Flatten the output observation",
     "flatten_observation": true,
 	"comment__": "Use a forward velocity reward computed in the python code",    
-    "use_forward_vel_reward": true,
+    "use_forward_vel_reward": false,
     	"comment__": "MultiTask config",
     "multitask_config":
     {
     	"type": "terrainvel",
     		"comment__": "A mapping from task id to terrain and target velocity.",
     	"task_goal": [-2, -1.8, -1.6, -1.4, -1.2, -1.0, -0.8, -0.6, -0.4, -0.2, -0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0]
+    }
+},
+"PD_Biped2D_MultiTask_Terrain-v1":
+{
+	"config_file": "./args/genBiped2D/biped2d_full_twotask.txt",
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"render_mode": "3d",
+    		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
+    	"enable_rand_state_reset": "false"
+    },
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["k", "j"],
+    	"comment__": "Flatten the output observation",
+    "flatten_observation": true,
+	"comment__": "Use a forward velocity reward computed in the python code",    
+    "use_forward_vel_reward": false,
+    	"comment__": "MultiTask config",
+    "multitask_config":
+    {
+    	"type": "terrainRand",
+    		"comment__": "A mapping from task id to terrain and target velocity.",
+    	"task_goal": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     }
 },
 "PD_Biped2D_Flat-v2": 
