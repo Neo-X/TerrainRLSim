@@ -506,7 +506,7 @@ class TerrainRLSimWrapper(gym.Env):
         if "success_distance" in self._config:
             a = self._sim.calcCOM()
 #             print ("a.CalcCOM(): ", a)
-            return a[0] > self._config["success_distance"]
+            return a[0] > self._config["success_distance"] * self._target_vel
         else:
             return False
         
@@ -915,6 +915,7 @@ class TerrainRLSimWrapper(gym.Env):
     
     def set_task(self, id):
         # print ("task id: ", id, type(id))
+        self._task_id = id
         if "multitask_config" in self._config:
             if (self._config["multitask_config"]["type"] == "vel"):
                 assert id < len(self._config["multitask_config"]["task_goal"])
