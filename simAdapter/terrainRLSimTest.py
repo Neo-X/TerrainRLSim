@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Imitate_60FPS_Torque_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz3D_FixedStart_64x64_1Sub_Imitate_30FPS_MultiModal_DualState_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid1_3D_Run_Phase_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Biped3D_Pedistal_v3", render=True)
+    env = terrainRLSim.getEnv(env_name="PD_Humanoid3D_MutliChar_ConcentricCircle_WithObs_OnlyVel_SimpleReward_v1", render=True)
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
