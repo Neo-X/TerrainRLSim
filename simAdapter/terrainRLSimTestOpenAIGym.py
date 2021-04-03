@@ -8,7 +8,7 @@ import time
 
 if __name__ == '__main__':
 
-    env = gym.make("PD_Biped2D_MultiTask_TerrainVel_Render-v0")
+    env = gym.make("PD_Biped2D_Gaps_Terrain-v0")
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         numTasks = env.getNumTasks()
         print ("Number of tasks: ", numTasks)
         task_id = np.random.randint(0,numTasks)
-        env.set_task(task_id)
+        env.set_task(0)
         print ("task_id: ", task_id)
         env.reset()
         for t in range(2):
