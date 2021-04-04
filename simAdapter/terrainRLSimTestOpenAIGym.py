@@ -37,7 +37,7 @@ if __name__ == '__main__':
         numTasks = env.getNumTasks()
         print ("Number of tasks: ", numTasks)
         task_id = np.random.randint(0,numTasks)
-        env.set_task(task_id)
+        env.set_task(0)
         print ("task_id: ", task_id)
         env.reset()
         for t in range(100):
@@ -59,10 +59,10 @@ if __name__ == '__main__':
                     plt.imshow(img_, origin='lower')
                     plt.title("visual Data: ")
                     fig1.savefig("render_view_"+str(e)+"_"+str(t)+".png")
-#             print ("Done: ", done)
-#             print("Reward: ", reward)
-            states = np.array(observation)
+            print("Reward: ", reward)
+#             states = np.array(observation)
 #             print("states shape ", np.array(states).shape)
+            print ("info: ", info)
             if ( done ):
                 break
             """

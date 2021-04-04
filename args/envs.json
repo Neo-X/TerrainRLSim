@@ -28,7 +28,12 @@
 "PD_Biped2D_Gaps_Terrain-v0": 
 {
 	"config_file": "./args/genBiped2D/biped2d_full_gaps_with_terrain_features.txt",
-	"time_limit": 256
+	"time_limit": 256,
+	"TerrainRL_Parameters":
+    {	
+    		"comment__": "Use simple DeepLoco HLC reward function",
+    	"render_mode": "3d"
+    }
 },
 "PD_Biped2D_Cliff_v0": 
 {
@@ -347,7 +352,9 @@
     		"comment__": "Use simple DeepLoco HLC reward function",
     	"render_mode": "3d",
     		"comment__": "Whether or not the initial pose for the character should be sampled from the mocap data",
-    	"enable_rand_state_reset": "false"
+    	"enable_rand_state_reset": "false",
+    		"comment__": "The type of scenario class to use.",
+    	"scenario": "imitate_viz_eval"
     },
     	"comment__": "Key Presses that change some of the rendered parts of the simulation",
     "rendering_key_presses": ["k", "j"],
@@ -361,7 +368,8 @@
     	"type": "terrainRand",
     		"comment__": "A mapping from task id to terrain and target velocity.",
     	"task_goal": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-    }
+    },
+    "success_distance": 2.0
 },
 "PD_Biped2D_Flat-v2": 
 {
