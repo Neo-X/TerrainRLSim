@@ -2572,5 +2572,6 @@ project "TerrainRL_Optimizer"
 		}
 
 
+dofile( "./simAdapter/tinyrenderer/premake4-dev.lua")
 dofile( "./simAdapter/premake4-dev.lua")
 

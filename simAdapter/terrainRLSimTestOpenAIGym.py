@@ -8,7 +8,7 @@ import time
 
 if __name__ == '__main__':
 
-    env = gym.make("PD_Biped2D_MultiTask_TerrainVel_Render-v0")
+    env = gym.make("PD_Biped2D_MultiTask_Terrain-v0")
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -33,14 +33,14 @@ if __name__ == '__main__':
     print("Actions space max: ", env.action_space.high)
     
     
-    for e in range(20):
+    for e in range(50):
         numTasks = env.getNumTasks()
         print ("Number of tasks: ", numTasks)
         task_id = np.random.randint(0,numTasks)
         env.set_task(task_id)
         print ("task_id: ", task_id)
         env.reset()
-        for t in range(2):
+        for t in range(100):
             action = env.action_space.sample()
             observation, reward,  done, info = env.step(action)
             # env.getImitationState()
@@ -59,10 +59,10 @@ if __name__ == '__main__':
                     plt.imshow(img_, origin='lower')
                     plt.title("visual Data: ")
                     fig1.savefig("render_view_"+str(e)+"_"+str(t)+".png")
-            print ("Done: ", done)
-            print("Reward: ", reward)
+#             print ("Done: ", done)
+#             print("Reward: ", reward)
             states = np.array(observation)
-            print("states shape ", np.array(states).shape)
+#             print("states shape ", np.array(states).shape)
             if ( done ):
                 break
             """
