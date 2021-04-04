@@ -8,7 +8,7 @@ import time
 
 if __name__ == '__main__':
 
-    env = gym.make("PD_Biped2D_Gaps_Terrain-v0")
+    env = gym.make("PD_Biped2D_MultiTask_Terrain-v0")
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -61,8 +61,9 @@ if __name__ == '__main__':
                     fig1.savefig("render_view_"+str(e)+"_"+str(t)+".png")
             print ("Done: ", done)
             print("Reward: ", reward)
-            states = np.array(observation)
-            print("states shape ", np.array(states).shape)
+#             states = np.array(observation)
+#             print("states shape ", np.array(states).shape)
+            print ("info: ", info)
             if ( done ):
                 break
             """
