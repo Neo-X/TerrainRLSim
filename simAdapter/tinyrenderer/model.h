@@ -19,6 +19,7 @@ private:
     void load_texture(const std::string filename, const std::string suffix, TGAImage &img);
 public:
     Model(const std::string filename);
+    Model();
     int nverts() const;
     int nfaces() const;
     vec3 normal(const int iface, const int nthvert) const;  // per triangle corner normal vertex

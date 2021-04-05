@@ -1257,34 +1257,9 @@ std::vector<unsigned char> cSimAdapter::getPixels(size_t x_start, size_t y_start
 
 std::vector<unsigned char> cSimAdapter::getPixels2(size_t x_start, size_t y_start, size_t width, size_t height)
 {
-	// drawAgent = true;
-	// drawObject = false;
-	// draw();
-	// std::vector<std::vector<std::vector<unsigned char> > > out(height,
-	// 		std::vector<std::vector<unsigned char> >(width,
-	// 				std::vector<unsigned char>(3, 0)));
-	// std::vector<unsigned char> out;
-	size_t num_pixels = 3*width*height;
-	std::vector<unsigned char> out(num_pixels, 0);
-	unsigned char m_pixels[num_pixels];
-	glReadPixels(x_start, y_start, width, height,
-			GL_RGB,GL_UNSIGNED_BYTE, (GLvoid *) out.data());
-			// GL_RGB,GL_UNSIGNED_BYTE, (GLvoid *) m_pixels);
-/*
-	for (size_t h = 0; h < height; h ++)
-	{
-		for (size_t w = 0; w < width; w ++)
-		{
-			for (size_t c = 0; c < 3; c ++)
-			{
-				// col.push_back(m_pixels[(c * width * height) + (h*height) + w]);
-				// 						gets row  gets column   get colour
-
-				out[h][w][c] = m_pixels[(h*(width*3)) + (w*3) + c];
-			}
-		}
-	}
-*/
+	std::vector<unsigned char> out;
+	this->tinyRender->render();
+	out = this->tinyRender->getPixels();
 	return out;
 }
 

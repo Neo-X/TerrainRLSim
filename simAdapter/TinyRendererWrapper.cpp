@@ -6,6 +6,7 @@
  */
 
 #include "TinyRendererWrapper.h"
+#include <memory>
 
 
 cTinyRendererWrapper::cTinyRendererWrapper() {
@@ -21,6 +22,8 @@ cTinyRendererWrapper::cTinyRendererWrapper() {
 
 //	extern mat<4,4> ModelView; // "OpenGL" state matrices
 //	extern mat<4,4> Projection;
+//	zbuffer(width*height, -std::numeric_limits<double>::max()); // note that the z-buffer is initialized with minimal possible values
+//	framebuffer(width, height, TGAImage::RGB); // the output image
 
 }
 
@@ -30,6 +33,22 @@ cTinyRendererWrapper::~cTinyRendererWrapper() {
 
 
 void cTinyRendererWrapper::init()
+{
+}
+
+void cTinyRendererWrapper::setScene(std::shared_ptr<cScenarioSimChar> scene)
+{
+	this->scenario = scene;
+}
+
+//void cTinyRendererWrapper::render(vec3 light_dir, vec3 eye, vec3 center, vec3 up)
+void cTinyRendererWrapper::render()
+{
+
+
+}
+
+std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 {
 	std::vector<double> zbuffer(width*height, -std::numeric_limits<double>::max()); // note that the z-buffer is initialized with minimal possible values
 	TGAImage framebuffer(width, height, TGAImage::RGB); // the output image
@@ -47,7 +66,13 @@ void cTinyRendererWrapper::init()
 //			triangle(clip_vert, shader, framebuffer, zbuffer); // actual rasterization routine call
 //		}
 //	}
+	addBoxToScene();
 	framebuffer.write_tga_file("framebuffer.tga"); // the vertical flip is moved inside the function
+	return framebuffer.buffer();
 //	return 0;
+
 }
+
+
+
 

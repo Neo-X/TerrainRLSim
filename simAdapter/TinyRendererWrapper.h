@@ -13,6 +13,9 @@
 #include <iostream>
 #include "tinyrenderer/model.h"
 #include "tinyrenderer/our_gl.h"
+#include <memory>
+#include "scenarios/Scenario.h"
+#include "scenarios/ScenarioSimChar.h"
 //#include "tinyrenderer/geometry.h"
 
 /*
@@ -38,6 +41,16 @@ public:
 
 	mat<4,4> ModelView; // "OpenGL" state matrices
 	mat<4,4> Projection;
+
+	virtual void render();
+	virtual std::vector<unsigned char> getPixels();
+
+	virtual void setScene(std::shared_ptr<cScenarioSimChar> scene);
+	virtual void addBoxToScene();
+
+	std::shared_ptr<cScenarioSimChar> scenario;
+	std::vector<double> zbuffer; // note that the z-buffer is initialized with minimal possible values
+	TGAImage framebuffer; // the output image
 };
 
 struct Shader : IShader {
