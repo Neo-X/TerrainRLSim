@@ -38,7 +38,7 @@ project "tinyRenderer"
 	}
 
 	-- targetdir "./"
-	buildoptions("-std=c++0x -O3 -ggdb -fPIC" )	
+	buildoptions("-std=c++14 -O3 -ggdb -fPIC" )	
 
 	-- linux library cflags and libs
 	configuration { "linux", "gmake" }

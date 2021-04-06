@@ -989,6 +989,8 @@ void cSimAdapter::init()
 //	gCamera.SetFocus(focus);
 
 //	this->reshapeScreen(100, 100);
+
+	tinyRender->setScene(this->_scene);
 }
 
 void cSimAdapter::initEpoch()

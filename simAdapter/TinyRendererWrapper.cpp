@@ -9,6 +9,7 @@
 #include <memory>
 
 
+
 cTinyRendererWrapper::cTinyRendererWrapper() {
 	// TODO Auto-generated constructor stub
 
@@ -59,20 +60,40 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 //	for (int m=1; m<argc; m++) { // iterate through all input objects
 //		Model model(argv[m]);
 //		Shader shader(model);
-//		for (int i=0; i<model.nfaces(); i++) { // for every triangle
-//			vec4 clip_vert[3]; // triangle coordinates (clip coordinates), written by VS, read by FS
-//			for (int j=0; j<3; j++)
-//				clip_vert[j] = shader.vertex(i, j); // call the vertex shader for each triangle vertex
-//			triangle(clip_vert, shader, framebuffer, zbuffer); // actual rasterization routine call
-//		}
+	const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();
+	char_->
+	const auto& shape_defs = character.GetDrawShapeDefs();
+	size_t num_shapes = shape_defs.rows();
+
+//	cDrawUtil::SetLineWidth(1);
+//	for (int i = 0; i < num_shapes; ++i)
+//	{
+	cKinTree::tDrawShapeDef curr_def = shape_defs.row(0);
+//	cDrawCharacter::DrawShape(character, curr_def, fill_tint, line_col);
+//	}
+//	for (int i=0; i<model.nfaces(); i++) { // for every triangle
+//		vec4 clip_vert[3]; // triangle coordinates (clip coordinates), written by VS, read by FS
+//		for (int j=0; j<3; j++)
+//			clip_vert[j] = shader.vertex(i, j); // call the vertex shader for each triangle vertex
+//		triangle(clip_vert, shader, framebuffer, zbuffer); // actual rasterization routine call
+//	}
 //	}
 	addBoxToScene();
 	framebuffer.write_tga_file("framebuffer.tga"); // the vertical flip is moved inside the function
-	return framebuffer.buffer();
+	std::vector<unsigned char> out;
+	for (size_t i = 0; i < width * height * 3; i ++)
+	{
+		out.push_back(framebuffer.buffer()[i]);
+	}
+	return out;
 //	return 0;
 
 }
 
 
+void cTinyRendererWrapper::addBoxToScene()
+{
+
+}
 
 
