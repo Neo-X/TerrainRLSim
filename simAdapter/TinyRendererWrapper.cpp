@@ -16,10 +16,10 @@ cTinyRendererWrapper::cTinyRendererWrapper() {
 	width  = 800; // output image size
 	height = 800;
 
-	light_dir = vec3(1,1,1); // light source
-	eye = vec3(1,1,3); // camera position
-	center = vec3(0,0,0); // camera direction
-	up = vec3(0,1,0); // camera up vector
+	light_dir = TinyRender::Vec3f(1,1,1); // light source
+	eye = TinyRender::Vec3f(1,1,3); // camera position
+	center = TinyRender::Vec3f(0,0,0); // camera direction
+	up = TinyRender::Vec3f(0,1,0); // camera up vector
 
 //	extern mat<4,4> ModelView; // "OpenGL" state matrices
 //	extern mat<4,4> Projection;
@@ -53,9 +53,9 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 {
 	std::vector<double> zbuffer(width*height, -std::numeric_limits<double>::max()); // note that the z-buffer is initialized with minimal possible values
 	TGAImage framebuffer(width, height, TGAImage::RGB); // the output image
-	lookat(eye, center, up);                            // build the ModelView matrix
-	viewport(width/8, height/8, width*3/4, height*3/4); // build the Viewport matrix
-	projection(-1.f/(eye-center).norm());               // build the Projection matrix
+	TinyRender::lookat(eye, center, up);                            // build the ModelView matrix
+	TinyRender::viewport(width/8, height/8, width*3/4, height*3/4); // build the Viewport matrix
+	TinyRender::projection(-1.f/(eye-center).norm());               // build the Projection matrix
 
 //	for (int m=1; m<argc; m++) { // iterate through all input objects
 //		Model model(argv[m]);
@@ -94,6 +94,147 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 void cTinyRendererWrapper::addBoxToScene()
 {
 
+	const tVector pos = tVector(0,0,0,0);
+	const tVector size = tVector(1,2,3,0);
+	const tVector tex_coord_min = tVector::Zero();
+	const tVector tex_coord_max = tVector::Ones();
+
+	const int num_faces = 6;
+	const int pos_len = num_faces * 6 * 3;
+	const int coord_len = num_faces * 6 * 3;
+
+
+	tVector sw0 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+	tVector se0 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+	tVector ne0 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+	tVector nw0 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+
+	tVector sw1 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+	tVector se1 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+	tVector ne1 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+	tVector nw1 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+
+
+	if( size[1]>1)
+	{
+		sw0 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.0 * size[1]  , pos[2] - 0.5 * size[2], 0);
+		se0 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.0 * size[1] , pos[2] - 0.5 * size[2], 0);
+		ne0 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+		nw0 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+
+		sw1 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.0 * size[1], pos[2] + 0.5 * size[2], 0);
+		se1 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.0 * size[1], pos[2] + 0.5 * size[2], 0);
+		ne1 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+		nw1 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+	}
+
+
+	const float pos_data[pos_len] = {
+		ne0[0], ne0[1], ne0[2], // top
+		nw0[0], nw0[1], nw0[2],
+		nw1[0], nw1[1], nw1[2],
+		nw1[0], nw1[1], nw1[2],
+		ne1[0], ne1[1], ne1[2],
+		ne0[0], ne0[1], ne0[2],
+
+		se1[0], se1[1], se1[2],  // bottom
+		sw1[0], sw1[1], sw1[2],
+		sw0[0], sw0[1], sw0[2],
+		sw0[0], sw0[1], sw0[2],
+		se0[0], se0[1], se0[2],
+		se1[0], se1[1], se1[2],
+
+		se1[0], se1[1], se1[2], // front
+		se0[0], se0[1], se0[2],
+		ne0[0], ne0[1], ne0[2],
+		ne0[0], ne0[1], ne0[2],
+		ne1[0], ne1[1], ne1[2],
+		se1[0], se1[1], se1[2],
+
+		sw0[0], sw0[1], sw0[2], // back
+		sw1[0], sw1[1], sw1[2],
+		nw1[0], nw1[1], nw1[2],
+		nw1[0], nw1[1], nw1[2],
+		nw0[0], nw0[1], nw0[2],
+		sw0[0], sw0[1], sw0[2],
+
+		sw0[0], sw0[1], sw0[2], // left
+		nw0[0], nw0[1], nw0[2],
+		ne0[0], ne0[1], ne0[2],
+		ne0[0], ne0[1], ne0[2],
+		se0[0], se0[1], se0[2],
+		sw0[0], sw0[1], sw0[2],
+
+		se1[0], se1[1], se1[2], // right
+		ne1[0], ne1[1], ne1[2],
+		nw1[0], nw1[1], nw1[2],
+		nw1[0], nw1[1], nw1[2],
+		sw1[0], sw1[1], sw1[2],
+		se1[0], se1[1], se1[2]
+	};
+
+	const float coord_data[coord_len] = {
+		tex_coord_min[0], tex_coord_min[2], // top
+		tex_coord_max[0], tex_coord_min[2],
+		tex_coord_max[0], tex_coord_max[2],
+		tex_coord_max[0], tex_coord_max[2],
+		tex_coord_min[0], tex_coord_max[2],
+		tex_coord_min[0], tex_coord_min[2],
+
+		tex_coord_max[0], tex_coord_min[2], // bottom
+		tex_coord_max[0], tex_coord_max[2],
+		tex_coord_min[0], tex_coord_max[2],
+		tex_coord_min[0], tex_coord_max[2],
+		tex_coord_min[0], tex_coord_min[2],
+		tex_coord_max[0], tex_coord_min[2],
+
+		tex_coord_min[0], tex_coord_min[1], // front
+		tex_coord_max[0], tex_coord_min[1],
+		tex_coord_max[0], tex_coord_max[1],
+		tex_coord_max[0], tex_coord_max[1],
+		tex_coord_min[0], tex_coord_max[1],
+		tex_coord_min[0], tex_coord_min[1],
+
+		tex_coord_min[0], tex_coord_min[1], // back
+		tex_coord_max[0], tex_coord_min[1],
+		tex_coord_max[0], tex_coord_max[1],
+		tex_coord_max[0], tex_coord_max[1],
+		tex_coord_min[0], tex_coord_max[1],
+		tex_coord_min[0], tex_coord_min[1],
+
+		tex_coord_max[2], tex_coord_min[1], // left
+		tex_coord_max[2], tex_coord_max[1],
+		tex_coord_min[2], tex_coord_max[1],
+		tex_coord_min[2], tex_coord_max[1],
+		tex_coord_min[2], tex_coord_min[1],
+		tex_coord_max[2], tex_coord_min[1],
+
+		tex_coord_max[2], tex_coord_min[1], // right
+		tex_coord_max[2], tex_coord_max[1],
+		tex_coord_min[2], tex_coord_max[1],
+		tex_coord_min[2], tex_coord_max[1],
+		tex_coord_min[2], tex_coord_min[1],
+		tex_coord_max[2], tex_coord_min[1]
+	};
+
+
+//	tAttribInfo attr_info;
+//	attr_info.mAttribNumber = cMeshUtil::eAttributePosition;
+//	attr_info.mAttribSize = sizeof(pos_data[0]);
+//	attr_info.mDataOffset = 0;
+//	attr_info.mDataStride = 0;
+//	attr_info.mNumComp = cMeshUtil::gPosDim;
+//	gBoxSolidMesh->LoadVBuffer(attr_info.mAttribNumber, sizeof(float) * pos_len, (GLubyte*)pos_data, 0, 1, &attr_info);
+//
+//	attr_info.mAttribNumber = cMeshUtil::eAttributeCoord;
+//	attr_info.mAttribSize = sizeof(coord_data[0]);
+//	attr_info.mDataOffset = 0;
+//	attr_info.mDataStride = 0;
+//	attr_info.mNumComp = cMeshUtil::gCoordDim;
+//	gBoxSolidMesh->LoadVBuffer(attr_info.mAttribNumber, sizeof(float) * coord_len, (GLubyte*)coord_data, 0, 1, &attr_info);
+//
+//	setMatricesFromStack();
+//	gBoxSolidMesh->Draw(gl_mode);
 }
 
 

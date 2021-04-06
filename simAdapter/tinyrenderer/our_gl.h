@@ -3,15 +3,25 @@
 #include "tgaimage.h"
 #include "geometry.h"
 
-void viewport(const int x, const int y, const int w, const int h);
-void projection(const double coeff=0); // coeff = -1/c
-void lookat(const vec3 eye, const vec3 center, const vec3 up);
+namespace TinyRender
+{
+Matrix viewport(int x, int y, int w, int h);
+Matrix projection(float coeff = 0.f);  // coeff = -1/c
+Matrix lookat(Vec3f eye, Vec3f center, Vec3f up);
 
-struct IShader {
-    virtual vec4 vertex(const int iface, const int nthvert) = 0;
-    virtual bool fragment(const vec3 bar, TGAColor &color) = 0;
+struct IShader
+{
+	float m_nearPlane;
+	float m_farPlane;
+	virtual ~IShader();
+	virtual Vec4f vertex(int iface, int nthvert) = 0;
+	virtual bool fragment(Vec3f bar, TGAColor &color) = 0;
 };
 
-void triangle(const vec4 clip_verts[3], IShader &shader, TGAImage &image, std::vector<double> &zbuffer);
-#endif //__OUR_GL_H__
+void triangle(mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &viewPortMatrix);
+void triangle(mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, int *segmentationMaskBuffer, const Matrix &viewPortMatrix, int objectIndex);
+void triangleClipped(mat<4, 3, float> &clippedPts, mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &viewPortMatrix);
+void triangleClipped(mat<4, 3, float> &clippedPts, mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, int *segmentationMaskBuffer, const Matrix &viewPortMatrix, int objectIndex);
+}
 
+#endif  //__OUR_GL_H__
