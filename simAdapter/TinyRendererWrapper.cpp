@@ -60,9 +60,9 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 //	for (int m=1; m<argc; m++) { // iterate through all input objects
 //		Model model(argv[m]);
 //		Shader shader(model);
-	const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();
-	char_->
-	const auto& shape_defs = character.GetDrawShapeDefs();
+	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
+//	char_->
+	const auto& shape_defs = char_->GetDrawShapeDefs();
 	size_t num_shapes = shape_defs.rows();
 
 //	cDrawUtil::SetLineWidth(1);
