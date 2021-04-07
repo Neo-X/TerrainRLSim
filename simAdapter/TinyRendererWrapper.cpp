@@ -139,9 +139,9 @@ cTinyRendererWrapper::cTinyRendererWrapper() {
 	width  = 800; // output image size
 	height = 800;
 
-	light_dir = TinyRender::Vec3f(1,1,1); // light source
-	eye = TinyRender::Vec3f(1,1,3); // camera position
-	center = TinyRender::Vec3f(0,0,0); // camera direction
+	light_dir = TinyRender::Vec3f(0,0,-1); // light source
+	eye = TinyRender::Vec3f(0,1,3); // camera position
+	center = TinyRender::Vec3f(0,0,-1); // camera direction
 	up = TinyRender::Vec3f(0,1,0); // camera up vector
 
 //	extern mat<4,4> ModelView; // "OpenGL" state matrices
@@ -177,9 +177,9 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 {
 	std::vector<float> zbuffer(width*height, -std::numeric_limits<double>::max()); // note that the z-buffer is initialized with minimal possible values
 	TGAImage framebuffer(width, height, TGAImage::RGB); // the output image
-	TinyRender::lookat(eye, center, up);                            // build the ModelView matrix
+	ModelView = TinyRender::lookat(eye, center, up);                            // build the ModelView matrix
 	Matrix viewPort = TinyRender::viewport(width/8, height/8, width*3/4, height*3/4); // build the Viewport matrix
-	TinyRender::projection(-1.f/(eye-center).norm());               // build the Projection matrix
+	Projection = TinyRender::projection(-1.f/(eye-center).norm());               // build the Projection matrix
 
 //	for (int m=1; m<argc; m++) { // iterate through all input objects
 //		Model model(argv[m]);
@@ -211,10 +211,14 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 
 //	Shader shader(m_model, light_dir_local, light_color, modelViewMatrix, lightModelViewMatrix, Projection, lightViewMatrix, lightViewMatrix, localScaling, m_model->getColorRGBA(), width, height, shadowBufferPtr, 1, 1, 1);
 	Shader shader(*m_model, this);
+	std::cout << "Rendering: verts: " << m_model->nverts() << " faces: " << m_model->nfaces() << std::endl;
 	for (int i=0; i<m_model->nfaces(); i++) { // for every triangle
 		TinyRender::mat<4, 3, float> clip_vert; // triangle coordinates (clip coordinates), written by VS, read by FS
 		for (int j=0; j<3; j++)
+		{
+			std::cout << "face: " << i << " vert: " << j << std::endl;
 			clip_vert[j] = proj<3>(shader.vertex(i, j)); // call the vertex shader for each triangle vertex
+		}
 		triangle(clip_vert, shader, framebuffer, zbuffer.data(), viewPort); // actual rasterization routine call
 	}
 //	}
@@ -362,25 +366,26 @@ void cTinyRendererWrapper::addBoxToScene()
 	m_model->setColorRGBA(rgbaColor);
 
 
-	m_model->reserveMemory(pos_len/3, coord_len/3);
+	m_model->reserveMemory(pos_len/3, pos_len/9);
 
-	for (int i = 0; i < pos_len/3; i++)
+	for (int i = 0; i < pos_len; i+=3)
 	{
-		m_model->addVertex(pos_data[i * 3],
-				pos_data[i * 3 + 1],
-				pos_data[i * 3 + 2],
+		m_model->addVertex(pos_data[i],
+				pos_data[i + 1],
+				pos_data[i + 2],
 				1.0, //normal
 				1.0,
 				1.0,
 				0.5, // uv
 				0.5);
 	}
-	for (int i = 0; i < pos_len/3; i += 3)
+	for (int i = 0; i < m_model->nverts()/3; i += 3)
 	{
 		m_model->addTriangle(i, i, i,
 				i + 1, i + 1, i + 1,
 				i + 2, i + 2, i + 2); // They are given in order
 	}
+	std::cout << "verts: " << m_model->nverts() << " faces: " << m_model->nfaces() << std::endl;
 
 //	tAttribInfo attr_info;
 //	attr_info.mAttribNumber = cMeshUtil::eAttributePosition;

@@ -73,11 +73,26 @@ struct Shader : TinyRender::IShader {
 	    }
 
 	    virtual TinyRender::Vec4f vertex(const int iface, const int nthvert) {
-	        TinyRender::Vec4f gl_Vertex = TinyRender::embed<4>(model.vert(iface, nthvert));
+	    	std::cout << "Shader: iface: " << iface << " nthvert: " << nthvert << std::endl;
+			std::cout << "Shader: verts: " << model.nverts() << " faces: " << model.nfaces() << " normals: " << model.nnormals() << std::endl;
+			std::cout << "First face size:" << model.face(iface).size() << std::endl;
+			std::cout << "First face verts:" << model.face(iface)[0] << ", "<< model.face(iface)[1] << ", " << model.face(iface)[2] << std::endl;
+			std::cout << "First vertex size:" << model.vert(0)[0] << " model.normal(iface, nthvert)" << model.normal(iface, nthvert)[1] <<std::endl;
+//	        TinyRender::Vec4f gl_Vertex = TinyRender::embed<4>(model.vert(iface, nthvert));
+			TinyRender::Vec4f vert;
+			vert[0] = model.normal(iface, nthvert)[0];
+			vert[1] = model.normal(iface, nthvert)[1];
+			vert[2] = model.normal(iface, nthvert)[2];
+			vert[3] = 0.0f;
 	        varying_uv.set_col(nthvert, model.uv(iface, nthvert));
+	        TinyRender::Vec4f tmp = (renderer->Projection*renderer->ModelView).invert_transpose() * vert;
+	        TinyRender::Vec3f tmp2 = TinyRender::Vec3f(tmp[0], tmp[1], tmp[2]);
 	        varying_nrm.set_col(nthvert,
-	        		TinyRender::proj<3>((renderer->Projection*renderer->ModelView).invert_transpose()*gl_Vertex));
-	        gl_Vertex = renderer->Projection*renderer->ModelView*gl_Vertex;
+	        		tmp2);
+//	        				TinyRender::embed<4>(model.normal(iface, nthvert))));
+//	        				vert));
+	        vert[3] = 1.0f;
+			TinyRender::Vec4f gl_Vertex = renderer->Projection*renderer->ModelView*vert;
 	        ndc_tri.set_col(nthvert, TinyRender::proj<3>(gl_Vertex/gl_Vertex[3]));
 	        return gl_Vertex;
 	    }
