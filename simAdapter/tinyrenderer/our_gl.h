@@ -5,6 +5,7 @@
 
 namespace TinyRender
 {
+
 Matrix viewport(int x, int y, int w, int h);
 Matrix projection(float coeff = 0.f);  // coeff = -1/c
 Matrix lookat(Vec3f eye, Vec3f center, Vec3f up);
@@ -18,6 +19,7 @@ struct IShader
 	virtual bool fragment(Vec3f bar, TGAColor &color) = 0;
 };
 
+//void triangle(mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer);
 void triangle(mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &viewPortMatrix);
 void triangle(mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, int *segmentationMaskBuffer, const Matrix &viewPortMatrix, int objectIndex);
 void triangleClipped(mat<4, 3, float> &clippedPts, mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &viewPortMatrix);

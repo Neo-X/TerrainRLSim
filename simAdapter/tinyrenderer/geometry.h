@@ -6,6 +6,19 @@
 
 namespace TinyRender
 {
+
+template <class T>
+const T& b3Min(const T& a, const T& b)
+{
+	return a < b ? a : b;
+}
+
+template <class T>
+const T& b3Max(const T& a, const T& b)
+{
+	return a > b ? a : b;
+}
+
 template <size_t DimCols, size_t DimRows, typename T>
 class mat;
 

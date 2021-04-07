@@ -991,6 +991,7 @@ void cSimAdapter::init()
 //	this->reshapeScreen(100, 100);
 
 	tinyRender->setScene(this->_scene);
+	tinyRender->init();
 }
 
 void cSimAdapter::initEpoch()

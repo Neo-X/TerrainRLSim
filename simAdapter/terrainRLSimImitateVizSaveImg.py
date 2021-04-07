@@ -59,6 +59,13 @@ if __name__ == '__main__':
                         plt.title("visual Data: " +  str(vd))
                         fig2.savefig("char_viz_imitation_state_"+str(e)+"_"+str(t)+".svg")
                     plt.show()
+                    
+                    if (True):
+                        image = env._sim.getPixels2(0,0,0,0)
+                        image = np.reshape(image, (800,800,3))
+                        plt.imshow(image, origin='lower')
+                        plt.title("visual Data: " +  str(image))
+                        fig2.savefig("char_render2_"+str(e)+"_"+str(t)+".svg")
             observation, reward,  done, info = env.step(actions)
             imitationState = env.getImitationState()
             # print ("observation.shape: ", observation.shape)
