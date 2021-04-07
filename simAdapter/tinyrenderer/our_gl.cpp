@@ -83,6 +83,15 @@ Vec3d barycentric(Vec2f A1, Vec2f B1, Vec2f C1, Vec2f P1)
 	return Vec3d(-1., 1., 1.);  // in this case generate negative coordinates, it will be thrown away by the rasterizator
 }
 
+Vec3f barycentric(const Vec2f tri[3], const Vec2f P) {
+    mat<3,3, float> ABC;
+    ABC[0] = embed<3>(tri[0]);
+    ABC[1] = embed<3>(tri[1]);
+    ABC[2] = embed<3>(tri[2]);
+    if (ABC.det()<1e-3) return Vec3f(-1,1,1); // for a degenerate triangle generate negative coordinates, it will be thrown away by the rasterizator
+    return ABC.invert_transpose() * embed<3>(P);
+}
+
 void triangleClipped(mat<4, 3, float> &clipc, mat<4, 3, float> &orgClipc, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &viewPortMatrix)
 {
 	triangleClipped(clipc, orgClipc, shader, image, zbuffer, 0, viewPortMatrix, 0);
@@ -220,32 +229,32 @@ void triangle(mat<4, 3, float> &clipc, IShader &shader, TGAImage &image, float *
 	}
 }
 
-//void triangle(const Vec4f clip_verts[3], IShader &shader, TGAImage &image, std::vector<double> &zbuffer) {
-//	Vec4f pts[3]  = { Viewport*clip_verts[0],    Viewport*clip_verts[1],    Viewport*clip_verts[2]    };  // triangle screen coordinates before persp. division
-//    Vec2f pts2[3] = { proj<2>(pts[0]/pts[0][3]), proj<2>(pts[1]/pts[1][3]), proj<2>(pts[2]/pts[2][3]) };  // triangle screen coordinates after  perps. division
-//
-//    Vec2f bboxmin( std::numeric_limits<double>::max(),  std::numeric_limits<double>::max());
-//    Vec2f bboxmax(-std::numeric_limits<double>::max(), -std::numeric_limits<double>::max());
-//    Vec2f clamp(image.get_width()-1, image.get_height()-1);
-//    for (int i=0; i<3; i++)
-//        for (int j=0; j<2; j++) {
-//            bboxmin[j] = std::max(0.,       std::min(bboxmin[j], pts2[i][j]));
-//            bboxmax[j] = std::min(clamp[j], std::max(bboxmax[j], pts2[i][j]));
-//        }
-//#pragma omp parallel for
-//    for (int x=(int)bboxmin.x; x<=(int)bboxmax.x; x++) {
-//        for (int y=(int)bboxmin.y; y<=(int)bboxmax.y; y++) {
-//        	Vec3f bc_screen  = barycentric(pts2, Vec2f(x, y));
-//        	Vec3f bc_clip    = Vec3f(bc_screen.x/pts[0][3], bc_screen.y/pts[1][3], bc_screen.z/pts[2][3]);
-//            bc_clip = bc_clip/(bc_clip.x+bc_clip.y+bc_clip.z); // check https://github.com/ssloy/tinyrenderer/wiki/Technical-difficulties-linear-interpolation-with-perspective-deformations
-//            double frag_depth = Vec3f(clip_verts[0][2], clip_verts[1][2], clip_verts[2][2])*bc_clip;
-//            if (bc_screen.x<0 || bc_screen.y<0 || bc_screen.z<0 || zbuffer[x+y*image.get_width()]>frag_depth) continue;
-//            TGAColor color;
-//            bool discard = shader.fragment(bc_clip, color);
-//            if (discard) continue;
-//            zbuffer[x+y*image.get_width()] = frag_depth;
-//            image.set(x, y, color);
-//        }
-//    }
-//}
+void triangle2(const mat<4, 4, float> &clip_verts, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &Viewport) {
+	Vec4f pts[3]  = { Viewport*clip_verts[0],    Viewport*clip_verts[1],    Viewport*clip_verts[2]    };  // triangle screen coordinates before persp. division
+    Vec2f pts2[3] = { proj<2>(pts[0]/pts[0][3]), proj<2>(pts[1]/pts[1][3]), proj<2>(pts[2]/pts[2][3]) };  // triangle screen coordinates after  perps. division
+
+    Vec2f bboxmin( std::numeric_limits<double>::max(),  std::numeric_limits<double>::max());
+    Vec2f bboxmax(-std::numeric_limits<double>::max(), -std::numeric_limits<double>::max());
+    Vec2f clamp(image.get_width()-1, image.get_height()-1);
+    for (int i=0; i<3; i++)
+        for (int j=0; j<2; j++) {
+            bboxmin[j] = std::max(0.f,       std::min(bboxmin[j], pts2[i][j]));
+            bboxmax[j] = std::min(clamp[j], std::max(bboxmax[j], pts2[i][j]));
+        }
+#pragma omp parallel for
+    for (int x=(int)bboxmin.x; x<=(int)bboxmax.x; x++) {
+        for (int y=(int)bboxmin.y; y<=(int)bboxmax.y; y++) {
+        	Vec3f bc_screen  = barycentric(pts2, Vec2f(x, y));
+        	Vec3f bc_clip    = Vec3f(bc_screen.x/pts[0][3], bc_screen.y/pts[1][3], bc_screen.z/pts[2][3]);
+            bc_clip = bc_clip/(bc_clip.x+bc_clip.y+bc_clip.z); // check https://github.com/ssloy/tinyrenderer/wiki/Technical-difficulties-linear-interpolation-with-perspective-deformations
+            double frag_depth = Vec3f(clip_verts[0][2], clip_verts[1][2], clip_verts[2][2])*bc_clip;
+            if (bc_screen.x<0 || bc_screen.y<0 || bc_screen.z<0 || zbuffer[x+y*image.get_width()]>frag_depth) continue;
+            TGAColor color;
+            bool discard = shader.fragment(bc_clip, color);
+            if (discard) continue;
+            zbuffer[x+y*image.get_width()] = frag_depth;
+            image.set(x, y, color);
+        }
+    }
+}
 }

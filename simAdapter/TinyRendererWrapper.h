@@ -59,25 +59,33 @@ public:
 
 struct Shader : TinyRender::IShader {
 	    TinyRender::Model model;
-	    cTinyRendererWrapper * renderer;
+//	    std::shared_ptr<cTinyRendererWrapper> renderer;
+	    TinyRender::Matrix ModelView; // "OpenGL" state matrices
+		TinyRender::Matrix Projection;
+
 	    TinyRender::Vec3f l;               // light direction in normalized device coordinates
 	    TinyRender::mat<2,3, float> varying_uv;  // triangle uv coordinates, written by the vertex shader, read by the fragment shader
 	    TinyRender::mat<3,3, float> varying_nrm; // normal per vertex to be interpolated by FS
 	    TinyRender::mat<3,3, float> ndc_tri;     // triangle in normalized device coordinates
 
-	    Shader(const TinyRender::Model &m, cTinyRendererWrapper * renderer) : model(m) {
-	    	renderer = renderer;
-	    	float x = renderer->light_dir[0];
-	    	TinyRender::Vec4f l_dir = TinyRender::embed<4>(TinyRender::Vec3f(renderer->light_dir));
-	        l = TinyRender::proj<3>((renderer->Projection*renderer->ModelView*l_dir)).normalize(); // transform the light vector to the normalized device coordinates
+	    Shader(const TinyRender::Model &m, TinyRender::Matrix ModelView,
+	    		TinyRender::Matrix Projection, TinyRender::Vec3f light_dir) :
+	    	model(m),
+	    	ModelView(ModelView),
+			Projection(Projection)
+			{
+//	    	renderer = renderer;
+//	    	float x = renderer->light_dir[0];
+	    	TinyRender::Vec4f l_dir = TinyRender::embed<4>(TinyRender::Vec3f(light_dir));
+	        l = TinyRender::proj<3>((Projection*ModelView*l_dir)).normalize(); // transform the light vector to the normalized device coordinates
 	    }
 
 	    virtual TinyRender::Vec4f vertex(const int iface, const int nthvert) {
-	    	std::cout << "Shader: iface: " << iface << " nthvert: " << nthvert << std::endl;
-			std::cout << "Shader: verts: " << model.nverts() << " faces: " << model.nfaces() << " normals: " << model.nnormals() << std::endl;
-			std::cout << "First face size:" << model.face(iface).size() << std::endl;
-			std::cout << "First face verts:" << model.face(iface)[0] << ", "<< model.face(iface)[1] << ", " << model.face(iface)[2] << std::endl;
-			std::cout << "First vertex size:" << model.vert(0)[0] << " model.normal(iface, nthvert)" << model.normal(iface, nthvert)[1] <<std::endl;
+//	    	std::cout << "Shader: iface: " << iface << " nthvert: " << nthvert << std::endl;
+//			std::cout << "Shader: verts: " << model.nverts() << " faces: " << model.nfaces() << " normals: " << model.nnormals() << std::endl;
+//			std::cout << "First face size:" << model.face(iface).size() << std::endl;
+//			std::cout << "First face verts:" << model.face(iface)[0] << ", "<< model.face(iface)[1] << ", " << model.face(iface)[2] << std::endl;
+//			std::cout << "First vertex size:" << model.vert(0)[0] << " model.normal(iface, nthvert)" << model.normal(iface, nthvert)[1] <<std::endl;
 //	        TinyRender::Vec4f gl_Vertex = TinyRender::embed<4>(model.vert(iface, nthvert));
 			TinyRender::Vec4f vert;
 			vert[0] = model.normal(iface, nthvert)[0];
@@ -85,14 +93,19 @@ struct Shader : TinyRender::IShader {
 			vert[2] = model.normal(iface, nthvert)[2];
 			vert[3] = 0.0f;
 	        varying_uv.set_col(nthvert, model.uv(iface, nthvert));
-	        TinyRender::Vec4f tmp = (renderer->Projection*renderer->ModelView).invert_transpose() * vert;
+//	        std::cout << "vert: " << vert << std::endl;
+//	        std::cout << "renderer->Projection: " << Projection << std::endl;
+//	        std::cout << "renderer->ModelView: " << ModelView << std::endl;
+	        TinyRender::Matrix tmp_mi = (Projection*ModelView).invert_transpose();
+//	        std::cout << "tmp_mi: " << tmp_mi << std::endl;
+	        TinyRender::Vec4f tmp = tmp_mi * vert;
 	        TinyRender::Vec3f tmp2 = TinyRender::Vec3f(tmp[0], tmp[1], tmp[2]);
 	        varying_nrm.set_col(nthvert,
 	        		tmp2);
 //	        				TinyRender::embed<4>(model.normal(iface, nthvert))));
 //	        				vert));
 	        vert[3] = 1.0f;
-			TinyRender::Vec4f gl_Vertex = renderer->Projection*renderer->ModelView*vert;
+			TinyRender::Vec4f gl_Vertex = Projection*ModelView*vert;
 	        ndc_tri.set_col(nthvert, TinyRender::proj<3>(gl_Vertex/gl_Vertex[3]));
 	        return gl_Vertex;
 	    }

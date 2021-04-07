@@ -139,8 +139,8 @@ cTinyRendererWrapper::cTinyRendererWrapper() {
 	width  = 800; // output image size
 	height = 800;
 
-	light_dir = TinyRender::Vec3f(0,0,-1); // light source
-	eye = TinyRender::Vec3f(0,1,3); // camera position
+	light_dir = TinyRender::Vec3f(1,1,1); // light source
+	eye = TinyRender::Vec3f(1,1,3); // camera position
 	center = TinyRender::Vec3f(0,0,-1); // camera direction
 	up = TinyRender::Vec3f(0,1,0); // camera up vector
 
@@ -177,6 +177,7 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 {
 	std::vector<float> zbuffer(width*height, -std::numeric_limits<double>::max()); // note that the z-buffer is initialized with minimal possible values
 	TGAImage framebuffer(width, height, TGAImage::RGB); // the output image
+	framebuffer.clear();
 	ModelView = TinyRender::lookat(eye, center, up);                            // build the ModelView matrix
 	Matrix viewPort = TinyRender::viewport(width/8, height/8, width*3/4, height*3/4); // build the Viewport matrix
 	Projection = TinyRender::projection(-1.f/(eye-center).norm());               // build the Projection matrix
@@ -210,19 +211,20 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 //	float* shadowBufferPtr = 0;
 
 //	Shader shader(m_model, light_dir_local, light_color, modelViewMatrix, lightModelViewMatrix, Projection, lightViewMatrix, lightViewMatrix, localScaling, m_model->getColorRGBA(), width, height, shadowBufferPtr, 1, 1, 1);
-	Shader shader(*m_model, this);
+	Shader shader(*m_model, ModelView, Projection, light_dir);
 	std::cout << "Rendering: verts: " << m_model->nverts() << " faces: " << m_model->nfaces() << std::endl;
 	for (int i=0; i<m_model->nfaces(); i++) { // for every triangle
-		TinyRender::mat<4, 3, float> clip_vert; // triangle coordinates (clip coordinates), written by VS, read by FS
+		TinyRender::mat<4, 4, float> clip_vert; // triangle coordinates (clip coordinates), written by VS, read by FS
 		for (int j=0; j<3; j++)
 		{
 			std::cout << "face: " << i << " vert: " << j << std::endl;
-			clip_vert[j] = proj<3>(shader.vertex(i, j)); // call the vertex shader for each triangle vertex
+//			clip_vert[j] = proj<3>(shader.vertex(i, j)); // call the vertex shader for each triangle vertex
+			clip_vert[j] = (shader.vertex(i, j)); // call the vertex shader for each triangle vertex
 		}
-		triangle(clip_vert, shader, framebuffer, zbuffer.data(), viewPort); // actual rasterization routine call
+		triangle2(clip_vert, shader, framebuffer, zbuffer.data(), viewPort); // actual rasterization routine call
 	}
 //	}
-	addBoxToScene();
+//	addBoxToScene();
 	framebuffer.write_tga_file("framebuffer.tga"); // the vertical flip is moved inside the function
 	std::vector<unsigned char> out;
 	for (size_t i = 0; i < width * height * 3; i ++)
@@ -317,52 +319,9 @@ void cTinyRendererWrapper::addBoxToScene()
 		se1[0], se1[1], se1[2]
 	};
 
-	const float coord_data[coord_len] = {
-		tex_coord_min[0], tex_coord_min[2], // top
-		tex_coord_max[0], tex_coord_min[2],
-		tex_coord_max[0], tex_coord_max[2],
-		tex_coord_max[0], tex_coord_max[2],
-		tex_coord_min[0], tex_coord_max[2],
-		tex_coord_min[0], tex_coord_min[2],
-
-		tex_coord_max[0], tex_coord_min[2], // bottom
-		tex_coord_max[0], tex_coord_max[2],
-		tex_coord_min[0], tex_coord_max[2],
-		tex_coord_min[0], tex_coord_max[2],
-		tex_coord_min[0], tex_coord_min[2],
-		tex_coord_max[0], tex_coord_min[2],
-
-		tex_coord_min[0], tex_coord_min[1], // front
-		tex_coord_max[0], tex_coord_min[1],
-		tex_coord_max[0], tex_coord_max[1],
-		tex_coord_max[0], tex_coord_max[1],
-		tex_coord_min[0], tex_coord_max[1],
-		tex_coord_min[0], tex_coord_min[1],
-
-		tex_coord_min[0], tex_coord_min[1], // back
-		tex_coord_max[0], tex_coord_min[1],
-		tex_coord_max[0], tex_coord_max[1],
-		tex_coord_max[0], tex_coord_max[1],
-		tex_coord_min[0], tex_coord_max[1],
-		tex_coord_min[0], tex_coord_min[1],
-
-		tex_coord_max[2], tex_coord_min[1], // left
-		tex_coord_max[2], tex_coord_max[1],
-		tex_coord_min[2], tex_coord_max[1],
-		tex_coord_min[2], tex_coord_max[1],
-		tex_coord_min[2], tex_coord_min[1],
-		tex_coord_max[2], tex_coord_min[1],
-
-		tex_coord_max[2], tex_coord_min[1], // right
-		tex_coord_max[2], tex_coord_max[1],
-		tex_coord_min[2], tex_coord_max[1],
-		tex_coord_min[2], tex_coord_max[1],
-		tex_coord_min[2], tex_coord_min[1],
-		tex_coord_max[2], tex_coord_min[1]
-	};
 
 	m_model = std::shared_ptr<TinyRender::Model>(new TinyRender::Model());
-	float rgbaColor[4] = {0,0,1,1};
+	float rgbaColor[4] = {1,1,1,0};
 	m_model->setColorRGBA(rgbaColor);
 
 
@@ -373,13 +332,13 @@ void cTinyRendererWrapper::addBoxToScene()
 		m_model->addVertex(pos_data[i],
 				pos_data[i + 1],
 				pos_data[i + 2],
-				1.0, //normal
-				1.0,
+				0.0, //normal
+				0.0,
 				1.0,
 				0.5, // uv
 				0.5);
 	}
-	for (int i = 0; i < m_model->nverts()/3; i += 3)
+	for (int i = 0; i < m_model->nverts(); i += 3)
 	{
 		m_model->addTriangle(i, i, i,
 				i + 1, i + 1, i + 1,

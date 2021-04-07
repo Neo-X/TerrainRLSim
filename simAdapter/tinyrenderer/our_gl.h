@@ -19,7 +19,8 @@ struct IShader
 	virtual bool fragment(Vec3f bar, TGAColor &color) = 0;
 };
 
-//void triangle(mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer);
+void triangle2(const mat<4, 4, float> &clip_verts, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &Viewport);
+// void triangle2(const Vec4f clip_verts[3], IShader &shader, TGAImage &image, std::vector<double> &zbuffer, const Matrix Viewport);
 void triangle(mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &viewPortMatrix);
 void triangle(mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, int *segmentationMaskBuffer, const Matrix &viewPortMatrix, int objectIndex);
 void triangleClipped(mat<4, 3, float> &clippedPts, mat<4, 3, float> &pts, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &viewPortMatrix);
