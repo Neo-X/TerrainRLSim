@@ -140,7 +140,7 @@ cTinyRendererWrapper::cTinyRendererWrapper() {
 	height = 800;
 
 	light_dir = TinyRender::Vec3f(1,1,1); // light source
-	eye = TinyRender::Vec3f(1,1,3); // camera position
+	eye = TinyRender::Vec3f(2,2,5); // camera position
 	center = TinyRender::Vec3f(0,0,0); // camera direction
 	up = TinyRender::Vec3f(0,1,0); // camera up vector
 
@@ -158,7 +158,7 @@ cTinyRendererWrapper::~cTinyRendererWrapper() {
 
 void cTinyRendererWrapper::init()
 {
-	addBoxToScene();
+//	addBoxToScene();
 }
 
 void cTinyRendererWrapper::setScene(std::shared_ptr<cScenarioSimChar> scene)
@@ -209,23 +209,26 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 //	Matrix viewMatrixInv = ModelView.invert();
 //	btVector3 P(viewMatrixInv[0][3], viewMatrixInv[1][3], viewMatrixInv[2][3]);
 //	float* shadowBufferPtr = 0;
+	addBoxToScene();
 
 //	Shader shader(m_model, light_dir_local, light_color, modelViewMatrix, lightModelViewMatrix, Projection, lightViewMatrix, lightViewMatrix, localScaling, m_model->getColorRGBA(), width, height, shadowBufferPtr, 1, 1, 1);
-	Shader shader(*m_model, ModelView, Projection, light_dir);
-	std::cout << "Rendering: verts: " << m_model->nverts() << " faces: " << m_model->nfaces() << std::endl;
-	for (int i=0; i<m_model->nfaces(); i++) { // for every triangle
-		TinyRender::mat<4, 4, float> clip_vert; // triangle coordinates (clip coordinates), written by VS, read by FS
-		for (int j=0; j<3; j++)
-		{
-			std::cout << "face: " << i << " vert: " << j << std::endl;
-//			clip_vert[j] = proj<3>(shader.vertex(i, j)); // call the vertex shader for each triangle vertex
-			clip_vert[j] = (shader.vertex(i, j)); // call the vertex shader for each triangle vertex
+	for (size_t m = 0; m < m_models.size(); m++)
+	{
+		Shader shader(m_models[m], ModelView, Projection, light_dir);
+		std::cout << "Rendering: verts: " << m_models[m].nverts() << " faces: " << m_models[m].nfaces() << std::endl;
+		for (int i=0; i<m_models[m].nfaces(); i++) { // for every triangle
+			TinyRender::mat<4, 4, float> clip_vert; // triangle coordinates (clip coordinates), written by VS, read by FS
+			for (int j=0; j<3; j++)
+			{
+	//			std::cout << "face: " << i << " vert: " << j << std::endl;
+	//			clip_vert[j] = proj<3>(shader.vertex(i, j)); // call the vertex shader for each triangle vertex
+				clip_vert[j] = (shader.vertex(i, j)); // call the vertex shader for each triangle vertex
+			}
+			triangle2(clip_vert, shader, framebuffer, zbuffer, viewPort); // actual rasterization routine call
 		}
-		triangle2(clip_vert, shader, framebuffer, zbuffer, viewPort); // actual rasterization routine call
 	}
 //	}
-//	addBoxToScene();
-	framebuffer.write_tga_file("framebuffer.tga"); // the vertical flip is moved inside the function
+//	framebuffer.write_tga_file("framebuffer.tga"); // the vertical flip is moved inside the function
 	std::vector<unsigned char> out;
 	for (size_t i = 0; i < width * height * 3; i ++)
 	{
@@ -239,9 +242,8 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 
 void cTinyRendererWrapper::addBoxToScene()
 {
-
-	const tVector pos = tVector(0,0,0,0);
-	const tVector size = tVector(1,2,3,0);
+	m_models.clear();
+	tVector pos = tVector(0,0,0,0);
 	const tVector tex_coord_min = tVector::Zero();
 	const tVector tex_coord_max = tVector::Ones();
 
@@ -249,120 +251,159 @@ void cTinyRendererWrapper::addBoxToScene()
 	const int pos_len = num_faces * 6 * 3;
 	const int coord_len = num_faces * 6 * 3;
 
-
-	tVector sw0 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
-	tVector se0 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
-	tVector ne0 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
-	tVector nw0 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
-
-	tVector sw1 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
-	tVector se1 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
-	tVector ne1 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
-	tVector nw1 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
-
-
-	if( size[1]>1)
+	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
+	const auto& shape_defs = char_->GetDrawShapeDefs();
+	size_t num_shapes = shape_defs.rows();
+	for (size_t d=0; d < shape_defs.rows(); d++)
 	{
-		sw0 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.0 * size[1]  , pos[2] - 0.5 * size[2], 0);
-		se0 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.0 * size[1] , pos[2] - 0.5 * size[2], 0);
-		ne0 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
-		nw0 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] - 0.5 * size[2], 0);
+		cKinTree::tDrawShapeDef curr_def = shape_defs.row(d);
 
-		sw1 = tVector(pos[0] - 0.5 * size[0], pos[1] - 0.0 * size[1], pos[2] + 0.5 * size[2], 0);
-		se1 = tVector(pos[0] + 0.5 * size[0], pos[1] - 0.0 * size[1], pos[2] + 0.5 * size[2], 0);
-		ne1 = tVector(pos[0] + 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
-		nw1 = tVector(pos[0] - 0.5 * size[0], pos[1] + 0.5 * size[1], pos[2] + 0.5 * size[2], 0);
+		double theta = 0;
+		tVector euler = cKinTree::GetDrawShapeAttachTheta(curr_def);
+		int parent_joint = cKinTree::GetDrawShapeParentJoint(curr_def);
+		tVector attach_pt = cKinTree::GetDrawShapeAttachPt(curr_def);
+		tVector col = cKinTree::GetDrawShapeColor(curr_def);
+		tVector size = tVector(curr_def[cKinTree::eDrawShapeParam0],
+				curr_def[cKinTree::eDrawShapeParam1], curr_def[cKinTree::eDrawShapeParam2], 0);
+	//	col = col.cwiseProduct(fill_tint);
+
+		tMatrix world_trans = char_->BuildJointWorldTrans(parent_joint);
+		std::cout << "world_trans: " << world_trans << std::endl;
+		std::cout << "col: " << col << std::endl;
+
+	//	cDrawUtil::PushMatrix();
+	//	cDrawUtil::GLMultMatrix(world_trans);
+	//	cDrawUtil::Translate(attach_pt);
+	//	cDrawUtil::Rotate(euler);
+
+	//	cDrawUtil::SetColor(col);
+
+	//	const tVector size = tVector(x,y,z,0);
+		pos = pos;
+
+
+	//	double theta;
+		tVector axis;
+		cMathUtil::EulerToAxisAngle(euler, axis, theta);
+		tMatrix rot_m = cMathUtil::RotateMat(axis, theta);
+		tMatrix trans_m = cMathUtil::TranslateMat(attach_pt);
+
+
+		tVector sw0 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], - 0.5 * size[1], - 0.5 * size[2], 1));
+		tVector se0 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], - 0.5 * size[1], - 0.5 * size[2], 1));
+		tVector ne0 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
+		tVector nw0 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
+
+		tVector sw1 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], - 0.5 * size[1], + 0.5 * size[2], 1));
+		tVector se1 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], - 0.5 * size[1], + 0.5 * size[2], 1));
+		tVector ne1 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
+		tVector nw1 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
+
+
+		if( size[1]>1)
+		{
+			sw0 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], - 0.0 * size[1], - 0.5 * size[2], 1));
+			se0 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], - 0.0 * size[1], - 0.5 * size[2], 1));
+			ne0 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
+			nw0 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
+
+			sw1 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], - 0.0 * size[1], + 0.5 * size[2], 1));
+			se1 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], - 0.0 * size[1], + 0.5 * size[2], 1));
+			ne1 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
+			nw1 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
+		}
+
+
+		const float pos_data[pos_len] = {
+			ne0[0], ne0[1], ne0[2], // top
+			nw0[0], nw0[1], nw0[2],
+			nw1[0], nw1[1], nw1[2],
+			nw1[0], nw1[1], nw1[2],
+			ne1[0], ne1[1], ne1[2],
+			ne0[0], ne0[1], ne0[2],
+
+			se1[0], se1[1], se1[2],  // bottom
+			sw1[0], sw1[1], sw1[2],
+			sw0[0], sw0[1], sw0[2],
+			sw0[0], sw0[1], sw0[2],
+			se0[0], se0[1], se0[2],
+			se1[0], se1[1], se1[2],
+
+			se1[0], se1[1], se1[2], // front
+			se0[0], se0[1], se0[2],
+			ne0[0], ne0[1], ne0[2],
+			ne0[0], ne0[1], ne0[2],
+			ne1[0], ne1[1], ne1[2],
+			se1[0], se1[1], se1[2],
+
+			sw0[0], sw0[1], sw0[2], // back
+			sw1[0], sw1[1], sw1[2],
+			nw1[0], nw1[1], nw1[2],
+			nw1[0], nw1[1], nw1[2],
+			nw0[0], nw0[1], nw0[2],
+			sw0[0], sw0[1], sw0[2],
+
+			sw0[0], sw0[1], sw0[2], // left
+			nw0[0], nw0[1], nw0[2],
+			ne0[0], ne0[1], ne0[2],
+			ne0[0], ne0[1], ne0[2],
+			se0[0], se0[1], se0[2],
+			sw0[0], sw0[1], sw0[2],
+
+			se1[0], se1[1], se1[2], // right
+			ne1[0], ne1[1], ne1[2],
+			nw1[0], nw1[1], nw1[2],
+			nw1[0], nw1[1], nw1[2],
+			sw1[0], sw1[1], sw1[2],
+			se1[0], se1[1], se1[2]
+		};
+
+
+		TinyRender::Model model = TinyRender::Model();
+		float rgbaColor[4] = {col[0],col[1],col[2],col[3]};
+//		float rgbaColor[4] = {1,0,1,0};
+		model.setColorRGBA(rgbaColor);
+
+
+		model.reserveMemory(pos_len/3, pos_len/9);
+
+		for (int i = 0; i < pos_len; i+=3)
+		{
+			model.addVertex(pos_data[i],
+					pos_data[i + 1],
+					pos_data[i + 2],
+					0.0, //normal
+					0.0,
+					1.0,
+					0.45, // uv
+					0.55);
+		}
+		for (int i = 0; i < model.nverts(); i += 3)
+		{
+			model.addTriangle(i, i, i,
+					i + 1, i + 1, i + 1,
+					i + 2, i + 2, i + 2); // They are given in order
+		}
+		std::cout << "verts: " << model.nverts() << " faces: " << model.nfaces() << std::endl;
+		m_models.push_back(model);
+	//	tAttribInfo attr_info;
+	//	attr_info.mAttribNumber = cMeshUtil::eAttributePosition;
+	//	attr_info.mAttribSize = sizeof(pos_data[0]);
+	//	attr_info.mDataOffset = 0;
+	//	attr_info.mDataStride = 0;
+	//	attr_info.mNumComp = cMeshUtil::gPosDim;
+	//	gBoxSolidMesh->LoadVBuffer(attr_info.mAttribNumber, sizeof(float) * pos_len, (GLubyte*)pos_data, 0, 1, &attr_info);
+	//
+	//	attr_info.mAttribNumber = cMeshUtil::eAttributeCoord;
+	//	attr_info.mAttribSize = sizeof(coord_data[0]);
+	//	attr_info.mDataOffset = 0;
+	//	attr_info.mDataStride = 0;
+	//	attr_info.mNumComp = cMeshUtil::gCoordDim;
+	//	gBoxSolidMesh->LoadVBuffer(attr_info.mAttribNumber, sizeof(float) * coord_len, (GLubyte*)coord_data, 0, 1, &attr_info);
+	//
+	//	setMatricesFromStack();
+	//	gBoxSolidMesh->Draw(gl_mode);
 	}
-
-
-	const float pos_data[pos_len] = {
-		ne0[0], ne0[1], ne0[2], // top
-		nw0[0], nw0[1], nw0[2],
-		nw1[0], nw1[1], nw1[2],
-		nw1[0], nw1[1], nw1[2],
-		ne1[0], ne1[1], ne1[2],
-		ne0[0], ne0[1], ne0[2],
-
-		se1[0], se1[1], se1[2],  // bottom
-		sw1[0], sw1[1], sw1[2],
-		sw0[0], sw0[1], sw0[2],
-		sw0[0], sw0[1], sw0[2],
-		se0[0], se0[1], se0[2],
-		se1[0], se1[1], se1[2],
-
-		se1[0], se1[1], se1[2], // front
-		se0[0], se0[1], se0[2],
-		ne0[0], ne0[1], ne0[2],
-		ne0[0], ne0[1], ne0[2],
-		ne1[0], ne1[1], ne1[2],
-		se1[0], se1[1], se1[2],
-
-		sw0[0], sw0[1], sw0[2], // back
-		sw1[0], sw1[1], sw1[2],
-		nw1[0], nw1[1], nw1[2],
-		nw1[0], nw1[1], nw1[2],
-		nw0[0], nw0[1], nw0[2],
-		sw0[0], sw0[1], sw0[2],
-
-		sw0[0], sw0[1], sw0[2], // left
-		nw0[0], nw0[1], nw0[2],
-		ne0[0], ne0[1], ne0[2],
-		ne0[0], ne0[1], ne0[2],
-		se0[0], se0[1], se0[2],
-		sw0[0], sw0[1], sw0[2],
-
-		se1[0], se1[1], se1[2], // right
-		ne1[0], ne1[1], ne1[2],
-		nw1[0], nw1[1], nw1[2],
-		nw1[0], nw1[1], nw1[2],
-		sw1[0], sw1[1], sw1[2],
-		se1[0], se1[1], se1[2]
-	};
-
-
-	m_model = std::shared_ptr<TinyRender::Model>(new TinyRender::Model());
-	float rgbaColor[4] = {1,0,1,0};
-	m_model->setColorRGBA(rgbaColor);
-
-
-	m_model->reserveMemory(pos_len/3, pos_len/9);
-
-	for (int i = 0; i < pos_len; i+=3)
-	{
-		m_model->addVertex(pos_data[i],
-				pos_data[i + 1],
-				pos_data[i + 2],
-				0.0, //normal
-				0.0,
-				1.0,
-				0.45, // uv
-				0.55);
-	}
-	for (int i = 0; i < m_model->nverts(); i += 3)
-	{
-		m_model->addTriangle(i, i, i,
-				i + 1, i + 1, i + 1,
-				i + 2, i + 2, i + 2); // They are given in order
-	}
-	std::cout << "verts: " << m_model->nverts() << " faces: " << m_model->nfaces() << std::endl;
-
-//	tAttribInfo attr_info;
-//	attr_info.mAttribNumber = cMeshUtil::eAttributePosition;
-//	attr_info.mAttribSize = sizeof(pos_data[0]);
-//	attr_info.mDataOffset = 0;
-//	attr_info.mDataStride = 0;
-//	attr_info.mNumComp = cMeshUtil::gPosDim;
-//	gBoxSolidMesh->LoadVBuffer(attr_info.mAttribNumber, sizeof(float) * pos_len, (GLubyte*)pos_data, 0, 1, &attr_info);
-//
-//	attr_info.mAttribNumber = cMeshUtil::eAttributeCoord;
-//	attr_info.mAttribSize = sizeof(coord_data[0]);
-//	attr_info.mDataOffset = 0;
-//	attr_info.mDataStride = 0;
-//	attr_info.mNumComp = cMeshUtil::gCoordDim;
-//	gBoxSolidMesh->LoadVBuffer(attr_info.mAttribNumber, sizeof(float) * coord_len, (GLubyte*)coord_data, 0, 1, &attr_info);
-//
-//	setMatricesFromStack();
-//	gBoxSolidMesh->Draw(gl_mode);
 }
 
 

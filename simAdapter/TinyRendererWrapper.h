@@ -53,7 +53,8 @@ public:
 	std::vector<double> zbuffer; // note that the z-buffer is initialized with minimal possible values
 	TGAImage framebuffer; // the output image
 
-	std::shared_ptr<TinyRender::Model> m_model;
+//	std::shared_ptr<TinyRender::Model> m_model;
+	std::vector<TinyRender::Model> m_models;
 };
 
 
