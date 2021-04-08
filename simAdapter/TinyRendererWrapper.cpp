@@ -136,8 +136,8 @@ using namespace TinyRender;
 cTinyRendererWrapper::cTinyRendererWrapper() {
 	// TODO Auto-generated constructor stub
 
-	width  = 800; // output image size
-	height = 800;
+	width  = 128; // output image size
+	height = 128;
 
 	light_dir = TinyRender::Vec3f(1,1,1); // light source
 	eye = TinyRender::Vec3f(2,2,5); // camera position
@@ -175,7 +175,7 @@ void cTinyRendererWrapper::render()
 
 std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 {
-
+	m_models.clear();
 	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
 	tVector c_pos = char_->CalcCOM();
 	const auto& shape_defs = char_->GetDrawShapeDefs();
@@ -218,7 +218,7 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 	for (size_t m = 0; m < m_models.size(); m++)
 	{
 		Shader shader(m_models[m], ModelView, Projection, light_dir);
-		std::cout << "Rendering: verts: " << m_models[m].nverts() << " faces: " << m_models[m].nfaces() << std::endl;
+//		std::cout << "Rendering: verts: " << m_models[m].nverts() << " faces: " << m_models[m].nfaces() << std::endl;
 		for (int i=0; i<m_models[m].nfaces(); i++) { // for every triangle
 			TinyRender::mat<4, 4, float> clip_vert; // triangle coordinates (clip coordinates), written by VS, read by FS
 			for (int j=0; j<3; j++)
@@ -245,15 +245,7 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 
 void cTinyRendererWrapper::addBoxToScene()
 {
-	m_models.clear();
 	tVector pos = tVector(0,0,0,0);
-	const tVector tex_coord_min = tVector::Zero();
-	const tVector tex_coord_max = tVector::Ones();
-
-	const int num_faces = 6;
-	const int pos_len = num_faces * 6 * 3;
-	const int coord_len = num_faces * 6 * 3;
-
 	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
 	const auto& shape_defs = char_->GetDrawShapeDefs();
 	size_t num_shapes = shape_defs.rows();
@@ -271,8 +263,8 @@ void cTinyRendererWrapper::addBoxToScene()
 	//	col = col.cwiseProduct(fill_tint);
 
 		tMatrix world_trans = char_->BuildJointWorldTrans(parent_joint);
-		std::cout << "world_trans: " << world_trans << std::endl;
-		std::cout << "col: " << col << std::endl;
+//		std::cout << "world_trans: " << world_trans << std::endl;
+//		std::cout << "col: " << col << std::endl;
 
 	//	cDrawUtil::PushMatrix();
 	//	cDrawUtil::GLMultMatrix(world_trans);
@@ -293,120 +285,124 @@ void cTinyRendererWrapper::addBoxToScene()
 
 
 		tVector sw0 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], - 0.5 * size[1], - 0.5 * size[2], 1));
-		tVector se0 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], - 0.5 * size[1], - 0.5 * size[2], 1));
-		tVector ne0 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
-		tVector nw0 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
+		addBoxToScene(pos, world_trans * trans_m * rot_m, col, size);
+	}
 
-		tVector sw1 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], - 0.5 * size[1], + 0.5 * size[2], 1));
-		tVector se1 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], - 0.5 * size[1], + 0.5 * size[2], 1));
-		tVector ne1 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
-		tVector nw1 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
-
-
-		if( size[1]>1)
-		{
-			sw0 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], - 0.0 * size[1], - 0.5 * size[2], 1));
-			se0 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], - 0.0 * size[1], - 0.5 * size[2], 1));
-			ne0 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
-			nw0 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
-
-			sw1 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], - 0.0 * size[1], + 0.5 * size[2], 1));
-			se1 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], - 0.0 * size[1], + 0.5 * size[2], 1));
-			ne1 = pos + (world_trans * trans_m * rot_m * tVector(+ 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
-			nw1 = pos + (world_trans * trans_m * rot_m * tVector(- 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
-		}
-
-
-		const float pos_data[pos_len] = {
-			ne0[0], ne0[1], ne0[2], // top
-			nw0[0], nw0[1], nw0[2],
-			nw1[0], nw1[1], nw1[2],
-			nw1[0], nw1[1], nw1[2],
-			ne1[0], ne1[1], ne1[2],
-			ne0[0], ne0[1], ne0[2],
-
-			se1[0], se1[1], se1[2],  // bottom
-			sw1[0], sw1[1], sw1[2],
-			sw0[0], sw0[1], sw0[2],
-			sw0[0], sw0[1], sw0[2],
-			se0[0], se0[1], se0[2],
-			se1[0], se1[1], se1[2],
-
-			se1[0], se1[1], se1[2], // front
-			se0[0], se0[1], se0[2],
-			ne0[0], ne0[1], ne0[2],
-			ne0[0], ne0[1], ne0[2],
-			ne1[0], ne1[1], ne1[2],
-			se1[0], se1[1], se1[2],
-
-			sw0[0], sw0[1], sw0[2], // back
-			sw1[0], sw1[1], sw1[2],
-			nw1[0], nw1[1], nw1[2],
-			nw1[0], nw1[1], nw1[2],
-			nw0[0], nw0[1], nw0[2],
-			sw0[0], sw0[1], sw0[2],
-
-			sw0[0], sw0[1], sw0[2], // left
-			nw0[0], nw0[1], nw0[2],
-			ne0[0], ne0[1], ne0[2],
-			ne0[0], ne0[1], ne0[2],
-			se0[0], se0[1], se0[2],
-			sw0[0], sw0[1], sw0[2],
-
-			se1[0], se1[1], se1[2], // right
-			ne1[0], ne1[1], ne1[2],
-			nw1[0], nw1[1], nw1[2],
-			nw1[0], nw1[1], nw1[2],
-			sw1[0], sw1[1], sw1[2],
-			se1[0], se1[1], se1[2]
-		};
-
-
-		TinyRender::Model model = TinyRender::Model();
-		float rgbaColor[4] = {col[0],col[1],col[2],col[3]};
-//		float rgbaColor[4] = {1,0,1,0};
-		model.setColorRGBA(rgbaColor);
-
-
-		model.reserveMemory(pos_len/3, pos_len/9);
-
-		for (int i = 0; i < pos_len; i+=3)
-		{
-			model.addVertex(pos_data[i],
-					pos_data[i + 1],
-					pos_data[i + 2],
-					0.0, //normal
-					0.0,
-					1.0,
-					0.45, // uv
-					0.55);
-		}
-		for (int i = 0; i < model.nverts(); i += 3)
-		{
-			model.addTriangle(i, i, i,
-					i + 1, i + 1, i + 1,
-					i + 2, i + 2, i + 2); // They are given in order
-		}
-		std::cout << "verts: " << model.nverts() << " faces: " << model.nfaces() << std::endl;
-		m_models.push_back(model);
-	//	tAttribInfo attr_info;
-	//	attr_info.mAttribNumber = cMeshUtil::eAttributePosition;
-	//	attr_info.mAttribSize = sizeof(pos_data[0]);
-	//	attr_info.mDataOffset = 0;
-	//	attr_info.mDataStride = 0;
-	//	attr_info.mNumComp = cMeshUtil::gPosDim;
-	//	gBoxSolidMesh->LoadVBuffer(attr_info.mAttribNumber, sizeof(float) * pos_len, (GLubyte*)pos_data, 0, 1, &attr_info);
-	//
-	//	attr_info.mAttribNumber = cMeshUtil::eAttributeCoord;
-	//	attr_info.mAttribSize = sizeof(coord_data[0]);
-	//	attr_info.mDataOffset = 0;
-	//	attr_info.mDataStride = 0;
-	//	attr_info.mNumComp = cMeshUtil::gCoordDim;
-	//	gBoxSolidMesh->LoadVBuffer(attr_info.mAttribNumber, sizeof(float) * coord_len, (GLubyte*)coord_data, 0, 1, &attr_info);
-	//
-	//	setMatricesFromStack();
-	//	gBoxSolidMesh->Draw(gl_mode);
+	for (size_t d=0; d < this->scenario->GetObjs().size(); d++)
+	{
+		std::shared_ptr<cSimObj> sobj = this->scenario->GetObjs()[d].mObj;
+		tVector pos = sobj->GetPos();
+		tMatrix ind = tMatrix::Identity();
+		addBoxToScene(pos, ind, tVector(0,1,0,0), tVector(0.5,0.5,0.5,0));
 	}
 }
 
+
+void cTinyRendererWrapper::addBoxToScene(tVector pos, tMatrix transform, tVector col, tVector size)
+{
+	const tVector tex_coord_min = tVector::Zero();
+	const tVector tex_coord_max = tVector::Ones();
+
+	const int num_faces = 6;
+	const int pos_len = num_faces * 6 * 3;
+	const int coord_len = num_faces * 6 * 3;
+
+	tVector sw0 = pos + (transform * tVector(- 0.5 * size[0], - 0.5 * size[1], - 0.5 * size[2], 1));
+	tVector se0 = pos + (transform * tVector(+ 0.5 * size[0], - 0.5 * size[1], - 0.5 * size[2], 1));
+	tVector ne0 = pos + (transform * tVector(+ 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
+	tVector nw0 = pos + (transform * tVector(- 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
+
+	tVector sw1 = pos + (transform * tVector(- 0.5 * size[0], - 0.5 * size[1], + 0.5 * size[2], 1));
+	tVector se1 = pos + (transform * tVector(+ 0.5 * size[0], - 0.5 * size[1], + 0.5 * size[2], 1));
+	tVector ne1 = pos + (transform * tVector(+ 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
+	tVector nw1 = pos + (transform * tVector(- 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
+
+
+	if( size[1]>1)
+	{
+		sw0 = pos + (transform * tVector(- 0.5 * size[0], - 0.0 * size[1], - 0.5 * size[2], 1));
+		se0 = pos + (transform * tVector(+ 0.5 * size[0], - 0.0 * size[1], - 0.5 * size[2], 1));
+		ne0 = pos + (transform * tVector(+ 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
+		nw0 = pos + (transform * tVector(- 0.5 * size[0], + 0.5 * size[1], - 0.5 * size[2], 1));
+
+		sw1 = pos + (transform * tVector(- 0.5 * size[0], - 0.0 * size[1], + 0.5 * size[2], 1));
+		se1 = pos + (transform * tVector(+ 0.5 * size[0], - 0.0 * size[1], + 0.5 * size[2], 1));
+		ne1 = pos + (transform * tVector(+ 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
+		nw1 = pos + (transform * tVector(- 0.5 * size[0], + 0.5 * size[1], + 0.5 * size[2], 1));
+	}
+
+
+	const float pos_data[pos_len] = {
+		ne0[0], ne0[1], ne0[2], // top
+		nw0[0], nw0[1], nw0[2],
+		nw1[0], nw1[1], nw1[2],
+		nw1[0], nw1[1], nw1[2],
+		ne1[0], ne1[1], ne1[2],
+		ne0[0], ne0[1], ne0[2],
+
+		se1[0], se1[1], se1[2],  // bottom
+		sw1[0], sw1[1], sw1[2],
+		sw0[0], sw0[1], sw0[2],
+		sw0[0], sw0[1], sw0[2],
+		se0[0], se0[1], se0[2],
+		se1[0], se1[1], se1[2],
+
+		se1[0], se1[1], se1[2], // front
+		se0[0], se0[1], se0[2],
+		ne0[0], ne0[1], ne0[2],
+		ne0[0], ne0[1], ne0[2],
+		ne1[0], ne1[1], ne1[2],
+		se1[0], se1[1], se1[2],
+
+		sw0[0], sw0[1], sw0[2], // back
+		sw1[0], sw1[1], sw1[2],
+		nw1[0], nw1[1], nw1[2],
+		nw1[0], nw1[1], nw1[2],
+		nw0[0], nw0[1], nw0[2],
+		sw0[0], sw0[1], sw0[2],
+
+		sw0[0], sw0[1], sw0[2], // left
+		nw0[0], nw0[1], nw0[2],
+		ne0[0], ne0[1], ne0[2],
+		ne0[0], ne0[1], ne0[2],
+		se0[0], se0[1], se0[2],
+		sw0[0], sw0[1], sw0[2],
+
+		se1[0], se1[1], se1[2], // right
+		ne1[0], ne1[1], ne1[2],
+		nw1[0], nw1[1], nw1[2],
+		nw1[0], nw1[1], nw1[2],
+		sw1[0], sw1[1], sw1[2],
+		se1[0], se1[1], se1[2]
+	};
+
+
+	TinyRender::Model model = TinyRender::Model();
+	float rgbaColor[4] = {col[0],col[1],col[2],col[3]};
+//		float rgbaColor[4] = {1,0,1,0};
+	model.setColorRGBA(rgbaColor);
+
+
+	model.reserveMemory(pos_len/3, pos_len/9);
+
+	for (int i = 0; i < pos_len; i+=3)
+	{
+		model.addVertex(pos_data[i],
+				pos_data[i + 1],
+				pos_data[i + 2],
+				0.0, //normal
+				0.0,
+				1.0,
+				0.45, // uv
+				0.55);
+	}
+	for (int i = 0; i < model.nverts(); i += 3)
+	{
+		model.addTriangle(i, i, i,
+				i + 1, i + 1, i + 1,
+				i + 2, i + 2, i + 2); // They are given in order
+	}
+//		std::cout << "verts: " << model.nverts() << " faces: " << model.nfaces() << std::endl;
+	m_models.push_back(model);
+}
 

@@ -180,7 +180,7 @@ class TerrainRLSimWrapper(gym.Env):
                 self._fig.canvas.draw()                      # View in default viewer
         
         if (mode == "rgb_array"):
-            return self.getFullViewData()
+            return self._sim.getPixels2(0,0,0,0)
         
     def set_render(self, mode):
         print ("terrainrl sim set render mode: ", mode)

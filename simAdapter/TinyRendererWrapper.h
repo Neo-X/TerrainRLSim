@@ -48,6 +48,7 @@ public:
 
 	virtual void setScene(std::shared_ptr<cScenarioSimChar> scene);
 	virtual void addBoxToScene();
+	virtual void addBoxToScene(tVector pos, tMatrix transform, tVector col, tVector size);
 
 	std::shared_ptr<cScenarioSimChar> scenario;
 	std::vector<double> zbuffer; // note that the z-buffer is initialized with minimal possible values
