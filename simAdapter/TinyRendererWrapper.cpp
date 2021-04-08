@@ -141,7 +141,7 @@ cTinyRendererWrapper::cTinyRendererWrapper() {
 
 	light_dir = TinyRender::Vec3f(1,1,1); // light source
 	eye = TinyRender::Vec3f(1,1,3); // camera position
-	center = TinyRender::Vec3f(0,0,-1); // camera direction
+	center = TinyRender::Vec3f(0,0,0); // camera direction
 	up = TinyRender::Vec3f(0,1,0); // camera up vector
 
 //	extern mat<4,4> ModelView; // "OpenGL" state matrices
@@ -321,7 +321,7 @@ void cTinyRendererWrapper::addBoxToScene()
 
 
 	m_model = std::shared_ptr<TinyRender::Model>(new TinyRender::Model());
-	float rgbaColor[4] = {1,1,1,0};
+	float rgbaColor[4] = {1,0,1,0};
 	m_model->setColorRGBA(rgbaColor);
 
 
@@ -335,8 +335,8 @@ void cTinyRendererWrapper::addBoxToScene()
 				0.0, //normal
 				0.0,
 				1.0,
-				0.5, // uv
-				0.5);
+				0.45, // uv
+				0.55);
 	}
 	for (int i = 0; i < m_model->nverts(); i += 3)
 	{

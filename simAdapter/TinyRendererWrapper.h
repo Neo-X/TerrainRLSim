@@ -58,89 +58,106 @@ public:
 
 
 struct Shader : TinyRender::IShader {
-	    TinyRender::Model model;
-//	    std::shared_ptr<cTinyRendererWrapper> renderer;
-	    TinyRender::Matrix ModelView; // "OpenGL" state matrices
-		TinyRender::Matrix Projection;
+    TinyRender::Model &model;
+    TinyRender::Matrix &ModelView; // "OpenGL" state matrices
+	TinyRender::Matrix &Projection;
+    TinyRender::Vec3f l;               // light direction in normalized device coordinates
+    TinyRender::mat<2,3, float> varying_uv;  // triangle uv coordinates, written by the vertex shader, read by the fragment shader
+    TinyRender::mat<3,3, float> varying_nrm; // normal per vertex to be interpolated by FS
+    TinyRender::mat<3,3, float> ndc_tri;     // triangle in normalized device coordinates
+//    TinyRender::Vec3f m_colorRGBA;
+	float m_ambient_coefficient;
+	float m_diffuse_coefficient;
+	float m_specular_coefficient;
 
-	    TinyRender::Vec3f l;               // light direction in normalized device coordinates
-	    TinyRender::mat<2,3, float> varying_uv;  // triangle uv coordinates, written by the vertex shader, read by the fragment shader
-	    TinyRender::mat<3,3, float> varying_nrm; // normal per vertex to be interpolated by FS
-	    TinyRender::mat<3,3, float> ndc_tri;     // triangle in normalized device coordinates
+    Shader(TinyRender::Model &m, TinyRender::Matrix &ModelView, TinyRender::Matrix &Projection,
+    		TinyRender::Vec3f &light_dir) :
+    	model(m),
+		ModelView(ModelView),
+		Projection(Projection)
+		{
+        l = TinyRender::proj<3>((Projection*ModelView*TinyRender::embed<4>(light_dir, 0.f))).normalize(); // transform the light vector to the normalized device coordinates
+    	m_ambient_coefficient = 1.0;
+    	m_diffuse_coefficient = 1.0;
+    	m_specular_coefficient = 1.0;
+    }
 
-	    Shader(const TinyRender::Model &m, TinyRender::Matrix ModelView,
-	    		TinyRender::Matrix Projection, TinyRender::Vec3f light_dir) :
-	    	model(m),
-	    	ModelView(ModelView),
-			Projection(Projection)
+    virtual TinyRender::Vec4f vertex(const int iface, const int nthvert) {
+        varying_uv.set_col(nthvert, model.uv(iface, nthvert));
+        varying_nrm.set_col(nthvert, TinyRender::proj<3>((Projection*ModelView).invert_transpose()*TinyRender::embed<4>(model.normal(iface, nthvert), 0.f)));
+        TinyRender::Vec4f gl_Vertex = Projection*ModelView*TinyRender::embed<4>(model.vert(iface, nthvert));
+        ndc_tri.set_col(nthvert, TinyRender::proj<3>(gl_Vertex/gl_Vertex[3]));
+        return gl_Vertex;
+    }
+
+//    virtual bool fragment(const TinyRender::Vec3f bar, TGAColor &color) {
+//    	TinyRender::Vec3f bn = (varying_nrm*bar).normalize(); // per-vertex normal interpolation
+//    	TinyRender::Vec2f uv = varying_uv*bar; // tex coord interpolation
+//    	std::cout << "uv: " << uv << std::endl;
+//
+//        // for the math refer to the tangent space normal mapping lecture
+//        // https://github.com/ssloy/tinyrenderer/wiki/Lesson-6bis-tangent-space-normal-mapping
+//    	TinyRender::mat<3,3, float> AI; // TinyRender::mat<3,3, float>{ {ndc_tri.col(1) - ndc_tri.col(0), ndc_tri.col(2) - ndc_tri.col(0), bn} }.invert();
+//		AI[0] = ndc_tri.col(1) - ndc_tri.col(0);
+//		AI[1] = ndc_tri.col(2) - ndc_tri.col(0);
+//		AI[2] = bn;
+//		AI = AI.invert();
+//		std::cout << " AI: " << AI << " ndc_tri: " << ndc_tri << std::endl;
+//        TinyRender::Vec3f i = AI * TinyRender::Vec3f(varying_uv[0][1] - varying_uv[0][0], varying_uv[0][2] - varying_uv[0][0], 0);
+//        TinyRender::Vec3f j = AI * TinyRender::Vec3f(varying_uv[1][1] - varying_uv[1][0], varying_uv[1][2] - varying_uv[1][0], 0);
+//        TinyRender::mat<3,3, float> B;
+//		B[0] = i.normalize();
+//		B[1] = j.normalize();
+//		B[2] = bn;
+//		B = B.transpose();
+//		TinyRender::Vec3f f_normal = model.normal(uv);
+//		std::cout << " B: " << B << " model.normal(uv): " << f_normal << std::endl;
+//
+//        TinyRender::Vec3f n = (B * model.normal(uv)).normalize(); // transform the normal from the texture to the tangent space
+//
+//        double diff = std::max(0.2f, n*l); // diffuse light intensity
+//        TinyRender::Vec3f r = (n*(n*l)*2 - l).normalize(); // reflected light direction, specular mapping is described here: https://github.com/ssloy/tinyrenderer/wiki/Lesson-6-Shaders-for-the-software-renderer
+//        double spec = std::pow(std::max(r.z, 0.f), 5+model.specular(uv)); // specular intensity, note that the camera lies on the z-axis (in ndc), therefore simple r.z
+//
+//        TGAColor c = model.diffuse(uv);
+////        c = TGAColor(255, 255, 255, 255);
+//        std::cout << "text colour: " << int(c[0]) << ", " << int(c[1]) << ", " << int(c[2]) <<
+//        		" diff: " << diff << " spec: " << spec << " n: " << n << " r: " << r <<  std::endl;
+//        for (int i=0; i<3; i++)
+//            color[i] = std::min<int>(10 + c[i]*(diff + spec), 255); // (a bit of ambient light, diff + spec), clamp the result
+//
+//        return false; // the pixel is not discarded
+//    }
+    virtual bool fragment(const TinyRender::Vec3f bar, TGAColor &color) {
+    	TinyRender::Vec3f bn = (varying_nrm * bar).normalize();
+    	TinyRender::Vec2f uv = varying_uv * bar;
+
+    	TinyRender::Vec3f reflection_direction = (bn * (bn * l * 2.f) - l).normalize();
+		float specular = std::pow(TinyRender::b3Max(reflection_direction.z, 0.f),
+									model.specular(uv));
+		float diffuse = TinyRender::b3Max(0.f, bn * l);
+
+		color = model.diffuse(uv);
+
+		color[0] *= model.getColorRGBA()[0];
+		color[1] *= model.getColorRGBA()[1];
+		color[2] *= model.getColorRGBA()[2];
+		color[3] *= model.getColorRGBA()[3];
+
+		for (int i = 0; i < 3; ++i)
+		{
+			int orgColor = 0;
+//			float floatColor = (m_ambient_coefficient * color[i] + shadow * (m_diffuse_coefficient * diffuse + m_specular_coefficient * specular) * color[i] * m_light_color[i]);
+			float floatColor = (m_ambient_coefficient * color[i] * (m_diffuse_coefficient * diffuse + m_specular_coefficient * specular) * color[i]);
+			if (floatColor==floatColor)
 			{
-//	    	renderer = renderer;
-//	    	float x = renderer->light_dir[0];
-	    	TinyRender::Vec4f l_dir = TinyRender::embed<4>(TinyRender::Vec3f(light_dir));
-	        l = TinyRender::proj<3>((Projection*ModelView*l_dir)).normalize(); // transform the light vector to the normalized device coordinates
-	    }
+				orgColor=int(floatColor);
+			}
+			color[i] = TinyRender::b3Min(orgColor, 255);
+		}
 
-	    virtual TinyRender::Vec4f vertex(const int iface, const int nthvert) {
-//	    	std::cout << "Shader: iface: " << iface << " nthvert: " << nthvert << std::endl;
-//			std::cout << "Shader: verts: " << model.nverts() << " faces: " << model.nfaces() << " normals: " << model.nnormals() << std::endl;
-//			std::cout << "First face size:" << model.face(iface).size() << std::endl;
-//			std::cout << "First face verts:" << model.face(iface)[0] << ", "<< model.face(iface)[1] << ", " << model.face(iface)[2] << std::endl;
-//			std::cout << "First vertex size:" << model.vert(0)[0] << " model.normal(iface, nthvert)" << model.normal(iface, nthvert)[1] <<std::endl;
-//	        TinyRender::Vec4f gl_Vertex = TinyRender::embed<4>(model.vert(iface, nthvert));
-			TinyRender::Vec4f vert;
-			vert[0] = model.normal(iface, nthvert)[0];
-			vert[1] = model.normal(iface, nthvert)[1];
-			vert[2] = model.normal(iface, nthvert)[2];
-			vert[3] = 0.0f;
-	        varying_uv.set_col(nthvert, model.uv(iface, nthvert));
-//	        std::cout << "vert: " << vert << std::endl;
-//	        std::cout << "renderer->Projection: " << Projection << std::endl;
-//	        std::cout << "renderer->ModelView: " << ModelView << std::endl;
-	        TinyRender::Matrix tmp_mi = (Projection*ModelView).invert_transpose();
-//	        std::cout << "tmp_mi: " << tmp_mi << std::endl;
-	        TinyRender::Vec4f tmp = tmp_mi * vert;
-	        TinyRender::Vec3f tmp2 = TinyRender::Vec3f(tmp[0], tmp[1], tmp[2]);
-	        varying_nrm.set_col(nthvert,
-	        		tmp2);
-//	        				TinyRender::embed<4>(model.normal(iface, nthvert))));
-//	        				vert));
-	        vert[3] = 1.0f;
-			TinyRender::Vec4f gl_Vertex = Projection*ModelView*vert;
-	        ndc_tri.set_col(nthvert, TinyRender::proj<3>(gl_Vertex/gl_Vertex[3]));
-	        return gl_Vertex;
-	    }
-
-	    virtual bool fragment(const TinyRender::Vec3f bar, TGAColor &color) {
-	    	TinyRender::Vec3f bn = (varying_nrm*bar).normalize(); // per-vertex normal interpolation
-	    	TinyRender::Vec2f uv = varying_uv * bar; // tex coord interpolation
-
-	        // for the math refer to the tangent space normal mapping lecture
-	        // https://github.com/ssloy/tinyrenderer/wiki/Lesson-6bis-tangent-space-normal-mapping
-	    	TinyRender::mat<3,3, float> AI; // TinyRender::mat<3,3, float>{ {ndc_tri.col(1) - ndc_tri.col(0), ndc_tri.col(2) - ndc_tri.col(0), bn} }.invert();
-	    	AI[0] = ndc_tri.col(1) - ndc_tri.col(0);
-	    	AI[1] = ndc_tri.col(2) - ndc_tri.col(0);
-			AI[2] = bn;
-	    	AI = AI.invert();
-	        TinyRender::Vec3f i = AI * TinyRender::Vec3f(varying_uv[0][1] - varying_uv[0][0], varying_uv[0][2] - varying_uv[0][0], 0);
-	        TinyRender::Vec3f j = AI * TinyRender::Vec3f(varying_uv[1][1] - varying_uv[1][0], varying_uv[1][2] - varying_uv[1][0], 0);
-	        TinyRender::mat<3,3, float> B;
-	        B[0] = i.normalize();
-	        B[1] = j.normalize();
-	        B[2] = bn;
-	    	B = B.transpose();
-
-	        TinyRender::Vec3f n = (B * model.normal(uv)).normalize(); // transform the normal from the texture to the tangent space
-
-	        double diff = std::max(0.f, n*l); // diffuse light intensity
-	        TinyRender::Vec3f r = (n*(n*l)*2 - l).normalize(); // reflected light direction, specular mapping is described here: https://github.com/ssloy/tinyrenderer/wiki/Lesson-6-Shaders-for-the-software-renderer
-	        double spec = std::pow(std::max(r.z, 0.f), 5+model.specular(uv)); // specular intensity, note that the camera lies on the z-axis (in ndc), therefore simple r.z
-
-	        TGAColor c = model.diffuse(uv);
-	        for (int i=0; i<3; i++)
-	            color[i] = std::min<int>(10 + c[i]*(diff + spec), 255); // (a bit of ambient light, diff + spec), clamp the result
-
-	        return false; // the pixel is not discarded
-	    }
-	};
+		return false;
+	}
+};
 
 #endif /* SIMADAPTER_H_ */
