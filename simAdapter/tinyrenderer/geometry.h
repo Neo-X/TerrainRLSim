@@ -327,12 +327,6 @@ template <size_t DimRows, size_t DimCols, typename T> std::ostream& operator<<(s
     return out ;
 }
 
-#if 0
-template <size_t DimRows,size_t DimCols,class T> std::ostream& operator<<(std::ostream& out, mat<DimRows,DimCols,T>& m) {
-    for (size_t i=0; i<DimRows; i++) out << m[i] << std::endl;
-    return out;
-}
-#endif
 /////////////////////////////////////////////////////////////////////////////////
 
 typedef vec<2, float> Vec2f;

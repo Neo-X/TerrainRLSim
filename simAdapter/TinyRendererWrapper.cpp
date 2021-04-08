@@ -221,7 +221,7 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 //			clip_vert[j] = proj<3>(shader.vertex(i, j)); // call the vertex shader for each triangle vertex
 			clip_vert[j] = (shader.vertex(i, j)); // call the vertex shader for each triangle vertex
 		}
-		triangle2(clip_vert, shader, framebuffer, zbuffer.data(), viewPort); // actual rasterization routine call
+		triangle2(clip_vert, shader, framebuffer, zbuffer, viewPort); // actual rasterization routine call
 	}
 //	}
 //	addBoxToScene();

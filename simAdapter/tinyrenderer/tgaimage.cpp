@@ -7,44 +7,45 @@
 
 TGAImage::TGAImage() : data(NULL), width(0), height(0), bytespp(0) {}
 
-TGAImage::TGAImage(int w, int h, int bpp) : data(NULL), width(w), height(h), bytespp(bpp)
+TGAImage::TGAImage(int w, int h, int bpp) : data(w*h*bpp, 0), width(w), height(h), bytespp(bpp)
 {
-	unsigned long nbytes = width * height * bytespp;
-	data = new unsigned char[nbytes];
+//	unsigned long nbytes = width * height * bytespp;
+//	data = new unsigned char[nbytes];
 	//memset(data, 0, nbytes);
 }
 
-TGAImage::TGAImage(const TGAImage &img) : data(NULL), width(img.width), height(img.height), bytespp(img.bytespp)
+TGAImage::TGAImage(const TGAImage &img) : data(img.width* img.height * img.bytespp),
+		width(img.width), height(img.height), bytespp(img.bytespp)
 {
-	unsigned long nbytes = width * height * bytespp;
-	data = new unsigned char[nbytes];
+//	unsigned long nbytes = width * height * bytespp;
+//	data = new unsigned char[nbytes];
 	//memcpy(data, img.data, nbytes);
 }
 
 TGAImage::~TGAImage()
 {
-	if (data) delete[] data;
+//	if (data) delete[] data;
 }
 
-TGAImage &TGAImage::operator=(const TGAImage &img)
-{
-	if (this != &img)
-	{
-		if (data) delete[] data;
-		width = img.width;
-		height = img.height;
-		bytespp = img.bytespp;
-		unsigned long nbytes = width * height * bytespp;
-		data = new unsigned char[nbytes];
-		memcpy(data, img.data, nbytes);
-	}
-	return *this;
-}
+//TGAImage &TGAImage::operator=(const TGAImage &img)
+//{
+//	if (this != &img)
+//	{
+//		if (data) delete[] data;
+//		width = img.width;
+//		height = img.height;
+//		bytespp = img.bytespp;
+//		unsigned long nbytes = width * height * bytespp;
+//		data = new unsigned char[nbytes];
+//		memcpy(data, img.data, nbytes);
+//	}
+//	return *this;
+//}
 
 bool TGAImage::read_tga_file(const char *filename)
 {
-	if (data) delete[] data;
-	data = NULL;
+//	if (data) delete[] data;
+//	data = NULL;
 	std::ifstream in;
 	in.open(filename, std::ios::binary);
 	if (!in.is_open())
@@ -71,10 +72,10 @@ bool TGAImage::read_tga_file(const char *filename)
 		return false;
 	}
 	unsigned long nbytes = bytespp * width * height;
-	data = new unsigned char[nbytes];
+	data = std::vector<std::uint8_t>(nbytes, 0);
 	if (3 == header.datatypecode || 2 == header.datatypecode)
 	{
-		in.read((char *)data, nbytes);
+		in.read(reinterpret_cast<char *>(data.data()), nbytes);
 		if (!in.good())
 		{
 			in.close();
@@ -200,7 +201,7 @@ bool TGAImage::write_tga_file(const char *filename, bool rle) const
 	}
 	if (!rle)
 	{
-		out.write((char *)data, width * height * bytespp);
+		out.write(reinterpret_cast<const char *>(data.data()), width*height*bytespp);
 		if (!out.good())
 		{
 			std::cerr << "can't unload raw data\n";
@@ -284,7 +285,7 @@ bool TGAImage::unload_rle_data(std::ofstream &out) const
 			std::cerr << "can't dump the tga file\n";
 			return false;
 		}
-		out.write((char *)(data + chunkstart), (raw ? run_length * bytespp : bytespp));
+		out.write((char *)(data.data() + chunkstart), (raw ? run_length * bytespp : bytespp));
 		if (!out.good())
 		{
 			std::cerr << "can't dump the tga file\n";
@@ -312,32 +313,19 @@ TGAColor TGAImage::get(int x, int y) const
 	{
 		y = height - 1;
 	}
-
-	if (!data || x < 0 || y < 0 || x >= width || y >= height)
+	if (!data.size() || x < 0 || y < 0 || x >= width || y >= height)
 	{
 		return TGAColor(128.f, 128.f, 128.f, 255.f);
 	}
-	return TGAColor(data + (x + y * width) * bytespp, bytespp);
+	std::cout << "width " << width << " height: " << height << " x: " << x << " y: " << y << std::endl;
+	return TGAColor(data.data() + (x + y * width) * bytespp, bytespp);
 }
 
-bool TGAImage::set(int x, int y, TGAColor &c)
-{
-	if (!data || x < 0 || y < 0 || x >= width || y >= height)
-	{
-		return false;
-	}
-	memcpy(data + (x + y * width) * bytespp, c.bgra, bytespp);
-	return true;
-}
 
-bool TGAImage::set(int x, int y, const TGAColor &c)
-{
-	if (!data || x < 0 || y < 0 || x >= width || y >= height)
-	{
-		return false;
-	}
-	memcpy(data + (x + y * width) * bytespp, c.bgra, bytespp);
-	return true;
+bool TGAImage::set(int x, int y, const TGAColor &c) {
+    if (!data.size() || x<0 || y<0 || x>=width || y>=height) return false;
+    memcpy(data.data()+(x+y*width)*bytespp, c.bgra, bytespp);
+    return true;
 }
 
 int TGAImage::get_bytespp()
@@ -355,89 +343,75 @@ int TGAImage::get_height()
 	return height;
 }
 
-bool TGAImage::flip_horizontally()
-{
-	if (!data) return false;
-	int half = width >> 1;
-	for (int i = 0; i < half; i++)
-	{
-		for (int j = 0; j < height; j++)
-		{
-			TGAColor c1 = get(i, j);
-			TGAColor c2 = get(width - 1 - i, j);
-			set(i, j, c2);
-			set(width - 1 - i, j, c1);
-		}
-	}
-	return true;
+bool TGAImage::flip_horizontally() {
+    if (!data.size()) return false;
+    int half = width>>1;
+    for (int i=0; i<half; i++) {
+        for (int j=0; j<height; j++) {
+            TGAColor c1 = get(i, j);
+            TGAColor c2 = get(width-1-i, j);
+            set(i, j, c2);
+            set(width-1-i, j, c1);
+        }
+    }
+    return true;
 }
 
-bool TGAImage::flip_vertically()
-{
-	if (!data) return false;
-	unsigned long bytes_per_line = width * bytespp;
-	unsigned char *line = new unsigned char[bytes_per_line];
-	int half = height >> 1;
-	for (int j = 0; j < half; j++)
-	{
-		unsigned long l1 = j * bytes_per_line;
-		unsigned long l2 = (height - 1 - j) * bytes_per_line;
-		memmove((void *)line, (void *)(data + l1), bytes_per_line);
-		memmove((void *)(data + l1), (void *)(data + l2), bytes_per_line);
-		memmove((void *)(data + l2), (void *)line, bytes_per_line);
-	}
-	delete[] line;
-	return true;
+bool TGAImage::flip_vertically() {
+    if (!data.size()) return false;
+    size_t bytes_per_line = width*bytespp;
+    std::vector<std::uint8_t> line(bytes_per_line, 0);
+    int half = height>>1;
+    for (int j=0; j<half; j++) {
+        size_t l1 = j*bytes_per_line;
+        size_t l2 = (height-1-j)*bytes_per_line;
+        std::copy(data.begin()+l1, data.begin()+l1+bytes_per_line, line.begin());
+        std::copy(data.begin()+l2, data.begin()+l2+bytes_per_line, data.begin()+l1);
+        std::copy(line.begin(), line.end(), data.begin()+l2);
+    }
+    return true;
 }
 
-unsigned char *TGAImage::buffer()
-{
-	return data;
+std::uint8_t *TGAImage::buffer() {
+    return data.data();
 }
 
-void TGAImage::clear()
-{
-	memset((void *)data, 0, width * height * bytespp);
+void TGAImage::clear() {
+    data = std::vector<std::uint8_t>(width*height*bytespp, 0);
 }
 
-bool TGAImage::scale(int w, int h)
-{
-	if (w <= 0 || h <= 0 || !data) return false;
-	unsigned char *tdata = new unsigned char[w * h * bytespp];
-	int nscanline = 0;
-	int oscanline = 0;
-	int erry = 0;
-	unsigned long nlinebytes = w * bytespp;
-	unsigned long olinebytes = width * bytespp;
-	for (int j = 0; j < height; j++)
-	{
-		int errx = width - w;
-		int nx = -bytespp;
-		int ox = -bytespp;
-		for (int i = 0; i < width; i++)
-		{
-			ox += bytespp;
-			errx += w;
-			while (errx >= (int)width)
-			{
-				errx -= width;
-				nx += bytespp;
-				memcpy(tdata + nscanline + nx, data + oscanline + ox, bytespp);
-			}
-		}
-		erry += h;
-		oscanline += olinebytes;
-		while (erry >= (int)height)
-		{
-			if (erry >= (int)height << 1)  // it means we jump over a scanline
-				memcpy(tdata + nscanline + nlinebytes, tdata + nscanline, nlinebytes);
-			erry -= height;
-			nscanline += nlinebytes;
-		}
-	}
-	delete[] data;
-	data = tdata;
-	width = w;
-	height = h;
-	return true;
+bool TGAImage::scale(int w, int h) {
+    if (w<=0 || h<=0 || !data.size()) return false;
+    std::vector<std::uint8_t> tdata(w*h*bytespp, 0);
+    int nscanline = 0;
+    int oscanline = 0;
+    int erry = 0;
+    size_t nlinebytes = w*bytespp;
+    size_t olinebytes = width*bytespp;
+    for (int j=0; j<height; j++) {
+        int errx = width-w;
+        int nx   = -bytespp;
+        int ox   = -bytespp;
+        for (int i=0; i<width; i++) {
+            ox += bytespp;
+            errx += w;
+            while (errx>=(int)width) {
+                errx -= width;
+                nx += bytespp;
+                memcpy(tdata.data()+nscanline+nx, data.data()+oscanline+ox, bytespp);
+            }
+        }
+        erry += h;
+        oscanline += olinebytes;
+        while (erry>=(int)height) {
+            if (erry>=(int)height<<1) // it means we jump over a scanline
+                memcpy(tdata.data()+nscanline+nlinebytes, tdata.data()+nscanline, nlinebytes);
+            erry -= height;
+            nscanline += nlinebytes;
+        }
+    }
+    data = tdata;
+    width = w;
+    height = h;
+    return true;
 }

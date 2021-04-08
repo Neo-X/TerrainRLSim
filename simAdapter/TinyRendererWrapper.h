@@ -117,8 +117,8 @@ struct Shader : TinyRender::IShader {
 	        // for the math refer to the tangent space normal mapping lecture
 	        // https://github.com/ssloy/tinyrenderer/wiki/Lesson-6bis-tangent-space-normal-mapping
 	    	TinyRender::mat<3,3, float> AI; // TinyRender::mat<3,3, float>{ {ndc_tri.col(1) - ndc_tri.col(0), ndc_tri.col(2) - ndc_tri.col(0), bn} }.invert();
-	    	AI[0] = ndc_tri.col(1) - ndc_tri.col(0),
-	    	AI[1] = ndc_tri.col(2) - ndc_tri.col(0),
+	    	AI[0] = ndc_tri.col(1) - ndc_tri.col(0);
+	    	AI[1] = ndc_tri.col(2) - ndc_tri.col(0);
 			AI[2] = bn;
 	    	AI = AI.invert();
 	        TinyRender::Vec3f i = AI * TinyRender::Vec3f(varying_uv[0][1] - varying_uv[0][0], varying_uv[0][2] - varying_uv[0][0], 0);

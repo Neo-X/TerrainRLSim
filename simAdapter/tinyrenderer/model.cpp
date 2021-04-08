@@ -56,6 +56,14 @@ Model::Model(const char *filename) : verts_(), faces_(), norms_(), uv_(), diffus
 	}
 	std::cerr << "# v# " << verts_.size() << " f# " << faces_.size() << " vt# " << uv_.size() << " vn# " << norms_.size() << std::endl;
 	load_texture(filename, "_diffuse.tga", diffusemap_);
+	for (size_t x=0; x < diffusemap_.get_width(); x++)
+	{
+		for (size_t y=0; y < diffusemap_.get_height(); y++)
+		{
+	        TGAColor col = diffusemap_.get(x, y);
+//	        std::cout << "diffuse map: " << "x " << x << " y " << y << " col: "  << int(col[0]) << " " << int(col[1]) << " " << int(col[2]) << std::endl;
+		}
+	}
 	load_texture(filename, "_nm_tangent.tga", normalmap_);
 	load_texture(filename, "_spec.tga", specularmap_);
 }
@@ -64,30 +72,30 @@ Model::Model() : verts_(), faces_(), norms_(), uv_(), diffusemap_(), normalmap_(
 {
 }
 
-void Model::setDiffuseTextureFromData(unsigned char *textureImage, int textureWidth, int textureHeight)
-{
-	{
-//		B3_PROFILE("new TGAImage");
-		diffusemap_ = TGAImage(textureWidth, textureHeight, TGAImage::RGB);
-	}
-	TGAColor color;
-	color.bgra[3] = 255;
-
-	color.bytespp = 3;
-	{
-//		B3_PROFILE("copy texels");
-		memcpy(diffusemap_.buffer(), textureImage, textureHeight * textureWidth * 3);
-	}
-	{
-//		B3_PROFILE("flip_vertically");
-		diffusemap_.flip_vertically();
-	}
-}
-
-void Model::loadDiffuseTexture(const char *relativeFileName)
-{
-	diffusemap_.read_tga_file(relativeFileName);
-}
+//void Model::setDiffuseTextureFromData(unsigned char *textureImage, int textureWidth, int textureHeight)
+//{
+//	{
+////		B3_PROFILE("new TGAImage");
+//		diffusemap_ = TGAImage(textureWidth, textureHeight, TGAImage::RGB);
+//	}
+//	TGAColor color;
+//	color.bgra[3] = 255;
+//
+//	color.bytespp = 3;
+//	{
+////		B3_PROFILE("copy texels");
+//		memcpy(diffusemap_.buffer(), textureImage, textureHeight * textureWidth * 3);
+//	}
+//	{
+////		B3_PROFILE("flip_vertically");
+//		diffusemap_.flip_vertically();
+//	}
+//}
+//
+//void Model::loadDiffuseTexture(const char *relativeFileName)
+//{
+//	diffusemap_.read_tga_file(relativeFileName);
+//}
 
 void Model::reserveMemory(int numVertices, int numIndices)
 {
@@ -162,15 +170,18 @@ TGAColor Model::diffuse(Vec2f uvf)
 {
 	if (diffusemap_.get_width() && diffusemap_.get_height())
 	{
-		double val;
-		//		bool repeat = true;
-		//		if (repeat)
-		{
-            uvf[0] = std::modf(uvf[0], &val);
-            uvf[1] = std::modf(uvf[1], &val);
-        }
+//		double val;
+//		//		bool repeat = true;
+//		//		if (repeat)
+//		{
+//            uvf[0] = std::modf(uvf[0], &val);
+//            uvf[1] = std::modf(uvf[1], &val);
+//        }
         Vec2i uv(uvf[0] * diffusemap_.get_width(), uvf[1] * diffusemap_.get_height());
-		return diffusemap_.get(uv[0], uv[1]);
+        TGAColor col = diffusemap_.get(uv[0], uv[1]);
+        std::cout << "diffusemap_.get_width(): " << diffusemap_.get_width() << " uv: " << uv <<
+        		" diffusemap_.get(uv[0], uv[1]): " << int(col[0]) << " " << int(col[1]) << " " << int(col[2]) << std::endl;
+		return col;
 	}
 	return TGAColor(255, 255, 255, 255);
 }

@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <vector>
+#include <ostream>
 
 #pragma pack(push, 1)
 struct TGA_Header
@@ -68,12 +69,22 @@ struct TGAColor
 		for (int i = 0; i < 4; i++) res.bgra[i] = bgra[i] * intensity;
 		return res;
 	}
+
 };
+
+//#pragma pack(push, 1)
+//std::ostream& operator<<(std::ostream& out, TGAColor &t) {
+//    for(unsigned int i=0; i<4; i++) {
+//        out << t.bgra[i] << " " ;
+//    }
+//    return out ;
+//}
+//#pragma pack(pop)
 
 class TGAImage
 {
 protected:
-	unsigned char *data;
+	std::vector<std::uint8_t> data;
 	int width;
 	int height;
 	int bytespp;
@@ -99,10 +110,10 @@ public:
 	bool scale(int w, int h);
 	TGAColor get(int x, int y) const;
 
-	bool set(int x, int y, TGAColor &c);
+//	bool set(int x, int y, TGAColor &c);
 	bool set(int x, int y, const TGAColor &c);
 	~TGAImage();
-	TGAImage &operator=(const TGAImage &img);
+//	TGAImage &operator=(const TGAImage &img);
 	int get_width();
 	int get_height();
 	int get_bytespp();

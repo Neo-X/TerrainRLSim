@@ -34,8 +34,8 @@ public:
 	{
 		return m_colorRGBA;
 	}
-	void loadDiffuseTexture(const char* relativeFileName);
-	void setDiffuseTextureFromData(unsigned char* textureImage, int textureWidth, int textureHeight);
+//	void loadDiffuseTexture(const char* relativeFileName);
+//	void setDiffuseTextureFromData(unsigned char* textureImage, int textureWidth, int textureHeight);
 	void reserveMemory(int numVertices, int numIndices);
 	void addVertex(float x, float y, float z, float normalX, float normalY, float normalZ, float u, float v);
 	void addTriangle(int vertexposIndex0, int normalIndex0, int uvIndex0,

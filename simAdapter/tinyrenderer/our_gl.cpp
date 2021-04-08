@@ -229,7 +229,7 @@ void triangle(mat<4, 3, float> &clipc, IShader &shader, TGAImage &image, float *
 	}
 }
 
-void triangle2(const mat<4, 4, float> &clip_verts, IShader &shader, TGAImage &image, float *zbuffer, const Matrix &Viewport) {
+void triangle2(const mat<4, 4, float> &clip_verts, IShader &shader, TGAImage &image, std::vector<float> &zbuffer, const Matrix &Viewport) {
 	Vec4f pts[3]  = { Viewport*clip_verts[0],    Viewport*clip_verts[1],    Viewport*clip_verts[2]    };  // triangle screen coordinates before persp. division
     Vec2f pts2[3] = { proj<2>(pts[0]/pts[0][3]), proj<2>(pts[1]/pts[1][3]), proj<2>(pts[2]/pts[2][3]) };  // triangle screen coordinates after  perps. division
 
