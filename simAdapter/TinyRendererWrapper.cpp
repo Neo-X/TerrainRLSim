@@ -175,6 +175,14 @@ void cTinyRendererWrapper::render()
 
 std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 {
+
+	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
+	tVector c_pos = char_->CalcCOM();
+	const auto& shape_defs = char_->GetDrawShapeDefs();
+	size_t num_shapes = shape_defs.rows();
+	eye = TinyRender::Vec3f(1,1,5) + TinyRender::Vec3f(c_pos[0], c_pos[1], c_pos[2]); // camera position
+	center = TinyRender::Vec3f(c_pos[0], c_pos[1], c_pos[2]); // camera direction
+
 	std::vector<float> zbuffer(width*height, -std::numeric_limits<double>::max()); // note that the z-buffer is initialized with minimal possible values
 	TGAImage framebuffer(width, height, TGAImage::RGB); // the output image
 	framebuffer.clear();
@@ -185,15 +193,10 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 //	for (int m=1; m<argc; m++) { // iterate through all input objects
 //		Model model(argv[m]);
 //		Shader shader(model);
-	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
-//	char_->
-	const auto& shape_defs = char_->GetDrawShapeDefs();
-	size_t num_shapes = shape_defs.rows();
 
 //	cDrawUtil::SetLineWidth(1);
 //	for (int i = 0; i < num_shapes; ++i)
 //	{
-	cKinTree::tDrawShapeDef curr_def = shape_defs.row(0);
 //	cDrawCharacter::DrawShape(character, curr_def, fill_tint, line_col);
 //	}
 //	Model model(argv[m]);

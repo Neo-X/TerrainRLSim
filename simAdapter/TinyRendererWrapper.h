@@ -78,9 +78,9 @@ struct Shader : TinyRender::IShader {
 		Projection(Projection)
 		{
         l = TinyRender::proj<3>((Projection*ModelView*TinyRender::embed<4>(light_dir, 0.f))).normalize(); // transform the light vector to the normalized device coordinates
-    	m_ambient_coefficient = 1.0;
-    	m_diffuse_coefficient = 1.0;
-    	m_specular_coefficient = 1.0;
+    	m_ambient_coefficient = 0.6;
+    	m_diffuse_coefficient = 0.35;
+    	m_specular_coefficient = 0.5;
     }
 
     virtual TinyRender::Vec4f vertex(const int iface, const int nthvert) {
