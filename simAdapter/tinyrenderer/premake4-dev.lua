@@ -111,12 +111,11 @@ project "tinyRenderer"
 			"pthread"
 		}
 
-
 project "tinyRendererMain"
 	language "C++"
 	kind "ConsoleApp"
 
-	targetdir ( "../../lib" )
+	targetdir ( "./" )
 --	targetname ("_terrainRLAdapter")
 --	targetprefix ("")
 	files { 
