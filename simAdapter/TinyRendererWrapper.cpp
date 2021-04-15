@@ -175,9 +175,13 @@ void cTinyRendererWrapper::render()
 
 }
 
-std::vector<unsigned char> cTinyRendererWrapper::getPixels(int condition, std::vector<double> camera_delta)
+std::vector<unsigned char> cTinyRendererWrapper::getPixels(int condition,
+		std::vector<double> camera_delta, double zoom, int width = 128, int height = 128)
 {
+	width  = width; // output image size
+	height = height;
 	m_models.clear();
+//	double zoom = 0.4;
 	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
 	std::shared_ptr<cKinSimCharacter> char2_;
 	tVector c_pos = char_->CalcCOM();
@@ -192,7 +196,7 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels(int condition, std::v
 	}
 	const auto& shape_defs = char_->GetDrawShapeDefs();
 	size_t num_shapes = shape_defs.rows();
-	std::cout << "camera_delta: " << camera_delta[2] << std::endl;
+//	std::cout << "camera_delta: " << camera_delta[2] << std::endl;
 	eye = TinyRender::Vec3f(camera_delta[0],camera_delta[1],camera_delta[2]) + TinyRender::Vec3f(c_pos[0], c_pos[1], c_pos[2]); // camera position
 //	eye = TinyRender::Vec3f(-1,0,20) + TinyRender::Vec3f(c_pos[0], c_pos[1], c_pos[2]); // camera position
 	center = TinyRender::Vec3f(c_pos[0], c_pos[1], c_pos[2]); // camera direction
@@ -202,7 +206,7 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels(int condition, std::v
 	framebuffer.clear();
 	ModelView = TinyRender::lookat(eye, center, up);                            // build the ModelView matrix
 	Matrix viewPort = TinyRender::viewport(width/8, height/8, width*3/4, height*3/4); // build the Viewport matrix
-	Projection = TinyRender::projection(-1.f/(eye-center).norm());               // build the Projection matrix
+	Projection = TinyRender::projection(zoom*1.f/(eye-center).norm());               // build the Projection matrix
 
 //	for (int m=1; m<argc; m++) { // iterate through all input objects
 //		Model model(argv[m]);
@@ -246,7 +250,7 @@ void cTinyRendererWrapper::addCharcterToScene(int condition)
 	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
 	std::shared_ptr<cKinSimCharacter> char2_;
 	Eigen::MatrixXd shape_defs = char_->GetDrawShapeDefs();
-	std::cout << "condition: " << condition << std::endl;
+//	std::cout << "condition: " << condition << std::endl;
 	if (condition == 1)
 	{
 		std::shared_ptr<cScenarioImitateVizEval> scenario__tmp = std::dynamic_pointer_cast<cScenarioImitateVizEval>(this->scenario);
@@ -254,7 +258,7 @@ void cTinyRendererWrapper::addCharcterToScene(int condition)
 		{
 			char2_ = std::dynamic_pointer_cast<cKinSimCharacter>(scenario__tmp->GetKinChar());
 			shape_defs = char2_->GetDrawShapeDefs();
-			std::cout << "Getting kin char draw defs" << std::endl;
+//			std::cout << "Getting kin char draw defs" << std::endl;
 		}
 	}
 	size_t num_shapes = shape_defs.rows();

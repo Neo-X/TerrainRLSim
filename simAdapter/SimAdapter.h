@@ -313,7 +313,8 @@ public:
 	/// New rendering stuff
 	virtual void setHeadlessRender(bool hr);
 	std::vector<unsigned char> getPixels(size_t x_start, size_t y_start, size_t width, size_t height);
-	std::vector<unsigned char> getPixels2(size_t x_start, std::vector<double> camera_delta);
+	std::vector<unsigned char> getPixels2(size_t x_start,
+			std::vector<double> camera_delta, double zoom, int width, int height);
 	virtual void setRenderingGPUDevicveIndex(int desiredGPUDeviceIndex_);
 
 #ifdef USE_OpenGLES

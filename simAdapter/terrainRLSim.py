@@ -109,6 +109,7 @@ class TerrainRLSimWrapper(gym.Env):
         self._done_multiAgent = None
         self._steps = 0
         self._target_vel = 1.0
+        self._render_condition = 0 ## Normal rendering
         
         self._config = config
         if ("process_visual_data" in self._config
@@ -180,7 +181,10 @@ class TerrainRLSimWrapper(gym.Env):
                 self._fig.canvas.draw()                      # View in default viewer
         
         if (mode == "rgb_array"):
-            return self._sim.getPixels2(1,[1,1,5])
+            cam_pos = [1,1,5]
+            zoom = -0.3
+            char_or_imitation_char = 0
+            return np.array(self._sim.getPixels2(char_or_imitation_char,cam_pos, zoom, 128, 128))
         
     def set_render(self, mode):
         print ("terrainrl sim set render mode: ", mode)
@@ -557,9 +561,9 @@ class TerrainRLSimWrapper(gym.Env):
             self.set_task(reset_args)
         if "camera_zoom_noise" in self._config:
             range_ = self._config["camera_zoom_noise"][1] - self._config["camera_zoom_noise"][0] 
-            zoom_ = (np.random.random(1)[0] * range_) + self._config["camera_zoom_noise"][0] 
+            self._zoom_ = (np.random.random(1)[0] * range_) + self._config["camera_zoom_noise"][0] 
 #             print ("zoom: ", zoom_)
-            self._sim.setZoom(zoom_)
+            self._sim.setZoom(self._zoom_)
         self._sim.initEpoch()
         self._done = False
         self._done_multiAgent = [False for i in range(self._sim.getNumAgents())]
@@ -628,7 +632,16 @@ class TerrainRLSimWrapper(gym.Env):
     def getFullViewData(self):
         from skimage.measure import block_reduce
         ### Get pixel data from view
-        if "resize_window" in self._config:
+        
+        if ("use_tiny_renderer" in self._config):
+            cam_pos = [1,1,5]
+            zoom = -0.3
+            img = self._sim.getPixels2(self._render_condition, cam_pos, zoom,
+                                       self._config["resize_window"][0], self._config["resize_window"][1])
+            img = np.array(img)
+            img = np.reshape(img, (self._config["resize_window"][0], 
+                               self._config["resize_window"][1], 3))
+        elif "resize_window" in self._config:
             
             img = self.getEnv().getPixels(0,
                                0, 
@@ -659,7 +672,21 @@ class TerrainRLSimWrapper(gym.Env):
         from skimage.measure import block_reduce
         from skimage.transform import rescale, resize, downscale_local_mean
         ### Get pixel data from view
-        if ("image_clipping_area" in self._config):
+        
+        if ("use_tiny_renderer" in self._config):
+            cam_pos = [1,1,5]
+            char_or_imitation_char = 1
+            img = self._sim.getPixels2(self._render_condition, cam_pos, self._zoom_, 
+                                       self._config["resize_window"][0], self._config["resize_window"][1])
+            img = np.array(img)
+            img = np.reshape(img, (self._config["resize_window"][0], 
+                               self._config["resize_window"][1], 3))
+#             print ("img shape: ", img.shape)
+            img = img[self._config["image_clipping_area"][0]:self._config["image_clipping_area"][0]+self._config["image_clipping_area"][2],
+                      self._config["image_clipping_area"][1]: 
+                           self._config["image_clipping_area"][1]+self._config["image_clipping_area"][3]]
+#             print ("img shape after: ", img.shape)
+        elif ("image_clipping_area" in self._config):
             img = np.array(self.getEnv().getPixels(self._config["image_clipping_area"][0],
                            self._config["image_clipping_area"][1], 
                            self._config["image_clipping_area"][2], 
@@ -725,11 +752,13 @@ class TerrainRLSimWrapper(gym.Env):
         # '8' for camera track kin char instead
         # '7' to disable drawing background grid
         # 'v' to render the simchar like the kin char (colour and shape)
+        condition = self._render_condition
         self.onKeyEvent(ord('k'), 0, 0)
         self.onKeyEvent(ord('j'), 0, 0)
         self.onKeyEvent(ord('0'), 0, 0)
         self.onKeyEvent(ord('7'), 0, 0)
         self.onKeyEvent(ord('v'), 0, 0)
+        self._render_condition = 0
         self.render()
         img = self.getViewData()
         self.onKeyEvent(ord('v'), 0, 0)
@@ -737,6 +766,7 @@ class TerrainRLSimWrapper(gym.Env):
         self.onKeyEvent(ord('0'), 0, 0)
         self.onKeyEvent(ord('j'), 0, 0)
         self.onKeyEvent(ord('k'), 0, 0)
+        self._render_condition = condition
         
         if ("append_camera_velocity_state" in self._config
             and (self._config["append_camera_velocity_state"] == True)):
@@ -755,12 +785,14 @@ class TerrainRLSimWrapper(gym.Env):
             return self._visual_state
     
     def _getImitationVisualState(self):
+        condition = self._render_condition
         self.onKeyEvent(ord('7'), 0, 0)
         self.onKeyEvent(ord('8'), 0, 0)
         self.onKeyEvent(ord('9'), 0, 0)
         self.onKeyEvent(ord('j'), 0, 0)
         self.onKeyEvent(ord('0'), 0, 0)
         # self._sim.update()
+        self._render_condition = 1
         self.render()
         img = self.getViewData()
         self.onKeyEvent(ord('0'), 0, 0)
@@ -768,6 +800,7 @@ class TerrainRLSimWrapper(gym.Env):
         self.onKeyEvent(ord('9'), 0, 0)
         self.onKeyEvent(ord('8'), 0, 0)
         self.onKeyEvent(ord('7'), 0, 0)
+        self._render_condition = condition
         
         if ("append_camera_velocity_state" in self._config
             and (self._config["append_camera_velocity_state"] == True)):
@@ -1038,7 +1071,8 @@ def getEnv(env_name, render=False, GPU_device=None):
         sim.changeAnimTimestep(1.0/env_data[env_name]["action_fps"])
         simTimeStep = sim.getAnimTimestep()
         
-    if ("resize_window" in env_data[env_name]):
+    if ("resize_window" in env_data[env_name] and 
+        ("use_tiny_renderer" not in env_data[env_name])):
         sim.reshapeScreen(env_data[env_name]["resize_window"][0], env_data[env_name]["resize_window"][1])
     
     if ("process_visual_data" in env_data[env_name]

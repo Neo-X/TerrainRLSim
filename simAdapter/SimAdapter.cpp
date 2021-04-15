@@ -1258,11 +1258,12 @@ std::vector<unsigned char> cSimAdapter::getPixels(size_t x_start, size_t y_start
 	return out;
 }
 
-std::vector<unsigned char> cSimAdapter::getPixels2(size_t x_start, std::vector<double> camera_delta)
+std::vector<unsigned char> cSimAdapter::getPixels2(size_t x_start,
+		std::vector<double> camera_delta, double zoom, int width, int height)
 {
 	std::vector<unsigned char> out;
 	this->tinyRender->render();
-	out = this->tinyRender->getPixels(x_start, camera_delta);
+	out = this->tinyRender->getPixels(x_start, camera_delta, zoom, width, height);
 	return out;
 }
 

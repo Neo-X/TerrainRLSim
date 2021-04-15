@@ -44,7 +44,8 @@ public:
 	TinyRender::Matrix Projection;
 
 	virtual void render();
-	virtual std::vector<unsigned char> getPixels(int condition, std::vector<double> camera_delta);
+	virtual std::vector<unsigned char> getPixels(int condition,
+			std::vector<double> camera_delta, double zoom, int width, int height);
 
 	virtual void setScene(std::shared_ptr<cScenarioSimChar> scene);
 	virtual void addCharcterToScene(int condition);

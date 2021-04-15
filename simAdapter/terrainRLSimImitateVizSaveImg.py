@@ -5,7 +5,7 @@ import json
 
 if __name__ == '__main__':
 
-    env = terrainRLSim.getEnv(env_name="PD_Humanoid_Morph_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=False)
+    env = terrainRLSim.getEnv(env_name="PD_Humanoid_Morph_2D_GRF_Viz3D_TR_48x48_1Sub_Imitate_30FPS_DualState_v1", render=False)
 #     env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_2_v0", render=False)
 #     env = terrainRLSim.getEnv(env_name="PD_Humanoid_Morph_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=True)
     
@@ -18,15 +18,15 @@ if __name__ == '__main__':
         action = ((env.observation_space.high - env.observation_space.low) * np.random.uniform(size=env.observation_space.high.shape[0])  ) + env.observation_space.low
         actions.append(action)            
     
-    for e in range(5):
+    for e in range(15):
         
-        for t in range(15):
-#             vizData = env.getVisualState()
-#             vizImitateData = env.getImitationVisualState()
-#             for vd in range(len(vizData)):
-                # print("viewData: ", viewData)
-#                 viewData = vizData[vd][:-3] ## remove cam velocity
-#                 viewImitateData = vizImitateData[vd][:-3]
+        for t in range(2):
+            vizData = env.getVisualState()
+            vizImitateData = env.getImitationVisualState()
+            for vd in range(len(vizData)):
+#                 print("viewData: ", vizData)
+                viewData = vizData[vd][:-3] ## remove cam velocity
+                viewImitateData = vizImitateData[vd][:-3]
                 ## Get and vis terrain data
             if (True):
                 import matplotlib
@@ -34,7 +34,7 @@ if __name__ == '__main__':
                 import matplotlib.pyplot as plt
                 # img_ = viewData
 #                     viewData = viewData - viewImitateData
-                if (False):
+                if (True):
                     if env._config["convert_to_greyscale"]:
                         img_ = np.reshape(viewData, env._config["resize_image"][-2:])
                     else:
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 #                     plt.title("visual Data: " +  str(vd))
 #                     fig1.savefig("char_viz_state_"+str(e)+"_"+str(t)+".svg")
 
-                if (False):                    
+                if (True):                    
                     img__ = viewImitateData
                     if env._config["convert_to_greyscale"]:
                         img__ = np.reshape(viewImitateData, env._config["resize_image"][-2:])
