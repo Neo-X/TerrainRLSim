@@ -8,6 +8,8 @@
 #include "TinyRendererWrapper.h"
 #include <memory>
 #include "tinyrenderer/geometry.h"
+#include "scenarios/ScenarioImitateVizEval.h"
+#include "anim/KinSimCharacter.h"
 
 using namespace TinyRender;
 
@@ -173,14 +175,26 @@ void cTinyRendererWrapper::render()
 
 }
 
-std::vector<unsigned char> cTinyRendererWrapper::getPixels()
+std::vector<unsigned char> cTinyRendererWrapper::getPixels(int condition, std::vector<double> camera_delta)
 {
 	m_models.clear();
 	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
+	std::shared_ptr<cKinSimCharacter> char2_;
 	tVector c_pos = char_->CalcCOM();
+	if (condition == 1)
+	{
+		std::shared_ptr<cScenarioImitateVizEval> scenario__tmp = std::dynamic_pointer_cast<cScenarioImitateVizEval>(this->scenario);
+		if ( scenario__tmp != nullptr)
+		{
+			char2_ = std::dynamic_pointer_cast<cKinSimCharacter>(scenario__tmp->GetKinChar());
+			c_pos = char2_->CalcCOM();
+		}
+	}
 	const auto& shape_defs = char_->GetDrawShapeDefs();
 	size_t num_shapes = shape_defs.rows();
-	eye = TinyRender::Vec3f(1,1,5) + TinyRender::Vec3f(c_pos[0], c_pos[1], c_pos[2]); // camera position
+	std::cout << "camera_delta: " << camera_delta[2] << std::endl;
+	eye = TinyRender::Vec3f(camera_delta[0],camera_delta[1],camera_delta[2]) + TinyRender::Vec3f(c_pos[0], c_pos[1], c_pos[2]); // camera position
+//	eye = TinyRender::Vec3f(-1,0,20) + TinyRender::Vec3f(c_pos[0], c_pos[1], c_pos[2]); // camera position
 	center = TinyRender::Vec3f(c_pos[0], c_pos[1], c_pos[2]); // camera direction
 
 	std::vector<float> zbuffer(width*height, -std::numeric_limits<double>::max()); // note that the z-buffer is initialized with minimal possible values
@@ -194,25 +208,8 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 //		Model model(argv[m]);
 //		Shader shader(model);
 
-//	cDrawUtil::SetLineWidth(1);
-//	for (int i = 0; i < num_shapes; ++i)
-//	{
-//	cDrawCharacter::DrawShape(character, curr_def, fill_tint, line_col);
-//	}
-//	Model model(argv[m]);
-//	Shader shader(m_model);
-//	Vec3f light_dir_local = Vec3f(light_dir[0], light_dir[1], light_dir[2]);
-//	Vec3f light_color = Vec3f(1, 1, 1);
-//	float light_distance = 20;
-//	// light target is set to be the origin, and the up direction is set to be vertical up.
-//	Matrix lightViewMatrix = lookat(light_dir_local * light_distance, Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 0.0, 1.0));
-//	Matrix lightModelViewMatrix = ModelView;
-//	Matrix modelViewMatrix = ModelView;
-//	Vec3f localScaling(1, 1, 1);
-//	Matrix viewMatrixInv = ModelView.invert();
-//	btVector3 P(viewMatrixInv[0][3], viewMatrixInv[1][3], viewMatrixInv[2][3]);
 //	float* shadowBufferPtr = 0;
-	addBoxToScene();
+	addCharcterToScene(condition);
 
 //	Shader shader(m_model, light_dir_local, light_color, modelViewMatrix, lightModelViewMatrix, Projection, lightViewMatrix, lightViewMatrix, localScaling, m_model->getColorRGBA(), width, height, shadowBufferPtr, 1, 1, 1);
 	for (size_t m = 0; m < m_models.size(); m++)
@@ -243,11 +240,23 @@ std::vector<unsigned char> cTinyRendererWrapper::getPixels()
 }
 
 
-void cTinyRendererWrapper::addBoxToScene()
+void cTinyRendererWrapper::addCharcterToScene(int condition)
 {
 	tVector pos = tVector(0,0,0,0);
 	const std::shared_ptr<cSimCharacter> char_ = this->scenario->GetCharacter();
-	const auto& shape_defs = char_->GetDrawShapeDefs();
+	std::shared_ptr<cKinSimCharacter> char2_;
+	Eigen::MatrixXd shape_defs = char_->GetDrawShapeDefs();
+	std::cout << "condition: " << condition << std::endl;
+	if (condition == 1)
+	{
+		std::shared_ptr<cScenarioImitateVizEval> scenario__tmp = std::dynamic_pointer_cast<cScenarioImitateVizEval>(this->scenario);
+		if ( scenario__tmp != nullptr)
+		{
+			char2_ = std::dynamic_pointer_cast<cKinSimCharacter>(scenario__tmp->GetKinChar());
+			shape_defs = char2_->GetDrawShapeDefs();
+			std::cout << "Getting kin char draw defs" << std::endl;
+		}
+	}
 	size_t num_shapes = shape_defs.rows();
 	for (size_t d=0; d < shape_defs.rows(); d++)
 	{
@@ -263,6 +272,10 @@ void cTinyRendererWrapper::addBoxToScene()
 	//	col = col.cwiseProduct(fill_tint);
 
 		tMatrix world_trans = char_->BuildJointWorldTrans(parent_joint);
+		if (condition == 1)
+		{
+			world_trans = char2_->BuildJointWorldTrans(parent_joint);
+		}
 //		std::cout << "world_trans: " << world_trans << std::endl;
 //		std::cout << "col: " << col << std::endl;
 

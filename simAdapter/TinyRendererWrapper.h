@@ -44,10 +44,10 @@ public:
 	TinyRender::Matrix Projection;
 
 	virtual void render();
-	virtual std::vector<unsigned char> getPixels();
+	virtual std::vector<unsigned char> getPixels(int condition, std::vector<double> camera_delta);
 
 	virtual void setScene(std::shared_ptr<cScenarioSimChar> scene);
-	virtual void addBoxToScene();
+	virtual void addCharcterToScene(int condition);
 	virtual void addBoxToScene(tVector pos, tMatrix transform, tVector col, tVector size);
 
 	std::shared_ptr<cScenarioSimChar> scenario;
