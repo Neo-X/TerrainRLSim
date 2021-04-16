@@ -184,7 +184,10 @@ class TerrainRLSimWrapper(gym.Env):
             cam_pos = [1,1,5]
             zoom = -0.3
             char_or_imitation_char = 0
-            return np.array(self._sim.getPixels2(char_or_imitation_char,cam_pos, zoom, 128, 128))
+            img = np.array(self._sim.getPixels2(char_or_imitation_char,cam_pos, zoom, 128, 128))
+            img = np.array(img)
+            img = np.reshape(img, (128, 128, 3))
+            return img
         
     def set_render(self, mode):
         print ("terrainrl sim set render mode: ", mode)
