@@ -489,7 +489,9 @@ class TerrainRLSimWrapper(gym.Env):
         
         # ob[0,0] = np.nan
         info = {}
-        if (self._render):
+        if (self._render == "off_screen"):
+            info['rendering'] = self.render(mode="rgb_array")
+        elif (self._render):
             info['rendering'] = np.array(self.getViewData() * 255, dtype='uint8')
             
         if ("process_visual_data" in self._config
@@ -723,7 +725,8 @@ class TerrainRLSimWrapper(gym.Env):
                 img = block_reduce(img, block_size=(self._config["downsample_image"][0], 
                                                     self._config["downsample_image"][1], 
                                                     self._config["downsample_image"][2]), func=np.mean)
-        if ("add_img_noise" in self._config):
+        if ("add_img_noise" in self._config and 
+            ( self._config["add_img_noise"] == True) ) :
             noise_ = np.random.randn(*(img.shape)) * self._config['add_img_noise']
             img = img + noise_
         ### convert to greyscale
