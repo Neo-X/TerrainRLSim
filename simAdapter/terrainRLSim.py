@@ -110,7 +110,7 @@ class TerrainRLSimWrapper(gym.Env):
         self._steps = 0
         self._target_vel = 1.0
         self._render_condition = 0 ## Normal rendering
-        self.render_mode = False
+        # self.render_mode = False
         self._config = config
         if ("process_visual_data" in self._config
         and (self._config["process_visual_data"] == True)):
@@ -190,7 +190,8 @@ class TerrainRLSimWrapper(gym.Env):
             return img
         
     def set_render(self, mode):
-        self.render_mode = mode
+        if mode == 'rgb_array':
+            self._render = True
         print ("terrainrl sim set render mode: ", mode)
         
     def updateAction(self, action):
@@ -499,8 +500,8 @@ class TerrainRLSimWrapper(gym.Env):
                 info["expert_obs"] = self.getImitationVisualState()[0]
             info.update(info_)
         info.update(self.checkSuccess())
-        if self.render_mode:
-            info['rendering'] = self.render(mode=self.render_mode)
+        # if self.render_mode:
+        #     info['rendering'] = self.render(mode=self.render_mode)
         
         return self.checkState(ob), self.checkState(reward), self._done, info
         
