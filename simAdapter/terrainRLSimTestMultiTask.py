@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Imitate_60FPS_Torque_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz3D_FixedStart_64x64_1Sub_Imitate_30FPS_MultiModal_DualState_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid1_3D_Run_Phase_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Biped2D_MultiTask_Terrain-v0", render=False)
+    env = terrainRLSim.getEnv(env_name="PD_Biped2D_MultiTask_TerrainVel-v0", render=True)
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -28,17 +28,17 @@ if __name__ == '__main__':
     env.setRandomSeed(1234)
     
     actions = []
-    for i in range(11):
-        action = ((actionSpace.getMaximum() - actionSpace.getMinimum()) * np.random.uniform(size=actionSpace.getMinimum().shape[0])  ) + actionSpace.getMinimum()
+    for i in range(1):
+        action = ((env.observation_space.high - env.observation_space.low) * np.random.uniform(size=env.observation_space.high.shape[0])  ) + env.observation_space.low
         actions.append(action * 0)
     # actions = np.array(actions) * 100            
     print("Actions: ", actions)
     
-    print("observation_space: ", env.observation_space.getMaximum())
+    print("observation_space: ", env.observation_space.high)
     
-    print("Actions space max: ", len(env.action_space.getMaximum()))
-    print("Actions space min: ", env.action_space.getMinimum())
-    print("Actions space max: ", env.action_space.getMaximum())
+    print("Actions space max: ", len(env.action_space.high))
+    print("Actions space min: ", env.action_space.low)
+    print("Actions space max: ", env.action_space.high)
     
     for e in range(100):
         numTasks = env.getNumTasks()

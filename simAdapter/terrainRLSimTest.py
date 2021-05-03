@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Imitate_60FPS_Torque_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz3D_FixedStart_64x64_1Sub_Imitate_30FPS_MultiModal_DualState_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid1_3D_Run_Phase_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Humanoid3D_MutliChar_ConcentricCircle_WithObs_OnlyVel_SimpleReward_v1", render=True)
+    env = terrainRLSim.getEnv(env_name="PD_Biped2D_MultiTask_TerrainVel-v0", render=True)
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     env.setRandomSeed(1234)
     
     actions = []
-    for i in range(11):
+    for i in range(1):
         action = actionSpace.sample()
         actions.append(action * 0)
     # actions = np.array(actions) * 100            

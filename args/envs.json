@@ -334,14 +334,18 @@
     	"comment__": "Flatten the output observation",
     "flatten_observation": true,
 	"comment__": "Use a forward velocity reward computed in the python code",    
-    "use_forward_vel_reward": false,
+    "use_forward_vel_reward": true,
     	"comment__": "MultiTask config",
     "multitask_config":
     {
     	"type": "terrainvel",
     		"comment__": "A mapping from task id to terrain and target velocity.",
-    	"task_goal": [-2, -1.8, -1.6, -1.4, -1.2, -1.0, -0.8, -0.6, -0.4, -0.2, -0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0]
+    	"task_goal": [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4]
     },
+    	"comment__": "Key Presses that change some of the rendered parts of the simulation",
+    "rendering_key_presses": ["k", "j"],
+    	"comment__": "Flatten the output observation",
+    "flatten_observation": true,
     "resize_window": [128,128],
     "resize_image": [1, 48, 48],
     "camera_zoom_noise": [-0.50, -0.1],
