@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Imitate_60FPS_Torque_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz3D_FixedStart_64x64_1Sub_Imitate_30FPS_MultiModal_DualState_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid1_3D_Run_Phase_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Biped2D_MultiTask_TerrainVel-v0", render=True)
+    env = terrainRLSim.getEnv(env_name="PD_Biped2D_MultiTask_Terrain-v1", render=True)
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -40,18 +40,19 @@ if __name__ == '__main__':
     print("Actions space min: ", env.action_space.low)
     print("Actions space max: ", env.action_space.high)
     
-    for e in range(100):
+    for e in range(6):
         numTasks = env.getNumTasks()
-        task_id = np.random.randint(0,numTasks)
+        task_id = e % 3 
         env.set_task(task_id)
+        print ("task: ", task_id)
         env.reset()
-        for t in range(256):
+        for t in range(32):
             observation, reward,  done, info = env.step(actions[0])
             # env.getImitationState()
-            print ("Done: ", done)
-            print("Reward: ", reward)
+#             print ("Done: ", done)
+#             print("Reward: ", reward)
             states = np.array(observation)
-            print("states shape ", np.array(states[0]).shape)
+#             print("states shape ", np.array(states[0]).shape)
             if ( done ):
                 break
             """
