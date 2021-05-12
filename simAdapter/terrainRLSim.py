@@ -109,11 +109,11 @@ class TerrainRLSimWrapper(gym.Env):
         self._done_multiAgent = None
         self._steps = 0
         self._target_vel = 1.0
+        self._config = config
+        # self.render_mode = False
         if ("target_vel" in self._config):
             self._target_vel = self._config["target_vel"]
         self._render_condition = 0 ## Normal rendering
-        # self.render_mode = False
-        self._config = config
         if ("process_visual_data" in self._config
         and (self._config["process_visual_data"] == True)):
             self._visual_state = [0] * self._config["timestep_subsampling"]
