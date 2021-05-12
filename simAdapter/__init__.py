@@ -245,6 +245,17 @@ gym_register(
 )
 
 gym_register(
+    id="PD_Biped2D_MultiTask_Terrain-v1",
+    entry_point='simAdapter.terrainRLSim:TerrainRLSimWrapper',
+    reward_threshold=0.95,
+    max_episode_steps=512,
+    kwargs={'config': env_data["PD_Biped2D_MultiTask_Terrain-v1"],
+            "render": False, 
+            "flatten_observation": True,
+            "fall_check": True}
+)
+
+gym_register(
     id="PD_Biped2D_MultiTask_Terrain_Render-v0",
     entry_point='simAdapter.terrainRLSim:TerrainRLSimWrapper',
     reward_threshold=0.95,
