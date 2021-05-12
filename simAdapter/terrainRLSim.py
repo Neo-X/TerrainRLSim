@@ -109,6 +109,8 @@ class TerrainRLSimWrapper(gym.Env):
         self._done_multiAgent = None
         self._steps = 0
         self._target_vel = 1.0
+        if ("target_vel" in self._config):
+            self._target_vel = self._config["target_vel"]
         self._render_condition = 0 ## Normal rendering
         # self.render_mode = False
         self._config = config

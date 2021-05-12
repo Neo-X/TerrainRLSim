@@ -352,7 +352,8 @@
     "add_img_noise": false,
 		"comment__": "Area that will be clipped from the rendering using glReadPixels [x, y, width, height]",
 	"image_clipping_area": [32, 29, 64, 64],
-    "use_tiny_renderer": true
+    "use_tiny_renderer": true,
+    "success_distance": 2.0
 },
 "PD_Biped2D_MultiTask_Terrain-v1":
 {
@@ -369,9 +370,10 @@
     "rendering_key_presses": ["k", "j"],
     	"comment__": "Flatten the output observation",
     "flatten_observation": true,
-	"comment__": "Use a forward velocity reward computed in the python code",    
+		"comment__": "Use a forward velocity reward computed in the python code",    
     "use_forward_vel_reward": true,
-    	"comment__": "MultiTask config",
+		"comment__": "Use a forward velocity reward computed in the python code",
+    "target_vel": 1.5,
     "multitask_config":
     {
     	"type": "terrainRand",
@@ -384,7 +386,8 @@
     "add_img_noise": false,
 		"comment__": "Area that will be clipped from the rendering using glReadPixels [x, y, width, height]",
 	"image_clipping_area": [32, 29, 64, 64],
-    "use_tiny_renderer": true
+    "use_tiny_renderer": true,
+    "success_distance": 2.0
 },
 "PD_Biped2D_Flat-v2": 
 {
