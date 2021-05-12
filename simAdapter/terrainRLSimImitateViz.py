@@ -18,7 +18,7 @@ if __name__ == '__main__':
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_3D_Viz3D_64x64_Imitate_30FPS_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_3D_Viz3D_64x64_Imitate_30FPS_DualState_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_GRF_3D_Walk_Viz3D_WithCamVel_64x64_1Sub_Imitate_30FPS_DualState_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Humanoid_Morph_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=True)
+    env = terrainRLSim.getEnv(env_name="PD_Humanoid_GRF_3D_Jog_Viz3D_WithCamVel_64x64_1Sub_Imitate_30FPS_DualState_v1", render=True)
     
     # env.reset()
     actionSpace = env.getActionSpace()
@@ -26,12 +26,12 @@ if __name__ == '__main__':
     
     actions = []
     for i in range(1):
-        action = ((actionSpace.high - actionSpace.low) * np.random.uniform(size=actionSpace.low.shape[0])  ) + actionSpace.low
+        action = ((actionSpace.getMaximum() - actionSpace.getMinimum()) * np.random.uniform(size=actionSpace.getMinimum().shape[0])  ) + actionSpace.getMinimum()
         actions.append(action)            
     
     for e in range(10):
         
-        for t in range(10):
+        for t in range(100):
             vizData = env.getVisualState()
             vizImitateData = env.getImitationVisualState()
             for vd in range(len(vizData)):

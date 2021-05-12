@@ -803,6 +803,7 @@ void cScenarioSimChar::ParseGroundParams(const std::shared_ptr<cArgParser>& pars
 {
 	std::string terrain_file = "";
 	parser->ParseString("terrain_file", terrain_file);
+	//printf("\n\nScenarioSimChar.cpp terrain_file: %s\n\n\n", terrain_file.c_str());
 	std::string fpath;
 	bool succ = parser->ParseString("relative_file_path", fpath);
 	if (succ)
@@ -811,7 +812,19 @@ void cScenarioSimChar::ParseGroundParams(const std::shared_ptr<cArgParser>& pars
 	}
 	parser->ParseDouble("terrain_blend", out_params.mBlend);
 
-	if (terrain_file != "")
+	std::string steersuite_file = "";
+	parser->ParseString("steersuite_file", steersuite_file);
+	
+	if (steersuite_file != ""){
+		//printf("\n\nScenarioSimChar.cpp steersuite_file: %s\n\n\n", steersuite_file.c_str());
+		bool succ = cGroundFactory::ParseParamsJsonSteerSuite(terrain_file, out_params, steersuite_file);
+		if (!succ)
+		{
+			printf("Failed to parse steersuite params from %s\n", steersuite_file.c_str());
+			assert(false);
+		}
+	}
+	else if (terrain_file != "")
 	{
 		bool succ = cGroundFactory::ParseParamsJson(terrain_file, out_params);
 		if (!succ)

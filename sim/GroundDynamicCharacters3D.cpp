@@ -3,6 +3,7 @@
 
 const double gDefaultHeight = 0;
 
+
 cGroundDynamicCharacters3D::cGroundDynamicCharacters3D()
 {
 }
@@ -57,6 +58,7 @@ void cGroundDynamicCharacters3D::SampleHeightVel(const tVector& pos, double& out
 
 	bool foundIntersectedChar = false;
 
+	printf("\n\n\nGroundDynamicCharacters3D.cpp steersuite here\n\n\n");
 	// Check to see if this sample point contains any of the other characters
 	for(std::vector<std::shared_ptr<cSimCharacter>>::const_iterator it = mChars.begin(); it != mChars.end(); ++it) 
 	{
@@ -88,7 +90,38 @@ void cGroundDynamicCharacters3D::SampleHeightVel(const tVector& pos, double& out
 			// out_vel = mChar->GetRootVel(); // Works for old LLC
 		}
 	}
+	
+	
+	
+	//steersuite
+	tVector curr_com = mChar->CalcCOM();
+	for (int i = 0; i < GetNumObstacles(); ++i)
+	{
+		const steersuiteObstacle& obstacle = steersuiteObstacles[i];
+		const auto& obj = obstacle.mObj;
 
-	out_h = SampleHeight(pos, out_valid_sample);
+		tVector aabb_min;
+		tVector aabb_max;
+		obj->CalcAABB(aabb_min, aabb_max);
+
+		printf("GroundDynamicCharacters3D.cpp aabb_min[0]: %f\n", aabb_min[0]);
+		
+		//tVector aabb_min_agent;
+		//tVector aabb_max_agent;
+		//mChar->CalcAABB(aabb_min_agent, aabb_max_agent);
+
+		//tVector unit_v = tVector(1.0,1.0,1.0,0);
+		//aabb_min = aabb_min - unit_v;
+		//aabb_max = aabb_max + unit_v;
+
+		if (cMathUtil::ContainsAABBXZ(pos, aabb_min, aabb_max) )
+		{
+			out_h = aabb_max[1];
+			out_vel = obstacle.mVel;
+			break;
+		}
+	}
+	//out_h = SampleHeight(pos, out_valid_sample);
 	out_valid_sample = true;
+	
 }

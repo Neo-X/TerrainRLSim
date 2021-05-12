@@ -68,7 +68,7 @@ public:
 		double mFriction;
 		tVector mOrigin;
 		double mBlend;
-
+		std::string steersuite_file;
 		double mGroundWidth;
 		double mVertSpacingX;
 		double mVertSpacingZ;
@@ -128,6 +128,16 @@ public:
 
 protected:
 
+	struct steersuiteObstacle
+	{
+		EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+		std::shared_ptr<cSimObj> mObj;
+
+		tVector mVel;
+	};
+
+	std::vector<steersuiteObstacle> steersuiteObstacles;
 	cRand mRand;
 	tParams mParams;
 	Eigen::VectorXd mBlendParams;

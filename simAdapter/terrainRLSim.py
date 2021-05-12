@@ -109,11 +109,8 @@ class TerrainRLSimWrapper(gym.Env):
         self._done_multiAgent = None
         self._steps = 0
         self._target_vel = 1.0
+        
         self._config = config
-        # self.render_mode = False
-        if ("target_vel" in self._config):
-            self._target_vel = self._config["target_vel"]
-        self._render_condition = 0 ## Normal rendering
         if ("process_visual_data" in self._config
         and (self._config["process_visual_data"] == True)):
             self._visual_state = [0] * self._config["timestep_subsampling"]
@@ -183,18 +180,9 @@ class TerrainRLSimWrapper(gym.Env):
                 self._fig.canvas.draw()                      # View in default viewer
         
         if (mode == "rgb_array"):
-            cam_pos = [1,1,5]
-            zoom = -0.3
-            char_or_imitation_char = 0
-            img = np.array(self._sim.getPixels2(char_or_imitation_char,cam_pos, zoom, 128, 128))
-            img = np.array(img)
-            img = np.reshape(img, (128, 128, 3))
-#             print ("img: ", img)
-            return img
+            return self.getFullViewData()
         
     def set_render(self, mode):
-        if mode == 'rgb_array':
-            self._render = True
         print ("terrainrl sim set render mode: ", mode)
         
     def updateAction(self, action):
@@ -443,6 +431,7 @@ class TerrainRLSimWrapper(gym.Env):
             self._sim.update()
             
     def step(self, action):
+        print("step function here\n\n")
         """
             Adding multi character support
         """
@@ -491,9 +480,7 @@ class TerrainRLSimWrapper(gym.Env):
         
         # ob[0,0] = np.nan
         info = {}
-        if (self._render == "off_screen"):
-            info['rendering'] = self.render(mode="rgb_array")
-        elif (self._render):
+        if (self._render):
             info['rendering'] = np.array(self.getViewData() * 255, dtype='uint8')
             
         if ("process_visual_data" in self._config
@@ -504,9 +491,6 @@ class TerrainRLSimWrapper(gym.Env):
                 info["expert_pos"] = self.getImitationState()
                 info["expert_obs"] = self.getImitationVisualState()[0]
             info.update(info_)
-        info.update(self.checkSuccess())
-        # if self.render_mode:
-        #     info['rendering'] = self.render(mode=self.render_mode)
         
         return self.checkState(ob), self.checkState(reward), self._done, info
         
@@ -517,18 +501,6 @@ class TerrainRLSimWrapper(gym.Env):
             self._sim.reload()
             print ("Found obs nan")
         return state
-    
-    def checkSuccess(self):
-        if "success_distance" in self._config:
-            a = self._sim.calcCOM()
-#             print ("a.CalcCOM(): ", a)
-            return {"success": a[0] > self._config["success_distance"],
-                    "x_pos": a[0],
-                    "y_pos": a[1],
-                    }
-        else:
-            return {"success": False
-                    }
         
     def calcRewardForAgent(self, a):
         return self._sim.calcRewardForAgent(a)
@@ -542,7 +514,6 @@ class TerrainRLSimWrapper(gym.Env):
     def calcRewards(self):
         reward = []
         target_vel = self._target_vel
-#         print ("target_vel: ", target_vel)
         if (self._sim.getNumAgents() > 0): ### Multi Character simulation
             for i in range(self._sim.getNumAgents()):
                 ### get all states and check that they are different
@@ -551,7 +522,7 @@ class TerrainRLSimWrapper(gym.Env):
                 # reward.append([self._sim.calcRewardForAgent(i) * int(not self._done_multiAgent[i])])
                 if ("use_forward_vel_reward" in self._config
                     and (self._config["use_forward_vel_reward"] == True)):
-#                     print ("target_vel: ", target_vel)
+                    # print ("target_vel: ", target_vel)
                     dist = self._sim.calcVelocity(i)-target_vel
                     reward__ = np.exp((dist*dist)*-2.5)
                     reward.append([reward__])
@@ -574,9 +545,9 @@ class TerrainRLSimWrapper(gym.Env):
             self.set_task(reset_args)
         if "camera_zoom_noise" in self._config:
             range_ = self._config["camera_zoom_noise"][1] - self._config["camera_zoom_noise"][0] 
-            self._zoom_ = (np.random.random(1)[0] * range_) + self._config["camera_zoom_noise"][0] 
+            zoom_ = (np.random.random(1)[0] * range_) + self._config["camera_zoom_noise"][0] 
 #             print ("zoom: ", zoom_)
-            self._sim.setZoom(self._zoom_)
+            self._sim.setZoom(zoom_)
         self._sim.initEpoch()
         self._done = False
         self._done_multiAgent = [False for i in range(self._sim.getNumAgents())]
@@ -645,16 +616,7 @@ class TerrainRLSimWrapper(gym.Env):
     def getFullViewData(self):
         from skimage.measure import block_reduce
         ### Get pixel data from view
-        
-        if ("use_tiny_renderer" in self._config):
-            cam_pos = [1,1,5]
-            zoom = -0.3
-            img = self._sim.getPixels2(self._render_condition, cam_pos, zoom,
-                                       self._config["resize_window"][0], self._config["resize_window"][1])
-            img = np.array(img)
-            img = np.reshape(img, (self._config["resize_window"][0], 
-                               self._config["resize_window"][1], 3))
-        elif "resize_window" in self._config:
+        if "resize_window" in self._config:
             
             img = self.getEnv().getPixels(0,
                                0, 
@@ -685,21 +647,7 @@ class TerrainRLSimWrapper(gym.Env):
         from skimage.measure import block_reduce
         from skimage.transform import rescale, resize, downscale_local_mean
         ### Get pixel data from view
-        
-        if ("use_tiny_renderer" in self._config):
-            cam_pos = [1,1,5]
-            char_or_imitation_char = 1
-            img = self._sim.getPixels2(self._render_condition, cam_pos, self._zoom_, 
-                                       self._config["resize_window"][0], self._config["resize_window"][1])
-            img = np.array(img)
-            img = np.reshape(img, (self._config["resize_window"][0], 
-                               self._config["resize_window"][1], 3))
-#             print ("img shape: ", img.shape)
-            img = img[self._config["image_clipping_area"][0]:self._config["image_clipping_area"][0]+self._config["image_clipping_area"][2],
-                      self._config["image_clipping_area"][1]: 
-                           self._config["image_clipping_area"][1]+self._config["image_clipping_area"][3]]
-#             print ("img shape after: ", img.shape)
-        elif ("image_clipping_area" in self._config):
+        if ("image_clipping_area" in self._config):
             img = np.array(self.getEnv().getPixels(self._config["image_clipping_area"][0],
                            self._config["image_clipping_area"][1], 
                            self._config["image_clipping_area"][2], 
@@ -728,8 +676,7 @@ class TerrainRLSimWrapper(gym.Env):
                 img = block_reduce(img, block_size=(self._config["downsample_image"][0], 
                                                     self._config["downsample_image"][1], 
                                                     self._config["downsample_image"][2]), func=np.mean)
-        if ("add_img_noise" in self._config and 
-            ( self._config["add_img_noise"] == True) ) :
+        if ("add_img_noise" in self._config):
             noise_ = np.random.randn(*(img.shape)) * self._config['add_img_noise']
             img = img + noise_
         ### convert to greyscale
@@ -766,13 +713,11 @@ class TerrainRLSimWrapper(gym.Env):
         # '8' for camera track kin char instead
         # '7' to disable drawing background grid
         # 'v' to render the simchar like the kin char (colour and shape)
-        condition = self._render_condition
         self.onKeyEvent(ord('k'), 0, 0)
         self.onKeyEvent(ord('j'), 0, 0)
         self.onKeyEvent(ord('0'), 0, 0)
         self.onKeyEvent(ord('7'), 0, 0)
         self.onKeyEvent(ord('v'), 0, 0)
-        self._render_condition = 0
         self.render()
         img = self.getViewData()
         self.onKeyEvent(ord('v'), 0, 0)
@@ -780,7 +725,6 @@ class TerrainRLSimWrapper(gym.Env):
         self.onKeyEvent(ord('0'), 0, 0)
         self.onKeyEvent(ord('j'), 0, 0)
         self.onKeyEvent(ord('k'), 0, 0)
-        self._render_condition = condition
         
         if ("append_camera_velocity_state" in self._config
             and (self._config["append_camera_velocity_state"] == True)):
@@ -799,14 +743,12 @@ class TerrainRLSimWrapper(gym.Env):
             return self._visual_state
     
     def _getImitationVisualState(self):
-        condition = self._render_condition
         self.onKeyEvent(ord('7'), 0, 0)
         self.onKeyEvent(ord('8'), 0, 0)
         self.onKeyEvent(ord('9'), 0, 0)
         self.onKeyEvent(ord('j'), 0, 0)
         self.onKeyEvent(ord('0'), 0, 0)
         # self._sim.update()
-        self._render_condition = 1
         self.render()
         img = self.getViewData()
         self.onKeyEvent(ord('0'), 0, 0)
@@ -814,7 +756,6 @@ class TerrainRLSimWrapper(gym.Env):
         self.onKeyEvent(ord('9'), 0, 0)
         self.onKeyEvent(ord('8'), 0, 0)
         self.onKeyEvent(ord('7'), 0, 0)
-        self._render_condition = condition
         
         if ("append_camera_velocity_state" in self._config
             and (self._config["append_camera_velocity_state"] == True)):
@@ -966,7 +907,6 @@ class TerrainRLSimWrapper(gym.Env):
     
     def set_task(self, id):
         # print ("task id: ", id, type(id))
-        self._task_id = id
         if "multitask_config" in self._config:
             if (self._config["multitask_config"]["type"] == "vel"):
                 assert id < len(self._config["multitask_config"]["task_goal"])
@@ -983,12 +923,6 @@ class TerrainRLSimWrapper(gym.Env):
                 t, v = id % i, id // i
                 self._target_vel = self._config["multitask_config"]["task_goal"][v]
                 self.getEnv().setTaskID(int(t))
-            elif (self._config["multitask_config"]["type"] == "terrainRand"):
-                self.setRandomSeed(self._config["multitask_config"]["task_goal"][id])
-                i = self.getEnv().GetNumTasks() # number of terrains
-                t, v = id % i, id // i
-#                 self._target_vel = self._config["multitask_config"]["task_goal"][v]
-                self.getEnv().setTaskID(int(t))
         else:
             self.getEnv().setTaskID(int(id))
         
@@ -999,8 +933,6 @@ class TerrainRLSimWrapper(gym.Env):
                 return len(self._config["multitask_config"]["task_goal"])
             elif (self._config["multitask_config"]["type"] == "terrainvel"):
                 return len(self._config["multitask_config"]["task_goal"]) * self.getEnv().GetNumTasks()
-            elif (self._config["multitask_config"]["type"] == "terrainRand"):
-                return len(self._config["multitask_config"]["task_goal"])
         else:
             return self.getEnv().GetNumTasks()
         
@@ -1085,8 +1017,7 @@ def getEnv(env_name, render=False, GPU_device=None):
         sim.changeAnimTimestep(1.0/env_data[env_name]["action_fps"])
         simTimeStep = sim.getAnimTimestep()
         
-    if ("resize_window" in env_data[env_name] and 
-        ("use_tiny_renderer" not in env_data[env_name])):
+    if ("resize_window" in env_data[env_name]):
         sim.reshapeScreen(env_data[env_name]["resize_window"][0], env_data[env_name]["resize_window"][1])
     
     if ("process_visual_data" in env_data[env_name]

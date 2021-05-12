@@ -23,7 +23,6 @@
 #include <X11/Xlib.h>
 #endif
 #include <sys/stat.h>
-#include "TinyRendererWrapper.h"
 
 /*
  * Return true if the file exists
@@ -245,7 +244,6 @@ public:
 	virtual double calcReward();
 	virtual double calcVelocity() const;
 	virtual std::vector<double> calcVelocity3D() const;
-	virtual std::vector<double> calcCOM() const;
 	virtual bool hasStumbled();
 	virtual double jointTorque();
 
@@ -313,8 +311,6 @@ public:
 	/// New rendering stuff
 	virtual void setHeadlessRender(bool hr);
 	std::vector<unsigned char> getPixels(size_t x_start, size_t y_start, size_t width, size_t height);
-	std::vector<unsigned char> getPixels2(size_t x_start,
-			std::vector<double> camera_delta, double zoom, int width, int height);
 	virtual void setRenderingGPUDevicveIndex(int desiredGPUDeviceIndex_);
 
 #ifdef USE_OpenGLES
@@ -381,8 +377,6 @@ protected:
 	*/
    bool _headless_render;
    int desiredGPUDeviceIndex;
-
-   cTinyRendererWrapper * tinyRender;
 };
 
 #endif /* SIMADAPTER_H_ */

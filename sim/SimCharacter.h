@@ -23,6 +23,7 @@ public:
 		std::string mCharFile;
 		std::string mStateFile;
 		std::string mRelativeFilePath;
+		std::string mSteerSuiteFilePath;
 		tVector mInitPos;
 
 		bool mEnableSoftContact;
@@ -44,7 +45,6 @@ public:
 	virtual tVector GetRootAngVel() const;
 	virtual const Eigen::MatrixXd& GetBodyDefs() const;
 	virtual const Eigen::MatrixXd& GetDrawShapeDefs() const;
-	virtual void SetDrawShapeDefs(size_t row, cKinTree::tDrawShapeDef curr_def);
 	virtual void SetRootPos(const tVector& pos);
 	virtual void SetRootRotation(const tQuaternion& q);
 	virtual void SetRootTransform(const tVector& pos, const tQuaternion& rot);

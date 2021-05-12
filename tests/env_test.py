@@ -110,7 +110,7 @@ class TestEnvs(object):
             actions.append(action)
             
         observation, reward,  done, info = env.step(actions)
-        
+        print("observation, observation")
         states = np.array(observation)
         img_data_size=1024
         agent_num = 1

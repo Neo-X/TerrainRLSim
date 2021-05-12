@@ -8,15 +8,19 @@ if __name__ == '__main__':
 
     # env = getEnv(env_name="FSM_Biped2D_Terrain_Walls-v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Biped3D_HLC_DynamicsObstacles-v0", render=False)
-    # env = terrainRLSim.getEnv(env_name="PD_Biped3D_MutliChar_Crowd_WithVel_LargeBlocks-v0", render=True)
-    # env = terrainRLSim.getEnv(env_name="PD_Biped3D_MutliChar_DynamicObstacles-v0", render=True)
+
+    #steersuite
+    
+    env = terrainRLSim.getEnv(env_name="PD_Biped3D_MutliChar_ConcentricCircleSteerSuite-v0", render=True)
+    #env = terrainRLSim.getEnv(env_name="PD_Humanoid3D_MutliChar_ScenarioSpace_5_OnlyVel_SimpleReward_v1", render=True)
+    #env = terrainRLSim.getEnv(env_name="PD_Biped3D_MutliChar_DynamicObstacles-v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Biped3D_Imitate_NoPhase_AxisAngle_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Biped3D_HLC_DynamicsObstacles-v1", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Biped3D_Imitate-v0", render=True)
-    # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Imitate_60FPS_Torque_v0", render=True)
+    #env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Imitate_60FPS_Torque_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz3D_FixedStart_64x64_1Sub_Imitate_30FPS_MultiModal_DualState_v0", render=True)
     # env = terrainRLSim.getEnv(env_name="PD_Humanoid1_3D_Run_Phase_v0", render=True)
-    env = terrainRLSim.getEnv(env_name="PD_Biped2D_MultiTask_Terrain-v1", render=True)
+    #env = terrainRLSim.getEnv(env_name="PD_Biped3D_Pedistal_v3", render=True)
 
     envs_list = terrainRLSim.getEnvsList()
     print ("# of envs: ", len(envs_list))
@@ -28,7 +32,7 @@ if __name__ == '__main__':
     env.setRandomSeed(1234)
     
     actions = []
-    for i in range(1):
+    for i in range(11):
         action = actionSpace.sample()
         actions.append(action * 0)
     # actions = np.array(actions) * 100            
@@ -44,11 +48,13 @@ if __name__ == '__main__':
         env.reset()
         for t in range(256):
             observation, reward,  done, info = env.step(actions)
+            #print("observation", observation)
             # env.getImitationState()
-            print ("Done: ", done)
+            #print ("Done: ", done)
             print("Reward: ", reward)
             states = np.array(observation)
             print("states shape ", np.array(states[0]).shape)
+          
             if ( done ):
                 break
             """
@@ -61,17 +67,20 @@ if __name__ == '__main__':
                 
                 sim.updateActionForAgent(i, actions[i])
                 """
-            # print("Observation: ", observation)
-            # print("action: ", actions)
+            print("Observation: ", observation)
+            print("length observation: ", observation.shape)
+            #print("action: ", actions)
                 
             # print ("state: ", states)
             # print ("std length: ", len(np.std(states, axis=0)) )
             # print ("std for states: ", np.std(states))
             #### LLC states. If there is an LLC
-            # llc_state = env.getLLCState()
-            # print ("LLC state:", llc_state.shape)
+            llc_state = env.getLLCState()
+            print ("LLC state:", llc_state.shape)
             
             ## Get and vis terrain data
+
+            #steersuite
             if (False):
                 import matplotlib.pyplot as plt
                 img_data_size=1024
@@ -103,7 +112,8 @@ if __name__ == '__main__':
     env.finish()
     print (env)
     
-    env = terrainRLSim.getEnv(env_name="PD_Biped3D_FULL_Imitate-Steps-v0", render=False)
+    #env = terrainRLSim.getEnv(env_name="PD_Biped3D_FULL_Imitate-Steps-v0", render=False)
+    env = terrainRLSim.getEnv(env_name="PD_Biped3D_MutliChar_ConcentricCircleSteerSuite-v0", render=True)
     env.finish()
     
     print ("Done")

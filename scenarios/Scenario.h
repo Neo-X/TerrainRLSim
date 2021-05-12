@@ -35,6 +35,7 @@ public:
 protected:
 	tCallbackFunc mResetCallback;
 	std::string _relativeFilePath;
+	std::string steersuite_file_path;
 
 	size_t _taskID;
 

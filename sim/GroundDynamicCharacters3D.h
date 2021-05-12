@@ -2,9 +2,13 @@
 
 #include "sim/GroundPlane.h"
 #include "sim/SimCharacter.h"
+#include "sim/GroundDynamicObstacles3D.h"
+
+
 
 class cGroundDynamicCharacters3D : public cGroundPlane
 {
+
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -22,6 +26,8 @@ public:
 	virtual eClass GetGroundClass() const;
 
 protected:
+//steersuite
+
 	// This is the vector of 'other characters'
 	std::vector<std::shared_ptr<cSimCharacter>> mChars;
 

@@ -5,9 +5,9 @@ import json
 
 if __name__ == '__main__':
 
-    env = terrainRLSim.getEnv(env_name="PD_Humanoid_Morph_2D_GRF_Viz3D_TR_48x48_1Sub_Imitate_30FPS_DualState_v1", render=False)
-#     env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_2_v0", render=False)
-#     env = terrainRLSim.getEnv(env_name="PD_Humanoid_Morph_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=True)
+    # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_v0", render=True)
+    # env = terrainRLSim.getEnv(env_name="PD_Humanoid_2D_Viz_Imitate_30FPS_2_v0", render=True)
+    env = terrainRLSim.getEnv(env_name="PD_Dog_2D_GRF_Viz3D_48x48_1Sub_Imitate_30FPS_DualState_v1", render=True)
     
     # env.reset()
     actionSpace = env.getActionSpace()
@@ -18,60 +18,45 @@ if __name__ == '__main__':
         action = ((env.observation_space.high - env.observation_space.low) * np.random.uniform(size=env.observation_space.high.shape[0])  ) + env.observation_space.low
         actions.append(action)            
     
-    for e in range(15):
+    for e in range(5):
         
-        for t in range(2):
+        for t in range(10):
             vizData = env.getVisualState()
             vizImitateData = env.getImitationVisualState()
             for vd in range(len(vizData)):
-#                 print("viewData: ", vizData)
-                viewData = vizData[vd][:-3] ## remove cam velocity
-                viewImitateData = vizImitateData[vd][:-3]
+                # print("viewData: ", viewData)
+                viewData = vizData[vd][:2304]
+                viewImitateData = vizImitateData[vd][:2304]
                 ## Get and vis terrain data
-            if (True):
-                import matplotlib
-                matplotlib.use('Agg')
-                import matplotlib.pyplot as plt
-                # img_ = viewData
-#                     viewData = viewData - viewImitateData
                 if (True):
-                    if env._config["convert_to_greyscale"]:
-                        img_ = np.reshape(viewData, env._config["resize_image"][-2:])
-                    else:
-                        img_ = np.reshape(viewData, env._config["resize_image"][-2:] + (3,))
-#                     img_ = env.render(mode="rgb_array")
+                    import matplotlib
+                    matplotlib.use('Agg')
+                    import matplotlib.pyplot as plt
+                    # img_ = viewData
+                    viewData = viewData - viewImitateData
+                    img_ = np.reshape(viewData, (48,48))
+                    img_ = env.render(mode="rgb_array")
 #                     noise = np.random.normal(loc=0, scale=0.02, size=img_.shape)
 #                     img_ = img_ + noise
                     print("img_ shape", img_.shape, " sum: ", np.sum(viewData))
-#                     fig1 = plt.figure(1)
-#                     plt.imshow(img_, origin='lower')
-#                     plt.title("visual Data: " +  str(vd))
-#                     fig1.savefig("char_viz_state_"+str(e)+"_"+str(t)+".svg")
-
-                if (True):                    
-                    img__ = viewImitateData
-                    if env._config["convert_to_greyscale"]:
-                        img__ = np.reshape(viewImitateData, env._config["resize_image"][-2:])
-                    else:
-                        img__ = np.reshape(viewImitateData, env._config["resize_image"][-2:] + (3,))
-                    fig2 = plt.figure(2)
-                    img__ = np.concatenate((img_, img__), axis=1)
-                    plt.imshow(img__, origin='lower')
+                    fig1 = plt.figure(1)
+                    plt.imshow(img_, origin='lower')
                     plt.title("visual Data: " +  str(vd))
-                    fig2.savefig("char_viz_imitation_state_"+str(e)+"_"+str(t)+".svg")
-                
-                if (True):
-                    fig3 = plt.figure(2)
-                    image = env.render(mode="rgb_array")
-                    image = np.reshape(image, (128,128,3))
-                    plt.imshow(image, origin='lower')
-                    plt.title("visual Data: " +  str(image))
-                    fig3.savefig("char_render2_"+str(e)+"_"+str(t)+".svg")
-                plt.show()
+                    fig1.savefig("char_viz_state_"+str(e)+"_"+str(t)+".svg")
+
+                    if (True):                    
+                        img__ = viewImitateData
+                        img__ = np.reshape(viewImitateData, (48, 48))
+                        fig2 = plt.figure(2)
+                        img__ = np.concatenate((img_, img__), axis=1)
+                        plt.imshow(img__, origin='lower')
+                        plt.title("visual Data: " +  str(vd))
+                        fig2.savefig("char_viz_imitation_state_"+str(e)+"_"+str(t)+".svg")
+                    plt.show()
             observation, reward,  done, info = env.step(actions)
-#             imitationState = env.getImitationState()
+            imitationState = env.getImitationState()
             # print ("observation.shape: ", observation.shape)
-#             print ("imitationState.shape", np.array(imitationState).shape)
+            print ("imitationState.shape", np.array(imitationState).shape)
             print ("Done: ", done)
             if ( done ):
                 break

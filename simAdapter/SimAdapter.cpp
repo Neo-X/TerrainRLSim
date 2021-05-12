@@ -36,6 +36,8 @@
 #include "scenarios/ScenarioMultCharRugby.h"
 #include "scenarios/DrawScenarioImitateEvalMultiTask.h"
 #include "scenarios/ScenarioImitateEvalMultiTask.h"
+#include "scenarios/DrawScenarioMultCharConcentricCircleSteerSuite.h"
+#include "scenarios/ScenarioMultCharConcentricCircleSteerSuite.h"
 
 cSimAdapter::cSimAdapter(std::vector<std::string> args) {
 	// TODO Auto-generated constructor stub
@@ -45,10 +47,6 @@ cSimAdapter::cSimAdapter(std::vector<std::string> args) {
 	_args = args;
 	this->_headless_render=false;
 	this->_relativePath = "";
-
-
-	tinyRender = new cTinyRendererWrapper();
-
 #ifdef USE_OpenGLES
 	m_frameCount = 0;
 	dpyName = NULL;
@@ -69,7 +67,6 @@ cSimAdapter::cSimAdapter(std::vector<std::string> args) {
 
 cSimAdapter::~cSimAdapter() {
 	// TODO Auto-generated destructor stub
-	delete tinyRender;
 }
 
 #ifdef USE_OpenGLES
@@ -351,13 +348,16 @@ void cSimAdapter::init()
 	std::string scenario_name = "";
 	gArgParser->ParseString("scenario", scenario_name);
 
+	//steersuite
 	if (scenario_name == "hike_eval"
 			|| scenario_name == "space_mult_char"
 			|| scenario_name == "multi_char"
 			|| scenario_name == "multi_char_circle"
+			|| scenario_name == "steersuite_multi_char_circle"
 					)
 	{
-		gCameraPosition = tVector(0, 50, 100, 0);
+		gCameraPosition = tVector(0, 40, 40, 0);
+		//gCameraPosition = tVector(100, 400, 100, 0);
 	}
 
 	// InitCaffe();
@@ -788,6 +788,30 @@ void cSimAdapter::init()
 			gScenario = std::shared_ptr<cDrawScenario>(scenario__);
 			this->_gScenario = gScenario;
 		}
+		//steersuite
+		else if (scenario_name == "steersuite_multi_char_circle")
+		{
+			printf("SimAdapter.cpp draw steersuite here\n");
+			gCameraPosition = tVector(40, 100, 40, 0);
+			std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioMultCharConcentricCircleSteerSuite>(new cDrawScenarioMultCharConcentricCircleSteerSuite(gCamera));
+			//std::shared_ptr<cDrawScenarioSimChar> scenario__ = std::shared_ptr<cDrawScenarioSimChar>(new cDrawScenarioSimChar(gCamera));
+			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__->GetScene());
+			
+			this->_gScenario = scenario__;
+			if (this->_gScenario != NULL)
+			{
+				auto sim_char_scene = std::dynamic_pointer_cast<cDrawScenarioTerrainRL>(scenario__);
+				if (sim_char_scene != nullptr)
+				{
+					sim_char_scene->SetOutputTex(gIntermediateFrameBuffer);
+				}
+
+			}
+			
+			gScenario = std::shared_ptr<cDrawScenario>(scenario__);
+			printf("\n\nit works\n\n");
+			this->_gScenario = gScenario;
+		}
 		else if (scenario_name == "multitask_imitate_viz")
 		{
 			gCameraPosition = tVector(0, 40, 40, 0);
@@ -812,6 +836,7 @@ void cSimAdapter::init()
 		}
 		else
 		{
+			std::cerr << "what\n" << std::endl;
 			std::cerr << "scenario not recognized: |" << scenario_name << "|" << std::endl;
 			exit(-1);
 		}
@@ -850,6 +875,7 @@ void cSimAdapter::init()
 			// gScenario = std::shared_ptr<cScenario>(scenario__);
 			this->_gScenario = scenario__ ;
 		}
+		
 		else if (scenario_name == "hike_eval")
 		{
 			gCameraPosition = tVector(0, 30, 30, 0);
@@ -900,6 +926,15 @@ void cSimAdapter::init()
 			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__);
 			this->_gScenario = scenario__ ;
 		}
+		//steersuite
+		else if (scenario_name == "steersuite_multi_char_circle")
+		{
+			printf("SimAdapter.cpp steersuite here\n");
+			gCameraPosition = tVector(0, 30, 30, 0);
+			std::shared_ptr<cScenarioSimChar> scenario__ = std::shared_ptr<cScenarioMultCharConcentricCircleSteerSuite>(new cScenarioMultCharConcentricCircleSteerSuite());
+			this->_scene = std::shared_ptr<cScenarioSimChar>(scenario__);
+			this->_gScenario = scenario__ ;
+		}
 		else if (scenario_name == "soccer_eval_general")
 		{
 			gCameraPosition = tVector(0, 30, 30, 0);
@@ -939,13 +974,16 @@ void cSimAdapter::init()
 		}
 		// gScenario = this->_gScenario;
 	}
-
+	
 	this->_gScenario->ParseArgs(gArgParser);
+	
 	this->_gScenario->Init();
+
 	printf("Loaded scenario: %s\n", this->_gScenario->GetName().c_str());
 	// if ( _render && (!this->_headless_render) )
 	if ( _render )
 	{
+		
 		this->_scene = std::shared_ptr<cScenarioSimChar>(std::dynamic_pointer_cast<cDrawScenarioSimChar>(this->_gScenario)->GetScene());
 		if ( !this->_headless_render )
 		{
@@ -989,9 +1027,6 @@ void cSimAdapter::init()
 //	gCamera.SetFocus(focus);
 
 //	this->reshapeScreen(100, 100);
-
-	tinyRender->setScene(this->_scene);
-	tinyRender->init();
 }
 
 void cSimAdapter::initEpoch()
@@ -1258,15 +1293,6 @@ std::vector<unsigned char> cSimAdapter::getPixels(size_t x_start, size_t y_start
 	return out;
 }
 
-std::vector<unsigned char> cSimAdapter::getPixels2(size_t x_start,
-		std::vector<double> camera_delta, double zoom, int width, int height)
-{
-	std::vector<unsigned char> out;
-	this->tinyRender->render();
-	out = this->tinyRender->getPixels(x_start, camera_delta, zoom, width, height);
-	return out;
-}
-
 
 void cSimAdapter::finish()
 {
@@ -1306,14 +1332,6 @@ double cSimAdapter::calcVelocity() const
 {
 	const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();
 	return char_->GetRootVel()(0);
-}
-
-std::vector<double> cSimAdapter::calcCOM() const
-{
-	const std::shared_ptr<cSimCharacter> char_ = this->_scene->GetCharacter();
-	tVector state = char_->CalcCOM();
-	std::vector<double> out(state.data(), state.data() + state.rows() * state.cols());
-	return out;
 }
 
 std::vector<double> cSimAdapter::calcVelocity3D() const

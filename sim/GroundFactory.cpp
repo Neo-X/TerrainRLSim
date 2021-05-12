@@ -10,8 +10,68 @@
 #include "sim/GroundDynamicObstacles3D.h"
 #include "sim/GroundConveyor3D.h"
 
+std::string cGroundFactory::steersuite_file = "";
+
 bool cGroundFactory::ParseParamsJson(const std::string& param_file, cGround::tParams& out_params)
 {
+	std::ifstream f_stream(param_file);
+	Json::Reader reader;
+	Json::Value root;
+	bool succ = reader.parse(f_stream, root);
+	f_stream.close();
+
+	if (succ)
+	{
+		if (!root[cGround::gTypeKey].isNull())
+		{
+			std::string type_str = root[cGround::gTypeKey].asString();
+			cGround::ParseType(type_str, out_params.mType);
+		}
+
+		out_params.mGroundWidth = root.get(cGround::gGroundWidthKey, out_params.mGroundWidth).asDouble();
+		out_params.mVertSpacingX = root.get(cGround::gVertSpacingXKey, out_params.mVertSpacingX).asDouble();
+		out_params.mVertSpacingZ = root.get(cGround::gVertSpacingZKey, out_params.mVertSpacingZ).asDouble();
+
+		if (!root[cGround::gParamsKey].isNull())
+		{
+			Json::Value params_arr = root[cGround::gParamsKey];
+			assert(params_arr.isArray());
+			int num = params_arr.size();
+
+			out_params.mParamArr.resize(0, 0);
+			if (num > 0)
+			{
+				for (int i = 0; i < num; ++i)
+				{
+					Eigen::VectorXd curr_params;
+					succ &= ParseParamsJason(out_params.mType, params_arr.get(i, 0), curr_params);
+
+					if (succ)
+					{
+						if (i == 0)
+						{
+							size_t m = num;
+							size_t n = curr_params.size();
+							out_params.mParamArr.resize(m, n);
+						}
+						out_params.mParamArr.row(i) = curr_params;
+					}
+				}
+			}
+		}
+	}
+
+	return succ;
+}
+
+//steersuite
+bool cGroundFactory::ParseParamsJsonSteerSuite(const std::string& param_file, 
+							cGround::tParams& out_params, const std::string& psteersuite_file)
+{
+	//steersuite
+	//std::string steersuite_file = psteersuite_file;
+	cGroundFactory::steersuite_file = psteersuite_file;
+	//printf("\n\nGroundFactory.cpp terrain_file: %s\n\n\n", steersuite_file.c_str());
 	std::ifstream f_stream(param_file);
 	Json::Reader reader;
 	Json::Value root;
@@ -68,36 +128,54 @@ void cGroundFactory::BuildGround(const std::shared_ptr<cWorld>& world, const cGr
 	switch (ground_class)
 	{
 	case cGround::eClassPlane:
+		printf("\n\nBuildGroundPlane\n\n");
 		BuildGroundPlane(world, params, out_ground);
 		break;
 	case cGround::eClassVar2D:
+		printf("\n\nBuildGroundVar2D\n\n");
 		BuildGroundVar2D(world, params, out_ground);
 		break;
 	case cGround::eClassVar3D:
+		printf("\n\nBuildGroundVar3D\n\n");
 		BuildGroundVar3D(world, params, out_ground);
 		break;
 	case cGround::eClassHills3D:
+		printf("\n\nBuildGroundHills3D\n\n");
 		BuildGroundHills3D(world, params, out_ground);
 		break;
 	case cGround::eClassTrail3D:
+		printf("\n\nBuildGroundTrail3D\n\n");
 		BuildGroundTrail3D(world, params, out_ground);
 		break;
 	case cGround::eClassObstaclesDynamicCharacters3D:
+		//steersuite
+		printf("\n\nBuildGroundObstaclesDynamicCharacters3D\n\n");
 		BuildGroundObstaclesDynamicCharacters3D(world, params, out_ground);
 		break;
 	case cGround::eClassObstaclesMeshDynamicCharacters3D:
+		printf("\n\nBuildGroundObstaclesMeshDynamicCharacters3D\n\n");
 		BuildGroundObstaclesMeshDynamicCharacters3D(world, params, out_ground);
 		break;
 	case cGround::eClassDynamicCharacters3D:
-		BuildGroundDynamicCharacters3D(world, params, out_ground);
+		printf("\n\nBuildGroundDynamicCharacters3D\n\n");
+		if(steersuite_file != ""){
+			BuildGroundObstaclesDynamicCharacters3D(world, params, out_ground);
+		}
+		else{
+			BuildGroundDynamicCharacters3D(world, params, out_ground);
+		}
+		
 		break;
 	case cGround::eClassObstacles3D:
+		printf("\n\nBuildGroundObstacles3D\n\n");
 		BuildGroundObstacles3D(world, params, out_ground);
 		break;
 	case cGround::eClassDynamicObstacles3D:
+		printf("\n\nBuildGroundDynamicObstacles3D\n\n");
 		BuildGroundDynamicObstacles3D(world, params, out_ground);
 		break;
 	case cGround::eClassConveyor3D:
+		printf("\n\nBuildGroundConveyor3D\n\n");
 		BuildGroundConveyor3D(world, params, out_ground);
 		break;
 	default:
@@ -227,8 +305,18 @@ void cGroundFactory::BuildGroundObstaclesDynamicCharacters3D(const std::shared_p
 	tVector bound_min = tVector(-half_width + spawn_offset, 0, -half_width + spawn_offset, 0);
 	tVector bound_max = tVector(half_width + spawn_offset, 0, half_width + spawn_offset, 0);
 
+	//steersuite
 	// ground->Init(world, params, bound_min, bound_max);
-	ground->Init(world, params);
+	
+	if(steersuite_file != ""){
+		printf("\n\nGroundFactor.cpp->GroundObstaclesDynamicCharacters3D terrain_file: %s\n\n\n", steersuite_file.c_str());
+		ground->Init(world, params, steersuite_file);
+	}
+	else{
+		printf("\nGroundFactory.cpp steersuite_file is empty\n\n");
+		ground->Init(world, params);
+	}
+	
 	out_ground = ground;
 }
 

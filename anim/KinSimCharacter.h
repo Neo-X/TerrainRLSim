@@ -51,7 +51,6 @@ public:
 
 
 	virtual const Eigen::MatrixXd& GetDrawShapeDefs() const;
-	virtual void SetDrawShapeDefs(size_t row, cKinTree::tDrawShapeDef curr_def);
 	virtual const Eigen::MatrixXd& GetBodyDefs() const;
 	virtual bool HasDrawShapes() const;
 	virtual size_t GetNumBodyParts() const;

@@ -7,11 +7,19 @@ class cGroundFactory
 public:
 
 	static bool ParseParamsJson(const std::string& param_file, cGround::tParams& out_params);
+	//steersuite
+	static bool ParseParamsJsonSteerSuite(const std::string& param_file, 
+										 cGround::tParams& out_params, const std::string& psteersuite_file);
+	//static bool ParseParamsJson(const std::string& param_file, const std::string& psteersuite_file, cGround::tParams& out_params);
 	static void BuildGround(const std::shared_ptr<cWorld>& world, const cGround::tParams& params, std::shared_ptr<cGround>& out_ground);
-
+	//steersuite
+	static std::string steersuite_file;
 protected:
+	
 
 	static bool ParseParamsJason(cGround::eType type, const Json::Value& json, Eigen::VectorXd& out_params);
+	
+
 	static void BuildGroundPlane(const std::shared_ptr<cWorld>& world, const cGround::tParams& params, std::shared_ptr<cGround>& out_ground);
 	static void BuildGroundVar2D(const std::shared_ptr<cWorld>& world, const cGround::tParams& params, std::shared_ptr<cGround>& out_ground);
 	static void BuildGroundVar3D(const std::shared_ptr<cWorld>& world, const cGround::tParams& params, std::shared_ptr<cGround>& out_ground);

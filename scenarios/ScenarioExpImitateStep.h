@@ -30,8 +30,6 @@ public:
 	virtual double CalcReward() const;
 	virtual double CalcRewardStep(const cBipedStepController3D::tStepPlan& step_plan) const;
 
-	virtual bool endOfEpoch() const;
-
 protected:
 	cBipedStepController3D::tStepPlan mStepPlan;
 	double mStepsPerPeriod;

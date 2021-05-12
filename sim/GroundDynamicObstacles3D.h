@@ -3,6 +3,7 @@
 #include "sim/GroundPlane.h"
 #include "sim/SimObj.h"
 #include "sim/SimCharacter.h"
+#include "sim/GroundDynamicCharacters3D.h"
 
 class cGroundDynamicObstacles3D : public cGroundPlane
 {

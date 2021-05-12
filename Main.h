@@ -44,6 +44,7 @@
 #include "scenarios/DrawScenarioMultCharConcentricCircle.h"
 #include "scenarios/DrawScenarioMultiTaskImitateVizEval.h"
 #include "scenarios/DrawScenarioImitateEvalMultiTask.h"
+#include "scenarios/DrawScenarioMultCharConcentricCircleSteerSuite.h"
 
 // #include "optimizer/scenarios/OptScenarioClimb.h"
 // #include "optimizer/scenarios/OptScenarioPoliEval.h"
@@ -55,10 +56,8 @@
 
 #include "util/BVHReader.h"
 #include "util/MotionDB.h"
-#ifndef USE_OpenGLES
-#include <GL/glut.h>
+#  include <GL/glut.h>
 #include <GL/freeglut_ext.h>
-#endif
 
 //#define USE_OpenGLES
 
@@ -309,7 +308,13 @@ void SetupScenario()
 	}
 	else if (scenario_name == "multi_char_circle")
 	{
+		printf("\n\nworks here\n\n");
 		gScenario = std::shared_ptr<cDrawScenarioMultCharConcentricCircle>(new cDrawScenarioMultCharConcentricCircle(gCamera));
+	}
+	//steersuite
+	else if (scenario_name == "steersuite_multi_char_circle")
+	{
+		gScenario = std::shared_ptr<cDrawScenarioMultCharConcentricCircleSteerSuite>(new cDrawScenarioMultCharConcentricCircleSteerSuite(gCamera));
 	}
 	else if (scenario_name == "space_mult_char")
 	{
@@ -387,10 +392,10 @@ void DrawInfo()
 
 		char buffer[128];
 		sprintf(buffer, "FPS: %.2f (%.2fx)\n", curr_fps, gPlaybackSpeed);
-
 		std::string text_info = std::string(buffer);
 		if (gScenario != nullptr)
 		{
+			
 			text_info += gScenario->BuildTextInfoStr();
 		}
 

@@ -97,6 +97,7 @@ void cSimCharacter::Reset()
 
 void cSimCharacter::Update(double time_step)
 {
+	//printf("\n\nSimCharacter.cpp works here\n\n");
 	BuildPose(mPose);
 	BuildVel(mVel);
 
@@ -163,11 +164,6 @@ const Eigen::MatrixXd& cSimCharacter::GetBodyDefs() const
 const Eigen::MatrixXd& cSimCharacter::GetDrawShapeDefs() const
 {
 	return mDrawShapeDefs;
-}
-
-void cSimCharacter::SetDrawShapeDefs(size_t row, cKinTree::tDrawShapeDef curr_def)
-{
-	mDrawShapeDefs.row(row) = curr_def;
 }
 
 void cSimCharacter::SetRootPos(const tVector& pos)

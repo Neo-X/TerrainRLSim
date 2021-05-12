@@ -211,7 +211,15 @@ void cGroundDynamicObstacles3D::BuildObstacles()
 		mObstacles.push_back(curr_obstacle);
 	}
 
+
 	SortObstacles();
+	for(int i = 0; i < num_obstacles; ++i){
+		struct steersuiteObstacle obstacle;
+		obstacle.mObj = mObstacles[i].mObj;
+		obstacle.mVel = mObstacles[i].CalcVel();
+	
+		steersuiteObstacles.push_back(obstacle);
+	}
 }
 
 void cGroundDynamicObstacles3D::ClearObstacles()

@@ -20,7 +20,7 @@ std::string cScenarioImitateStepEval::GetName() const
 
 bool cScenarioImitateStepEval::HasFallen() const
 {
-	bool fallen = cScenarioExpImitateStep::HasFallen();
+	bool fallen = cScenarioImitateTargetEval::HasFallen();
 #if defined(ENABLE_KIN_CONTROLLER_TEST)
 	fallen = false;
 #endif
