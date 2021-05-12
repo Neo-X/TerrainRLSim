@@ -540,6 +540,7 @@ class TerrainRLSimWrapper(gym.Env):
     def calcRewards(self):
         reward = []
         target_vel = self._target_vel
+#         print ("target_vel: ", target_vel)
         if (self._sim.getNumAgents() > 0): ### Multi Character simulation
             for i in range(self._sim.getNumAgents()):
                 ### get all states and check that they are different
@@ -548,7 +549,7 @@ class TerrainRLSimWrapper(gym.Env):
                 # reward.append([self._sim.calcRewardForAgent(i) * int(not self._done_multiAgent[i])])
                 if ("use_forward_vel_reward" in self._config
                     and (self._config["use_forward_vel_reward"] == True)):
-                    # print ("target_vel: ", target_vel)
+#                     print ("target_vel: ", target_vel)
                     dist = self._sim.calcVelocity(i)-target_vel
                     reward__ = np.exp((dist*dist)*-2.5)
                     reward.append([reward__])
