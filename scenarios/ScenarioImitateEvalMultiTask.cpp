@@ -114,6 +114,7 @@ void cScenarioImitateEvalMultiTask::LoadTerrains(const std::vector<std::string>&
 		}
 		else
 		{
+			std::cout << "FAILED loading terrain file: " << curr_file << std::endl;
 			assert(false);
 		}
 	}
@@ -132,6 +133,10 @@ void cScenarioImitateEvalMultiTask::setTaskID(size_t task)
 	{
 		auto terrain_func = cTerrainGen2D::GetTerrainFunc(mGroundParams.mType);
 		ground_var2d->SetTerrainFunc(terrain_func);
+	}
+	else
+	{
+		std::cout << "Could not cast terrain file for multi-task sim." << std::endl;
 	}
 }
 

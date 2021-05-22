@@ -163,6 +163,10 @@ class TerrainRLSimWrapper(gym.Env):
                 else:
                     ob_low = np.array([-1] * self.getEnv().getObservationSpaceSize())
                     ob_high = np.array([1] * self.getEnv().getObservationSpaceSize())
+            if ("add_xpos_to_state" in self._config
+                and (self._config["add_xpos_to_state"])):
+                ob_low = np.concatenate((ob_low, [ob_low[0]]), axis=-1)
+                ob_high = np.concatenate((ob_high, [ob_high[0]]), axis=-1)
             self.observation_space = Box(low=np.array(ob_low), high=np.array(ob_high))
             
         self.init()
@@ -414,6 +418,9 @@ class TerrainRLSimWrapper(gym.Env):
         if ("flatten_observation" in self._config
             and (self._config["flatten_observation"])):
             ob = ob.flatten()
+        if ("add_xpos_to_state" in self._config
+            and (self._config["add_xpos_to_state"])):
+            ob = np.concatenate((ob, [self._sim.calcCOM()[0]]), axis=-1)
         return self.checkState(ob)
     
     def simUpdate(self):

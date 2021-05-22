@@ -36,13 +36,13 @@ if __name__ == '__main__':
     
     print("observation_space: ", env.observation_space.high)
     
-    print("Actions space max: ", len(env.action_space.high))
+    print("Observation space max: ", len(env.observation_space.high))
     print("Actions space min: ", env.action_space.low)
     print("Actions space max: ", env.action_space.high)
     
-    for e in range(6):
+    for e in range(20):
         numTasks = env.getNumTasks()
-        task_id = e % 3 
+        task_id = e % 10 
         env.set_task(task_id)
         print ("task: ", task_id)
         env.reset()
@@ -52,7 +52,7 @@ if __name__ == '__main__':
 #             print ("Done: ", done)
 #             print("Reward: ", reward)
             states = np.array(observation)
-#             print("states shape ", np.array(states[0]).shape)
+            print("states shape ", np.array(states).shape)
             if ( done ):
                 break
             """
