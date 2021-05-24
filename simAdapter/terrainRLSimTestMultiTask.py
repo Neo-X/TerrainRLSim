@@ -51,6 +51,7 @@ if __name__ == '__main__':
             # env.getImitationState()
 #             print ("Done: ", done)
 #             print("Reward: ", reward)
+            print ("info: ", info)
             states = np.array(observation)
             print("states shape ", np.array(states).shape)
             if ( done ):
