@@ -102,7 +102,7 @@ project "terrainRLAdapter"
 			-- "/usr/include/python2.7",
             "/usr/include/python3.5m",
             "/usr/include/python3.6m",
-            "/usr/include/python3.8/",
+            "/usr/include/python3.8",
             "/rcg/software/Linux/Ubuntu/16.04/amd64/LANG/PYTHON/3.5.2-SYSTEM/include/python3.5m" -- for cluster env at sfu
 		}
 		defines {
