@@ -102,6 +102,7 @@ project "terrainRLAdapter"
 			-- "/usr/include/python2.7",
             "/usr/include/python3.5m",
             "/usr/include/python3.6m",
+            "/usr/include/python3.8/",
             "/rcg/software/Linux/Ubuntu/16.04/amd64/LANG/PYTHON/3.5.2-SYSTEM/include/python3.5m" -- for cluster env at sfu
 		}
 		defines {
@@ -109,7 +110,29 @@ project "terrainRLAdapter"
 		}
 			-- debug configs
 		configuration { "linux", "Debug*", "gmake"}
-			if file_exists("/usr/include/python3.6m/Python.h") then
+		    if file_exists("/usr/include/python3.8/Python.h") then
+				links {
+					"X11",
+					"dl",
+					"pthread",
+					-- Just a few dependancies....
+					"BulletDynamics_gmake_x64_release",
+					"BulletCollision_gmake_x64_release",
+					"LinearMath_gmake_x64_release",
+					"jsoncpp",
+					"boost_system",
+					"caffe",
+					"glog",
+					--"hdf5",
+					--"hdf5_hl",
+					"hdf5_serial_hl",
+					"hdf5_serial",
+					-- "python2.7",
+					"python3.8",
+					"EGL",
+					-- "OpenGL",
+				}
+			elseif file_exists("/usr/include/python3.6m/Python.h") then
 				links {
 					"X11",
 					"dl",
@@ -158,7 +181,29 @@ project "terrainRLAdapter"
 	 	-- release configs
 		configuration { "linux", "Release*", "gmake"}
 			defines { "NDEBUG" }
-			if file_exists("/usr/include/python3.6m/Python.h") then
+			if file_exists("/usr/include/python3.8/Python.h") then
+				links {
+					"X11",
+					"dl",
+					"pthread",
+					-- Just a few dependancies....
+					"BulletDynamics_gmake_x64_release",
+					"BulletCollision_gmake_x64_release",
+					"LinearMath_gmake_x64_release",
+					"jsoncpp",
+					"boost_system",
+					"caffe",
+					"glog",
+					--"hdf5",
+					--"hdf5_hl",
+					"hdf5_serial_hl",
+					"hdf5_serial",
+					-- "python2.7",
+					"python3.8",
+					"EGL",
+					-- "OpenGL",
+				}
+			elseif file_exists("/usr/include/python3.6m/Python.h") then
 				links {
 					"X11",
 					"dl",
