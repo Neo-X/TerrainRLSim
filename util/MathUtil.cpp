@@ -71,6 +71,8 @@ int cMathUtil::RandUint()
 	return gRand.RandUint();
 }
 
+
+
 int cMathUtil::RandUint(unsigned int min, unsigned int max)
 {
 	return gRand.RandUint(min, max);
@@ -411,10 +413,24 @@ void cMathUtil::QuaternionToAxisAngle(const tQuaternion& q, tVector& out_axis, d
 	if (sin_theta > 0.0001)
 	{
 		out_theta = 2 * cMathUtil::Sign(q.w()) * std::asin(sin_theta);
+		out_theta = cMathUtil::NormalizeAngle(out_theta);
 		out_axis = tVector(q.x(), q.y(), q.z(), 0) / sin_theta;
 	}
 }
-
+double cMathUtil::NormalizeAngle(double theta)
+{
+	// normalizes theta to be between [-pi, pi]
+	double norm_theta = fmod(theta, 2 * M_PI);
+	if (norm_theta > M_PI)
+	{
+		norm_theta = -2 * M_PI + norm_theta;
+	}
+	else if (norm_theta < -M_PI)
+	{
+		norm_theta = 2 * M_PI + norm_theta;
+	}
+	return norm_theta;
+}
 tVector cMathUtil::AxisAngleToVec(const tVector& axis, const double& theta)
 {
 	return tVector(theta, axis(0), axis(1), axis(2));
@@ -472,12 +488,19 @@ double cMathUtil::QuatDiffTheta(const tQuaternion& q0, const tQuaternion& q1)
 
 double cMathUtil::QuatTheta(const tQuaternion& dq)
 {
+	double theta = 0;
 	tQuaternion q1 = dq;
-	if (std::abs(q1.w()) > 1)
+	if (q1.w() > 1)
 	{
 		q1.normalize();
 	}
-	double theta = 2 * std::acos(q1.w());
+
+	double sin_theta = std::sqrt(1 - q1.w() * q1.w());
+	if (sin_theta > 0.0001)
+	{
+		theta = 2 * std::acos(q1.w());
+		theta = cMathUtil::NormalizeAngle(theta);
+	}
 	return theta;
 }
 

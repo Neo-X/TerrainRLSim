@@ -55,7 +55,7 @@ public:
 	static int RandSign();
 	static bool FlipCoin(double p = 0.5);
 	static double SmoothStep(double t);
-
+	static double NormalizeAngle(double theta);
 	// matrices
 	static tMatrix TranslateMat(const tVector& trans);
 	static tMatrix ScaleMat(double scale);
